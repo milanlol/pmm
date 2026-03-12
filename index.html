@@ -895,7 +895,7 @@
     </div>
   </footer>
   <!-- reCAPTCHA v3 -->
-  <script src="https://www.google.com/recaptcha/api.js?render=6LdplJEUAAAAA0gIfsS1WPErP77V_v8tqz-segzU"></script>
+  <script src="https://www.google.com/recaptcha/api.js?render=6LdplJEUAAAAAOgIfsS1WPErP77V_v8tqz-segzU"></script>
 <!-- FOOTER END -->
 
   <script>
@@ -959,7 +959,7 @@
       btn.disabled = true;
       btnText.textContent = 'Sending…';
       grecaptcha.ready(function() {
-        grecaptcha.execute('6LdplJEUAAAAA0gIfsS1WPErP77V_v8tqz-segzU', { action: 'contact' }).then(function(token) {
+        grecaptcha.execute('6LdplJEUAAAAAOgIfsS1WPErP77V_v8tqz-segzU', { action: 'contact' }).then(function(token) {
           fetch(APPS_SCRIPT_URL, {
             method: 'POST', mode: 'no-cors',
             headers: { 'Content-Type': 'application/json' },

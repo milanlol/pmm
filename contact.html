@@ -753,7 +753,7 @@
     </div>
   </footer>
   <!-- reCAPTCHA v3 -->
-  <script src="https://www.google.com/recaptcha/api.js?render=6LdplJEUAAAAA0gIfsS1WPErP77V_v8tqz-segzU"></script>
+  <script src="https://www.google.com/recaptcha/api.js?render=6LdplJEUAAAAAOgIfsS1WPErP77V_v8tqz-segzU"></script>
 <!-- FOOTER END -->
 
 </div><!-- /overflow-x-hidden -->
@@ -856,7 +856,7 @@
     };
 
     grecaptcha.ready(function() {
-      grecaptcha.execute('6LdplJEUAAAAA0gIfsS1WPErP77V_v8tqz-segzU', { action: 'contact' }).then(function(token) {
+      grecaptcha.execute('6LdplJEUAAAAAOgIfsS1WPErP77V_v8tqz-segzU', { action: 'contact' }).then(function(token) {
         payload.recaptcha_token = token;
         fetch('https://script.google.com/macros/s/AKfycbxVo6rCfprqQYYeCCUZdL_ZVCXVqaiUFnP6F2qHGYnYk9A-oPejRSWLohl8bQ8cCx0d/exec', {
           method: 'POST',
