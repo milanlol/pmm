@@ -812,6 +812,7 @@
               <label class="field-label">Message</label>
               <textarea id="hc-message" class="field-input field-textarea" placeholder="Tell us about your project…"></textarea>
             </div>
+            <div class="cf-turnstile" data-sitekey="0x4AAAAAACp0e6MVU_LHBvl0" data-theme="dark"></div>
             <p id="hc-error" class="font-body text-pmm-red text-xs hidden">Please fill in your name, email, and message.</p>
             <button type="submit" id="hc-submit" class="w-full bg-pmm-red text-white font-heading font-bold text-xs tracking-[0.2em] uppercase py-4 px-8 hover:bg-red-700 transition-colors duration-200 flex items-center justify-center gap-3 group focus:outline-none focus-visible:ring-2 focus-visible:ring-pmm-red focus-visible:ring-offset-2 focus-visible:ring-offset-pmm-black">
               <span id="hc-btn-text">Send Message</span>
@@ -894,8 +895,8 @@
       </div>
     </div>
   </footer>
-  <!-- reCAPTCHA v3 -->
-  <script src="https://www.google.com/recaptcha/api.js?render=6LdplJEUAAAAAOgIfsS1WPErP77V_v8tqz-segzU"></script>
+  <!-- Cloudflare Turnstile -->
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 <!-- FOOTER END -->
 
   <script>
@@ -958,29 +959,25 @@
       const btnText = document.getElementById('hc-btn-text');
       btn.disabled = true;
       btnText.textContent = 'Sending…';
-      grecaptcha.ready(function() {
-        grecaptcha.execute('6LdplJEUAAAAAOgIfsS1WPErP77V_v8tqz-segzU', { action: 'contact' }).then(function(token) {
-          fetch(APPS_SCRIPT_URL, {
-            method: 'POST', mode: 'no-cors',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              first_name: name, last_name: '', email: email,
-              company: document.getElementById('hc-company').value.trim(),
-              service: document.getElementById('hc-service').value,
-              message: message,
-              source: window.location.pathname,
-              recaptcha_token: token
-            })
-          }).then(() => {
-            btn.style.display = 'none';
-            document.getElementById('hc-success').style.display = 'block';
-          }).catch(() => {
-            btnText.textContent = 'Send Message';
-            btn.disabled = false;
-            error.textContent = 'Something went wrong. Please try again or email us directly.';
-            error.classList.remove('hidden');
-          });
-        });
+      fetch(APPS_SCRIPT_URL, {
+        method: 'POST', mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          first_name: name, last_name: '', email: email,
+          company: document.getElementById('hc-company').value.trim(),
+          service: document.getElementById('hc-service').value,
+          message: message,
+          source: window.location.pathname,
+          'cf-turnstile-response': (document.querySelector('[name="cf-turnstile-response"]') || {}).value || ''
+        })
+      }).then(() => {
+        btn.style.display = 'none';
+        document.getElementById('hc-success').style.display = 'block';
+      }).catch(() => {
+        btnText.textContent = 'Send Message';
+        btn.disabled = false;
+        error.textContent = 'Something went wrong. Please try again or email us directly.';
+        error.classList.remove('hidden');
       });
     });
 
