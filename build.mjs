@@ -20,40 +20,40 @@ const root  = __dir;
 //   dropdownItem → href of the dropdown <a> that gets "active" class (or null)
 //   mobileActive → href of the mobile menu <a> that gets text-pmm-red (or null)
 const PAGE_MAP = {
-  'index.html':                                { topLink: '/index.html',                    dropdownItem: null,                              mobileActive: null },
-  'about.html':                                { topLink: '/about.html',                    dropdownItem: null,                              mobileActive: null },
-  'philanthropy.html':                         { topLink: '/philanthropy.html',             dropdownItem: null,                              mobileActive: null },
-  'contact.html':                              { topLink: '/contact.html',                  dropdownItem: null,                              mobileActive: '/contact.html' },
-  'clients/index.html':                        { topLink: '/clients/index.html',            dropdownItem: null,                              mobileActive: null },
-  'clients/fat-heads.html':                    { topLink: '/clients/index.html',            dropdownItem: null,                              mobileActive: null },
-  'clients/bob-evans.html':                    { topLink: '/clients/index.html',            dropdownItem: null,                              mobileActive: null },
-  'clients/cleveland-boat-show.html':          { topLink: '/clients/index.html',            dropdownItem: null,                              mobileActive: null },
-  'clients/southwest-general.html':            { topLink: '/clients/index.html',            dropdownItem: null,                              mobileActive: null },
-  'clients/pse-credit-union.html':            { topLink: '/clients/index.html',            dropdownItem: null,                              mobileActive: null },
-  'clients/moen.html':                        { topLink: '/clients/index.html',            dropdownItem: null,                              mobileActive: null },
-  'clients/npa-coatings.html':               { topLink: '/clients/index.html',            dropdownItem: null,                              mobileActive: null },
-  'clients/oatey.html':                      { topLink: '/clients/index.html',            dropdownItem: null,                              mobileActive: null },
-  'clients/polaris.html':                    { topLink: '/clients/index.html',            dropdownItem: null,                              mobileActive: null },
-  'clients/avery-dennison.html':             { topLink: '/clients/index.html',            dropdownItem: null,                              mobileActive: null },
-  'clients/hill-n-dale.html':               { topLink: '/clients/index.html',            dropdownItem: null,                              mobileActive: null },
-  'clients/dap.html':                        { topLink: '/clients/index.html',            dropdownItem: null,                              mobileActive: null },
-  'clients/hannahs-home.html':              { topLink: '/clients/index.html',            dropdownItem: null,                              mobileActive: null },
-  'clients/tovolo.html':                     { topLink: '/clients/index.html',            dropdownItem: null,                              mobileActive: null },
-  'clients/action-door.html':               { topLink: '/clients/index.html',            dropdownItem: null,                              mobileActive: null },
-  'clients/jim-kaminski.html':              { topLink: '/clients/index.html',            dropdownItem: null,                              mobileActive: null },
-  'clients/gales-garden-center.html':      { topLink: '/clients/index.html',            dropdownItem: null,                              mobileActive: null },
-  'services/index.html':                       { topLink: '/services/index.html',           dropdownItem: null,                              mobileActive: null },
-  'services/video-production.html':            { topLink: '/services/index.html',           dropdownItem: '/services/video-production.html', mobileActive: null },
-  'services/search-marketing.html':            { topLink: '/services/index.html',           dropdownItem: '/services/search-marketing.html', mobileActive: null },
-  'services/website-design.html':              { topLink: '/services/index.html',           dropdownItem: '/services/website-design.html',   mobileActive: null },
-  'services/social-media.html':                { topLink: '/services/index.html',           dropdownItem: '/services/social-media.html',     mobileActive: null },
-  'services/email-campaigns.html':             { topLink: '/services/index.html',           dropdownItem: '/services/email-campaigns.html',  mobileActive: null },
-  'services/photography.html':                 { topLink: '/services/index.html',           dropdownItem: '/services/photography.html',      mobileActive: null },
-  'services/graphic-design.html':              { topLink: '/services/index.html',           dropdownItem: '/services/graphic-design.html',           mobileActive: null },
-  'services/traditional-media.html':           { topLink: '/services/index.html',           dropdownItem: '/services/traditional-media.html',        mobileActive: null },
-  'services/google-business-profile.html':     { topLink: '/services/index.html',           dropdownItem: '/services/google-business-profile.html',  mobileActive: null },
-  'services/reputation-management.html':       { topLink: '/services/index.html',           dropdownItem: '/services/reputation-management.html',    mobileActive: null },
-  'blog/index.html':                           { topLink: '/blog/index.html',               dropdownItem: null,                                      mobileActive: null },
+  'index.html':                                { topLink: '/index.html',                    dropdownItem: null,                              mobileActive: null,           description: 'Perception Multimedia is a full-service digital marketing agency in Middleburg Heights, OH — video production, web design, social media, SEO, photography, and more for Northeast Ohio businesses.' },
+  'about.html':                                { topLink: '/about.html',                    dropdownItem: null,                              mobileActive: null,           description: 'Meet the team behind Perception Multimedia — a collaborative digital marketing agency in Northeast Ohio specializing in video, web design, photography, and integrated marketing strategy.' },
+  'philanthropy.html':                         { topLink: '/philanthropy.html',             dropdownItem: null,                              mobileActive: null,           description: 'Perception Multimedia is proud to give back to the Northeast Ohio community. Learn about our philanthropy efforts and charitable partnerships.' },
+  'contact.html':                              { topLink: '/contact.html',                  dropdownItem: null,                              mobileActive: '/contact.html', description: 'Contact Perception Multimedia in Middleburg Heights, OH. Call (440) 340-1115 or send a message to start your next marketing project with our Northeast Ohio team.' },
+  'clients/index.html':                        { topLink: '/clients/index.html',            dropdownItem: null,                              mobileActive: null,           description: 'See how Perception Multimedia has helped brands like Bob Evans, Moen, Oatey, and more achieve their marketing goals through video production, web design, and creative strategy.' },
+  'clients/fat-heads.html':                    { topLink: '/clients/index.html',            dropdownItem: null,                              mobileActive: null,           description: 'See how Perception Multimedia helped Fat Head\'s Brewery grow their brand with social media content, video production, and digital marketing across Northeast Ohio.' },
+  'clients/bob-evans.html':                    { topLink: '/clients/index.html',            dropdownItem: null,                              mobileActive: null,           description: 'Perception Multimedia partnered with Bob Evans Farms to produce brand videos and digital marketing content that connect with audiences across the country.' },
+  'clients/cleveland-boat-show.html':          { topLink: '/clients/index.html',            dropdownItem: null,                              mobileActive: null,           description: 'Discover how Perception Multimedia elevated the Cleveland Boat Show\'s digital presence with email marketing, social media strategy, and video content.' },
+  'clients/southwest-general.html':            { topLink: '/clients/index.html',            dropdownItem: null,                              mobileActive: null,           description: 'See how Perception Multimedia helped Southwest General Hospital connect with patients through compelling video production and digital marketing in Northeast Ohio.' },
+  'clients/pse-credit-union.html':            { topLink: '/clients/index.html',            dropdownItem: null,                              mobileActive: null,           description: 'Perception Multimedia partnered with PSE Credit Union to create compelling video content and targeted digital marketing campaigns for their members.' },
+  'clients/moen.html':                        { topLink: '/clients/index.html',            dropdownItem: null,                              mobileActive: null,           description: 'See how Perception Multimedia supported Moen — one of North America\'s leading faucet brands — with video production and creative marketing content.' },
+  'clients/npa-coatings.html':               { topLink: '/clients/index.html',            dropdownItem: null,                              mobileActive: null,           description: 'Perception Multimedia built NPA Coatings\' web presence and captured their work with professional photography and custom website design in Northeast Ohio.' },
+  'clients/oatey.html':                      { topLink: '/clients/index.html',            dropdownItem: null,                              mobileActive: null,           description: 'See how Perception Multimedia partnered with Oatey — a leading name in the plumbing industry — on video production and digital marketing campaigns.' },
+  'clients/polaris.html':                    { topLink: '/clients/index.html',            dropdownItem: null,                              mobileActive: null,           description: 'Perception Multimedia helped Polaris Career Center grow community awareness and student enrollment through video production and targeted digital marketing.' },
+  'clients/avery-dennison.html':             { topLink: '/clients/index.html',            dropdownItem: null,                              mobileActive: null,           description: 'Perception Multimedia created video content and digital marketing campaigns for Avery Dennison, a global leader in labeling and packaging materials.' },
+  'clients/hill-n-dale.html':               { topLink: '/clients/index.html',            dropdownItem: null,                              mobileActive: null,           description: 'See how Perception Multimedia helped Hill N Dale Club connect with members and grow their community through video production and digital marketing.' },
+  'clients/dap.html':                        { topLink: '/clients/index.html',            dropdownItem: null,                              mobileActive: null,           description: 'Perception Multimedia partnered with DAP — one of America\'s most trusted home improvement brands — to produce video content and digital marketing campaigns.' },
+  'clients/hannahs-home.html':              { topLink: '/clients/index.html',            dropdownItem: null,                              mobileActive: null,           description: 'Perception Multimedia helped Hannah\'s Home share their life-changing mission through powerful video storytelling and digital marketing campaigns.' },
+  'clients/tovolo.html':                     { topLink: '/clients/index.html',            dropdownItem: null,                              mobileActive: null,           description: 'Perception Multimedia produced social media videos and product content for Tovolo, helping the kitchen tools brand engage home cooks with creative digital marketing.' },
+  'clients/action-door.html':               { topLink: '/clients/index.html',            dropdownItem: null,                              mobileActive: null,           description: 'See how Perception Multimedia helped Action Door & Window grow their business with video commercials, email marketing, and a custom website design.' },
+  'clients/jim-kaminski.html':              { topLink: '/clients/index.html',            dropdownItem: null,                              mobileActive: null,           description: 'Perception Multimedia created political video content and digital marketing strategy for Jim Kaminski\'s mayoral campaign in Strongsville, Ohio.' },
+  'clients/gales-garden-center.html':      { topLink: '/clients/index.html',            dropdownItem: null,                              mobileActive: null,           description: 'Perception Multimedia helped Gale\'s Garden Center grow their seasonal business with video production and social media marketing in Northeast Ohio.' },
+  'services/index.html':                       { topLink: '/services/index.html',           dropdownItem: null,                              mobileActive: null,           description: 'Explore Perception Multimedia\'s full range of marketing services: video production, web design, social media, search marketing, email campaigns, photography, and more.' },
+  'services/video-production.html':            { topLink: '/services/index.html',           dropdownItem: '/services/video-production.html', mobileActive: null,          description: 'Perception Multimedia produces compelling brand videos, commercials, and social media content for businesses across Northeast Ohio and beyond. Tell your story on screen.' },
+  'services/search-marketing.html':            { topLink: '/services/index.html',           dropdownItem: '/services/search-marketing.html', mobileActive: null,          description: 'Drive more leads with Perception Multimedia\'s search marketing services. Google Ads, PPC management, and local SEO strategies for businesses in Northeast Ohio.' },
+  'services/website-design.html':              { topLink: '/services/index.html',           dropdownItem: '/services/website-design.html',   mobileActive: null,          description: 'Custom website design and development by Perception Multimedia. We build fast, responsive, conversion-focused websites for businesses in Cleveland and Northeast Ohio.' },
+  'services/social-media.html':                { topLink: '/services/index.html',           dropdownItem: '/services/social-media.html',     mobileActive: null,          description: 'Grow your brand with Perception Multimedia\'s social media management — strategy, content creation, and community management tailored for Northeast Ohio businesses.' },
+  'services/email-campaigns.html':             { topLink: '/services/index.html',           dropdownItem: '/services/email-campaigns.html',  mobileActive: null,          description: 'Perception Multimedia designs and manages email marketing campaigns that convert. Mailchimp-certified experts serving businesses across Cleveland and Northeast Ohio.' },
+  'services/photography.html':                 { topLink: '/services/index.html',           dropdownItem: '/services/photography.html',      mobileActive: null,          description: 'Professional commercial photography from Perception Multimedia — headshots, product photos, event coverage, and architectural imagery for businesses in Northeast Ohio.' },
+  'services/graphic-design.html':              { topLink: '/services/index.html',           dropdownItem: '/services/graphic-design.html',           mobileActive: null,  description: 'Brand identity, logo design, and graphic design from Perception Multimedia. We craft visual identities that set businesses apart across Cleveland and Northeast Ohio.' },
+  'services/traditional-media.html':           { topLink: '/services/index.html',           dropdownItem: '/services/traditional-media.html',        mobileActive: null,  description: 'TV, radio, print, and outdoor advertising from Perception Multimedia. Strategic traditional media planning and buying for businesses in the Cleveland market.' },
+  'services/google-business-profile.html':     { topLink: '/services/index.html',           dropdownItem: '/services/google-business-profile.html',  mobileActive: null,  description: 'Perception Multimedia optimizes and manages Google Business Profiles for businesses across Cleveland and Northeast Ohio. Improve your local search visibility, Google Maps ranking, and online reputation.' },
+  'services/reputation-management.html':       { topLink: '/services/index.html',           dropdownItem: '/services/reputation-management.html',    mobileActive: null,  description: 'Perception Multimedia helps businesses in Cleveland and Northeast Ohio manage, monitor, and grow their online reputation. Review generation, monitoring, and response management.' },
+  'blog/index.html':                           { topLink: '/blog/index.html',               dropdownItem: null,                                      mobileActive: null,  description: 'Marketing tips, campaign insights, and industry news from Perception Multimedia — Northeast Ohio\'s collaborative digital marketing agency.' },
 };
 
 // ─── Read partials ────────────────────────────────────────────────────────────
@@ -127,7 +127,7 @@ function escRe(str) {
 let updated = 0;
 let skipped = 0;
 
-for (const [relPath, { topLink, dropdownItem, mobileActive }] of Object.entries(PAGE_MAP)) {
+for (const [relPath, { topLink, dropdownItem, mobileActive, description }] of Object.entries(PAGE_MAP)) {
   const filePath = resolve(root, relPath);
 
   let html;
@@ -210,6 +210,18 @@ for (const [relPath, { topLink, dropdownItem, mobileActive }] of Object.entries(
       '<!-- End Google Tag Manager (noscript) -->',
     ].join('\n');
     html = html.replace(/(<body[^>]*>)/, `$1\n${gtmNoscript}`);
+  }
+
+  // Inject or update meta description
+  if (description) {
+    const metaTag = `<meta name="description" content="${description}">`;
+    if (html.includes('<meta name="description"')) {
+      // Replace existing
+      html = html.replace(/<meta name="description"[^>]*>/g, metaTag);
+    } else {
+      // Insert after <title>...</title>
+      html = html.replace(/(<\/title>)/, `$1\n  ${metaTag}`);
+    }
   }
 
   writeFileSync(filePath, html, 'utf8');
