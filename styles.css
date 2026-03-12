@@ -915,3 +915,67 @@ button:focus-visible {
   outline: 2px solid var(--pmm-red);
   outline-offset: 3px;
 }
+
+/* ============================================================
+   FAQ ACCORDION
+   ============================================================ */
+.faq-item {
+  border-bottom: 1px solid var(--pmm-border);
+  opacity: 0;
+  transform: translateY(14px);
+  transition:
+    opacity 0.55s var(--ease-expo),
+    transform 0.55s var(--ease-expo);
+}
+
+.faq-item.in-view {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.faq-item:nth-child(1) { transition-delay: 0.05s; }
+.faq-item:nth-child(2) { transition-delay: 0.12s; }
+.faq-item:nth-child(3) { transition-delay: 0.19s; }
+.faq-item:nth-child(4) { transition-delay: 0.26s; }
+.faq-item:nth-child(5) { transition-delay: 0.33s; }
+
+.faq-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  width: 100%;
+  padding: 24px 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  color: var(--pmm-white);
+  transition: color 0.2s ease;
+}
+
+.faq-btn:hover { color: var(--pmm-red); }
+
+.faq-btn[aria-expanded="true"] { color: var(--pmm-red); }
+
+.faq-chevron {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  color: var(--pmm-red);
+  transition: transform 0.35s var(--ease-expo);
+}
+
+.faq-btn[aria-expanded="true"] .faq-chevron {
+  transform: rotate(180deg);
+}
+
+.faq-answer {
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 0.4s var(--ease-expo);
+}
+
+.faq-answer-inner {
+  padding-bottom: 24px;
+}

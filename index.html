@@ -639,6 +639,87 @@
     </div>
   </section>
 
+  <!-- ===== FAQ ===== -->
+  <section id="faq" class="bg-pmm-surface py-24 lg:py-32">
+    <div class="max-w-4xl mx-auto px-6 lg:px-10">
+
+      <!-- Header -->
+      <div class="flex items-center gap-3 mb-5">
+        <span class="block w-10 h-px bg-pmm-red"></span>
+        <span class="font-heading font-semibold text-pmm-red text-xs tracking-[0.3em] uppercase">FAQ</span>
+      </div>
+      <h2 class="font-display leading-[0.9] tracking-[0.02em] text-pmm-white mb-14"
+          style="font-size: clamp(2.5rem,5vw,4.5rem);">
+        Common Questions.
+      </h2>
+
+      <!-- Accordion -->
+      <div class="faq-list border-t border-pmm-border">
+
+        <div class="faq-item">
+          <button class="faq-btn" aria-expanded="false" aria-controls="faq-a1" onclick="toggleFaq(this)">
+            <span class="font-heading font-semibold text-sm sm:text-base tracking-[0.02em]">What makes PMM different from other agencies?</span>
+            <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          <div class="faq-answer" id="faq-a1" role="region">
+            <div class="faq-answer-inner">
+              <p class="font-body text-pmm-gray text-sm leading-relaxed">We operate on month-to-month agreements — no long-term contracts, no lock-in. We earn your business every single month through results, collaboration, and award-winning creative work that actually moves the needle.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-btn" aria-expanded="false" aria-controls="faq-a2" onclick="toggleFaq(this)">
+            <span class="font-heading font-semibold text-sm sm:text-base tracking-[0.02em]">What industries do you specialize in?</span>
+            <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          <div class="faq-answer" id="faq-a2" role="region">
+            <div class="faq-answer-inner">
+              <p class="font-body text-pmm-gray text-sm leading-relaxed">We work across all industries, with deep experience in food &amp; beverage, healthcare, home services, retail, manufacturing, and professional services. Our portfolio spans local businesses to nationally recognized brands.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-btn" aria-expanded="false" aria-controls="faq-a3" onclick="toggleFaq(this)">
+            <span class="font-heading font-semibold text-sm sm:text-base tracking-[0.02em]">Do you handle both digital and traditional media?</span>
+            <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          <div class="faq-answer" id="faq-a3" role="region">
+            <div class="faq-answer-inner">
+              <p class="font-body text-pmm-gray text-sm leading-relaxed">Yes — we're a full-service shop. Our capabilities include video production, web design, social media, email campaigns, search marketing, photography, graphic design, and traditional media like TV, radio, and print.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-btn" aria-expanded="false" aria-controls="faq-a4" onclick="toggleFaq(this)">
+            <span class="font-heading font-semibold text-sm sm:text-base tracking-[0.02em]">How do we get started?</span>
+            <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          <div class="faq-answer" id="faq-a4" role="region">
+            <div class="faq-answer-inner">
+              <p class="font-body text-pmm-gray text-sm leading-relaxed">Fill out the contact form below or give us a call. We'll schedule a free discovery conversation to learn about your business, goals, and budget — then put together a custom plan tailored to what you actually need.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-btn" aria-expanded="false" aria-controls="faq-a5" onclick="toggleFaq(this)">
+            <span class="font-heading font-semibold text-sm sm:text-base tracking-[0.02em]">Where are you located? Do you work with clients outside Cleveland?</span>
+            <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          <div class="faq-answer" id="faq-a5" role="region">
+            <div class="faq-answer-inner">
+              <p class="font-body text-pmm-gray text-sm leading-relaxed">Our studio is in Middleburg Heights, OH — right in the heart of Greater Cleveland. We work with clients locally and across the country, and our remote capabilities make collaboration seamless regardless of where you're based.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
   <!-- ===== CONTACT ===== -->
   <section id="contact" class="bg-pmm-black py-24 lg:py-32">
     <div class="max-w-7xl mx-auto px-6 lg:px-10">
@@ -853,8 +934,24 @@
     }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
 
     document.querySelectorAll(
-      '.svc-card, .diff-card, .port-item, .stat-item, .contact-row'
+      '.svc-card, .diff-card, .port-item, .stat-item, .contact-row, .faq-item'
     ).forEach(el => observer.observe(el));
+
+    // FAQ accordion
+    function toggleFaq(btn) {
+      const isOpen = btn.getAttribute('aria-expanded') === 'true';
+      // Close all
+      document.querySelectorAll('.faq-btn[aria-expanded="true"]').forEach(b => {
+        b.setAttribute('aria-expanded', 'false');
+        document.getElementById(b.getAttribute('aria-controls')).style.maxHeight = '0';
+      });
+      // Open clicked if it was closed
+      if (!isOpen) {
+        btn.setAttribute('aria-expanded', 'true');
+        const panel = document.getElementById(btn.getAttribute('aria-controls'));
+        panel.style.maxHeight = panel.scrollHeight + 'px';
+      }
+    }
   </script>
 
 </div><!-- /overflow-x-hidden -->
