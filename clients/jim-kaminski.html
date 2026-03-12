@@ -808,6 +808,8 @@
       </div>
     </div>
   </footer>
+  <!-- reCAPTCHA v3 -->
+  <script src="https://www.google.com/recaptcha/api.js?render=6LdplJEUAAAAA0gIfsS1WPErP77V_v8tqz-segzU"></script>
 <!-- FOOTER END -->
 
 </div><!-- /#case-content -->
@@ -1003,16 +1005,20 @@
       var origHTML = btn.innerHTML;
       btn.disabled = true;
       btn.innerHTML = 'Sending…';
-      fetch('https://script.google.com/macros/s/AKfycbxVo6rCfprqQYYeCCUZdL_ZVCXVqaiUFnP6F2qHGYnYk9A-oPejRSWLohl8bQ8cCx0d/exec', {
-        method: 'POST', mode: 'no-cors',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ first_name: name, last_name: '', email: email, message: message, source: window.location.pathname })
-      }).then(function() {
-        form.style.display = 'none';
-        document.getElementById('cta-success').style.display = 'block';
-      }).catch(function() {
-        btn.disabled = false;
-        btn.innerHTML = origHTML;
+      grecaptcha.ready(function() {
+        grecaptcha.execute('6LdplJEUAAAAA0gIfsS1WPErP77V_v8tqz-segzU', { action: 'contact' }).then(function(token) {
+          fetch('https://script.google.com/macros/s/AKfycbxVo6rCfprqQYYeCCUZdL_ZVCXVqaiUFnP6F2qHGYnYk9A-oPejRSWLohl8bQ8cCx0d/exec', {
+            method: 'POST', mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ first_name: name, last_name: '', email: email, message: message, source: window.location.pathname, recaptcha_token: token })
+          }).then(function() {
+            form.style.display = 'none';
+            document.getElementById('cta-success').style.display = 'block';
+          }).catch(function() {
+            btn.disabled = false;
+            btn.innerHTML = origHTML;
+          });
+        });
       });
     });
   })();
