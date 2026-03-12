@@ -199,8 +199,8 @@
     #form-success {
       display: none;
       padding: 24px;
-      border: 1px solid rgba(232,27,30,0.25);
-      background: rgba(232,27,30,0.05);
+      border: 1px solid rgba(34,197,94,0.35);
+      background: rgba(34,197,94,0.06);
       margin-top: 16px;
     }
 
@@ -630,7 +630,7 @@
 
               <!-- Success -->
               <div id="form-success">
-                <p class="font-heading font-bold text-xs tracking-[0.15em] uppercase text-pmm-red mb-1">Message Sent</p>
+                <p class="font-heading font-bold text-xs tracking-[0.15em] uppercase mb-1" style="color:#22c55e">Message Sent</p>
                 <p class="font-body text-sm text-white/60 leading-relaxed">Thank you for reaching out! A member of our team will be in touch with you shortly.</p>
               </div>
 
@@ -841,11 +841,35 @@
     submitArrow.classList.add('hidden');
     submitSpinner.classList.remove('hidden');
 
-    // Simulate send (replace with your actual form handler / Formspree / etc.)
-    setTimeout(() => {
+    const payload = {
+      first_name: firstName,
+      last_name:  lastName,
+      email:      email,
+      phone:      document.getElementById('phone').value.trim(),
+      company:    document.getElementById('company').value.trim(),
+      service:    document.getElementById('service').value,
+      budget:     document.getElementById('budget').value,
+      message:    message
+    };
+
+    fetch('https://script.google.com/macros/s/AKfycbxVo6rCfprqQYYeCCUZdL_ZVCXVqaiUFnP6F2qHGYnYk9A-oPejRSWLohl8bQ8cCx0d/exec', {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    })
+    .then(() => {
       submitBtn.style.display = 'none';
       formSuccess.style.display = 'block';
-    }, 1400);
+    })
+    .catch(() => {
+      submitText.textContent = 'Send Message';
+      submitArrow.classList.remove('hidden');
+      submitSpinner.classList.add('hidden');
+      submitBtn.disabled = false;
+      formError.textContent = 'Something went wrong. Please try again or email us directly.';
+      formError.classList.remove('hidden');
+    });
   });
 </script>
 

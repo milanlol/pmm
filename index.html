@@ -778,24 +778,24 @@
 
         <!-- Form -->
         <div class="form-card">
-          <form onsubmit="return false;" class="space-y-5">
+          <form id="home-contact-form" class="space-y-5">
             <div class="grid sm:grid-cols-2 gap-5">
               <div class="field-group">
                 <label class="field-label">Your Name</label>
-                <input type="text" class="field-input" placeholder="Jane Smith">
+                <input type="text" id="hc-name" class="field-input" placeholder="Jane Smith">
               </div>
               <div class="field-group">
                 <label class="field-label">Email Address</label>
-                <input type="email" class="field-input" placeholder="jane@company.com">
+                <input type="email" id="hc-email" class="field-input" placeholder="jane@company.com">
               </div>
             </div>
             <div class="field-group">
               <label class="field-label">Company</label>
-              <input type="text" class="field-input" placeholder="Your Company Name">
+              <input type="text" id="hc-company" class="field-input" placeholder="Your Company Name">
             </div>
             <div class="field-group">
               <label class="field-label">Service Interested In</label>
-              <select class="field-input field-select">
+              <select id="hc-service" class="field-input field-select">
                 <option value="" disabled selected>Select a service…</option>
                 <option>Video Production</option>
                 <option>Website Design</option>
@@ -810,12 +810,17 @@
             </div>
             <div class="field-group">
               <label class="field-label">Message</label>
-              <textarea class="field-input field-textarea" placeholder="Tell us about your project…"></textarea>
+              <textarea id="hc-message" class="field-input field-textarea" placeholder="Tell us about your project…"></textarea>
             </div>
-            <button type="submit" class="w-full bg-pmm-red text-white font-heading font-bold text-xs tracking-[0.2em] uppercase py-4 px-8 hover:bg-red-700 transition-colors duration-200 flex items-center justify-center gap-3 group focus:outline-none focus-visible:ring-2 focus-visible:ring-pmm-red focus-visible:ring-offset-2 focus-visible:ring-offset-pmm-black">
-              Send Message
+            <p id="hc-error" class="font-body text-pmm-red text-xs hidden">Please fill in your name, email, and message.</p>
+            <button type="submit" id="hc-submit" class="w-full bg-pmm-red text-white font-heading font-bold text-xs tracking-[0.2em] uppercase py-4 px-8 hover:bg-red-700 transition-colors duration-200 flex items-center justify-center gap-3 group focus:outline-none focus-visible:ring-2 focus-visible:ring-pmm-red focus-visible:ring-offset-2 focus-visible:ring-offset-pmm-black">
+              <span id="hc-btn-text">Send Message</span>
               <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
             </button>
+            <div id="hc-success" style="display:none; padding:20px; border:1px solid rgba(34,197,94,0.35); background:rgba(34,197,94,0.06);">
+              <p class="font-heading font-bold text-xs tracking-[0.15em] uppercase mb-1" style="color:#22c55e">Message Sent</p>
+              <p class="font-body text-sm text-white/60 leading-relaxed">Thank you for reaching out! A member of our team will be in touch with you shortly.</p>
+            </div>
           </form>
         </div>
 
@@ -936,6 +941,40 @@
     document.querySelectorAll(
       '.svc-card, .diff-card, .port-item, .stat-item, .contact-row, .faq-item'
     ).forEach(el => observer.observe(el));
+
+    // Home contact form
+    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxVo6rCfprqQYYeCCUZdL_ZVCXVqaiUFnP6F2qHGYnYk9A-oPejRSWLohl8bQ8cCx0d/exec';
+    document.getElementById('home-contact-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const name    = document.getElementById('hc-name').value.trim();
+      const email   = document.getElementById('hc-email').value.trim();
+      const message = document.getElementById('hc-message').value.trim();
+      const error   = document.getElementById('hc-error');
+      if (!name || !email || !message) { error.classList.remove('hidden'); return; }
+      error.classList.add('hidden');
+      const btn = document.getElementById('hc-submit');
+      const btnText = document.getElementById('hc-btn-text');
+      btn.disabled = true;
+      btnText.textContent = 'Sending…';
+      fetch(APPS_SCRIPT_URL, {
+        method: 'POST', mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          first_name: name, last_name: '', email: email,
+          company: document.getElementById('hc-company').value.trim(),
+          service: document.getElementById('hc-service').value,
+          message: message
+        })
+      }).then(() => {
+        btn.style.display = 'none';
+        document.getElementById('hc-success').style.display = 'block';
+      }).catch(() => {
+        btnText.textContent = 'Send Message';
+        btn.disabled = false;
+        error.textContent = 'Something went wrong. Please try again or email us directly.';
+        error.classList.remove('hidden');
+      });
+    });
 
     // FAQ accordion
     function toggleFaq(btn) {

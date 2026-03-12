@@ -517,12 +517,12 @@
           <span style="color:#d6391d;">STORY TO LIFE?</span>
         </h3>
       </div>
-      <form style="display:flex; flex-direction:column; gap:12px; width:100%; max-width:420px;" onsubmit="return false;">
+      <form id="cta-form" style="display:flex; flex-direction:column; gap:12px; width:100%; max-width:420px;">
         <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
-          <input type="text"  placeholder="Your Name"     class="dap-cta-input">
-          <input type="email" placeholder="Email Address" class="dap-cta-input">
+          <input id="cta-name" type="text"  placeholder="Your Name"     class="dap-cta-input">
+          <input id="cta-email" type="email" placeholder="Email Address" class="dap-cta-input">
         </div>
-        <textarea placeholder="Tell us about your project…" class="dap-cta-input" rows="3" style="resize:none;"></textarea>
+        <textarea id="cta-message" placeholder="Tell us about your project…" class="dap-cta-input" rows="3" style="resize:none;"></textarea>
         <button type="submit" class="cta-btn-dap" style="width:100%; justify-content:center;">
           Send Message
           <svg width="14" height="10" viewBox="0 0 14 10" fill="none">
@@ -530,6 +530,10 @@
           </svg>
         </button>
       </form>
+      <div id="cta-success" style="display:none; margin-top:16px; padding:20px; border:1px solid rgba(34,197,94,0.35); background:rgba(34,197,94,0.06);">
+        <p style="font-family:'Josefin Sans',sans-serif; font-weight:700; font-size:11px; letter-spacing:0.15em; text-transform:uppercase; color:#22c55e; margin-bottom:4px;">Message Sent</p>
+        <p style="font-family:'DM Sans',sans-serif; font-size:14px; color:rgba(255,255,255,0.6); line-height:1.6;">Thank you for reaching out! A member of our team will be in touch with you shortly.</p>
+      </div>
     </div>
   </section>
 
@@ -739,6 +743,34 @@
       mobileMenuEl.classList.add('flex');
     });
     menuCloseBtn.addEventListener('click', window.closeMobileMenu);
+  })();
+
+  // CTA form
+  (function() {
+    var form = document.getElementById('cta-form');
+    if (!form) return;
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      var name    = document.getElementById('cta-name').value.trim();
+      var email   = document.getElementById('cta-email').value.trim();
+      var message = document.getElementById('cta-message').value.trim();
+      if (!name || !email || !message) return;
+      var btn = form.querySelector('button[type="submit"]');
+      var origHTML = btn.innerHTML;
+      btn.disabled = true;
+      btn.innerHTML = 'Sending…';
+      fetch('https://script.google.com/macros/s/AKfycbxVo6rCfprqQYYeCCUZdL_ZVCXVqaiUFnP6F2qHGYnYk9A-oPejRSWLohl8bQ8cCx0d/exec', {
+        method: 'POST', mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ first_name: name, last_name: '', email: email, message: message, source: window.location.pathname })
+      }).then(function() {
+        form.style.display = 'none';
+        document.getElementById('cta-success').style.display = 'block';
+      }).catch(function() {
+        btn.disabled = false;
+        btn.innerHTML = origHTML;
+      });
+    });
   })();
 </script>
 
