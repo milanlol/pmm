@@ -180,6 +180,38 @@ for (const [relPath, { topLink, dropdownItem, mobileActive }] of Object.entries(
     html = html.slice(0, ftrS) + footerPartial.trim() + html.slice(ftrE);
   }
 
+  // Inject favicon if not already present
+  if (!html.includes('rel="icon"')) {
+    html = html.replace(
+      '<meta charset="UTF-8">',
+      '<meta charset="UTF-8">\n  <link rel="icon" href="/brand_assets/pmm-symbol.svg" type="image/svg+xml">'
+    );
+  }
+
+  // Inject GTM snippets if not already present
+  if (!html.includes('GTM-MFL6XRS')) {
+    // Head snippet — as high as possible, right after charset
+    const gtmHead = [
+      '<!-- Google Tag Manager -->',
+      '  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({\'gtm.start\':',
+      '  new Date().getTime(),event:\'gtm.js\'});var f=d.getElementsByTagName(s)[0],',
+      '  j=d.createElement(s),dl=l!=\'dataLayer\'?\'&l=\'+l:\'\';j.async=true;j.src=',
+      '  \'https://www.googletagmanager.com/gtm.js?id=\'+i+dl;f.parentNode.insertBefore(j,f);',
+      '  })(window,document,\'script\',\'dataLayer\',\'GTM-MFL6XRS\');</script>',
+      '  <!-- End Google Tag Manager -->',
+    ].join('\n');
+    html = html.replace('<meta charset="UTF-8">', `<meta charset="UTF-8">\n  ${gtmHead}`);
+
+    // Body noscript — immediately after opening <body> tag
+    const gtmNoscript = [
+      '<!-- Google Tag Manager (noscript) -->',
+      '<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MFL6XRS"',
+      'height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>',
+      '<!-- End Google Tag Manager (noscript) -->',
+    ].join('\n');
+    html = html.replace(/(<body[^>]*>)/, `$1\n${gtmNoscript}`);
+  }
+
   writeFileSync(filePath, html, 'utf8');
   console.log(`  ✓  ${relPath}`);
   updated++;
