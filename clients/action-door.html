@@ -1,0 +1,1317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Action Door and Window — Perception Multimedia</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Josefin+Sans:ital,wght@0,300;0,400;0,600;0,700;1,300&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../styles.css">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'pmm-red':     '#E81B1E',
+            'pmm-black':   '#0A0A0A',
+            'pmm-dark':    '#111111',
+            'pmm-surface': '#161616',
+            'pmm-border':  '#222222',
+            'pmm-muted':   '#3A3A3A',
+            'pmm-white':   '#F4F4F0',
+            'pmm-cream':   '#EDECEA',
+            'pmm-gray':    '#5C5C5C',
+            'ad-red':      '#f04135',
+            'ad-ember':    '#f26352',
+            'ad-dark':     '#c2332a',
+          },
+          fontFamily: {
+            'display': ['"Bebas Neue"', 'cursive'],
+            'heading': ['"Josefin Sans"', 'sans-serif'],
+            'body':    ['"DM Sans"', 'sans-serif'],
+          },
+        }
+      }
+    }
+  </script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: #0A0A0A;
+      color: #F4F4F0;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+    ::selection { background: #f04135; color: #fff; }
+
+    /* ── Grain ── */
+    .grain-overlay {
+      position: fixed; inset: 0; z-index: 200;
+      pointer-events: none; opacity: 0.03;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size: 180px 180px;
+    }
+
+    /* ── Scroll-expansion hero ── */
+    #expansion-hero {
+      position: relative;
+      min-height: 100dvh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    #expansion-bg {
+      position: absolute; inset: 0; z-index: 0;
+    }
+    #expansion-bg img {
+      width: 100%; height: 100%;
+      object-fit: cover; object-position: center 35%;
+      display: block;
+    }
+    #expansion-bg .bg-vignette {
+      position: absolute; inset: 0;
+      background: linear-gradient(
+        to bottom,
+        rgba(10,10,10,0.72) 0%,
+        rgba(10,10,10,0.38) 50%,
+        rgba(10,10,10,0.92) 100%
+      );
+    }
+
+    /* Media box */
+    #media-box {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 10;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow:
+        0 0 0 1px rgba(240,65,53,0.30),
+        0 8px 60px rgba(0,0,0,0.65),
+        0 0 120px rgba(240,65,53,0.14);
+      will-change: width, height;
+    }
+    #media-overlay {
+      position: absolute; inset: 0;
+      background: rgba(0,0,0,0.28);
+      border-radius: 12px;
+      pointer-events: none;
+    }
+
+    /* Scroll hint */
+    #scroll-hint {
+      position: absolute; z-index: 20;
+      bottom: 10%;
+      left: 50%; transform: translateX(-50%);
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 10px; font-weight: 600;
+      letter-spacing: 0.28em; text-transform: uppercase;
+      color: rgba(244,244,240,0.7);
+      display: flex; align-items: center; gap: 10px;
+    }
+    .hint-bar {
+      width: 28px; height: 1px;
+      background: rgba(240,65,53,0.9);
+      animation: barPulse 1.8s ease-in-out infinite;
+    }
+    @keyframes barPulse {
+      0%, 100% { opacity: 0.4; transform: scaleX(1); }
+      50%       { opacity: 1;   transform: scaleX(1.3); }
+    }
+
+    /* ── Case content ── */
+    #case-content {
+      opacity: 0;
+      transition: opacity 0.55s ease;
+    }
+    #case-content.visible { opacity: 1; }
+
+    /* ── Eyebrow rule ── */
+    .ad-rule {
+      width: 28px; height: 1px;
+      background: #f04135;
+      flex-shrink: 0;
+    }
+
+    /* ── Service tags ── */
+    .ad-tag {
+      display: inline-block;
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 9px; font-weight: 600;
+      letter-spacing: 0.20em; text-transform: uppercase;
+      padding: 6px 12px;
+      border: 1px solid rgba(240,65,53,0.35);
+      color: rgba(244,244,240,0.65);
+      border-radius: 2px;
+    }
+
+    /* ── Video grid ── */
+    .video-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 2px;
+    }
+    @media (min-width: 768px) {
+      .video-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+    .video-card {
+      position: relative;
+      overflow: hidden;
+      background: #0d0d0d;
+      cursor: pointer;
+    }
+    .video-card video {
+      display: block;
+      width: 100%; height: 100%;
+      object-fit: cover;
+    }
+    .video-card-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(10,10,10,0.75) 0%, transparent 55%);
+      transition: opacity 0.3s ease;
+    }
+    .video-card:hover .video-card-overlay { opacity: 0.75; }
+    .video-card-play {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 52px; height: 52px;
+      border-radius: 50%;
+      background: rgba(240,65,53,0.88);
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0;
+      transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.16,1,0.3,1);
+      box-shadow: 0 0 0 8px rgba(240,65,53,0.18);
+    }
+    .video-card:hover .video-card-play {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1.05);
+    }
+    .video-card-label {
+      position: absolute;
+      bottom: 14px; left: 16px;
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 9px; font-weight: 600;
+      letter-spacing: 0.22em; text-transform: uppercase;
+      color: rgba(244,244,240,0.85);
+    }
+
+    /* ── Video modal ── */
+    #vid-modal {
+      position: fixed; inset: 0; z-index: 300;
+      background: rgba(0,0,0,0.92);
+      display: none; align-items: center; justify-content: center;
+      opacity: 0; transition: opacity 0.3s ease;
+    }
+    #vid-modal.open { display: flex; }
+    #vid-modal.fade-in { opacity: 1; }
+    #vid-modal-inner {
+      position: relative;
+      width: min(90vw, 1100px);
+    }
+    #vid-modal-video {
+      width: 100%; border-radius: 6px;
+      display: block;
+      box-shadow: 0 32px 80px rgba(0,0,0,0.8);
+    }
+    #vid-modal-close {
+      position: absolute;
+      top: -14px; right: -14px;
+      width: 36px; height: 36px;
+      background: #f04135;
+      border-radius: 50%;
+      border: none; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      color: #fff;
+      transition: background 0.2s ease, transform 0.2s ease;
+    }
+    #vid-modal-close:hover { background: #c2332a; transform: scale(1.08); }
+
+    /* ── Approach section (light) ── */
+    .approach-section {
+      background: #F4F4F0;
+    }
+    .approach-ad-rule {
+      width: 28px; height: 1px;
+      background: #f04135;
+      flex-shrink: 0;
+    }
+    .approach-quote-border {
+      border-left: 3px solid #f04135;
+      padding-left: 24px;
+    }
+
+    /* ── Website mockup ── */
+    .mockup-frame {
+      position: relative;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow:
+        0 0 0 1px rgba(0,0,0,0.10),
+        0 24px 64px rgba(0,0,0,0.18),
+        0 4px 16px rgba(0,0,0,0.08);
+    }
+    .mockup-browser-bar {
+      background: #e8e8e6;
+      border-bottom: 1px solid rgba(0,0,0,0.08);
+      padding: 10px 16px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .browser-dot {
+      width: 10px; height: 10px; border-radius: 50%;
+    }
+    .browser-url {
+      flex: 1; height: 22px;
+      background: #fff;
+      border-radius: 4px;
+      margin: 0 16px;
+      border: 1px solid rgba(0,0,0,0.10);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 10px; color: rgba(0,0,0,0.4);
+      letter-spacing: 0.04em;
+    }
+    .mockup-scroll-area {
+      height: 480px;
+      overflow-y: auto;
+      overflow-x: hidden;
+      cursor: ns-resize;
+      scroll-behavior: smooth;
+    }
+    .mockup-scroll-area::-webkit-scrollbar { width: 4px; }
+    .mockup-scroll-area::-webkit-scrollbar-track { background: #e0e0de; }
+    .mockup-scroll-area::-webkit-scrollbar-thumb { background: #f04135; border-radius: 2px; }
+    .mockup-scroll-area img {
+      display: block; width: 100%; height: auto;
+    }
+
+    /* ── Email showcase ── */
+    .email-showcase {
+      background: #0d0d0d;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    .email-img-wrap {
+      position: relative;
+      overflow: hidden;
+      border-radius: 8px;
+      box-shadow:
+        0 0 0 1px rgba(240,65,53,0.15),
+        0 20px 60px rgba(0,0,0,0.55);
+    }
+    .email-img-wrap img {
+      display: block; width: 100%; height: auto;
+    }
+
+    /* ── Social Spotlight (phone mockup) ── */
+    .ad-social-spotlight {
+      background: #0a0a0a;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+      overflow: visible;
+    }
+    .ad-spotlight-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 64px;
+      align-items: center;
+    }
+    @media (min-width: 1024px) {
+      .ad-spotlight-grid {
+        grid-template-columns: 380px 1fr;
+        gap: 80px;
+      }
+    }
+    .ad-phone-wrap {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      padding: 24px 0 40px;
+    }
+    .ad-phone-glow {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 280px; height: 560px;
+      background: radial-gradient(ellipse at center, rgba(240,65,53,0.16) 0%, transparent 70%);
+      pointer-events: none;
+      border-radius: 50%;
+      filter: blur(30px);
+    }
+    .ad-phone {
+      position: relative;
+      width: 240px;
+      background: #0d0d0d;
+      border-radius: 38px;
+      border: 1.5px solid rgba(240,65,53,0.28);
+      box-shadow:
+        0 0 0 5px #0a0a0a,
+        0 0 0 6px rgba(240,65,53,0.10),
+        0 32px 80px rgba(0,0,0,0.8),
+        inset 0 1px 0 rgba(255,255,255,0.06);
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    .ad-phone-notch {
+      position: relative;
+      height: 28px;
+      background: #0d0d0d;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2;
+    }
+    .ad-phone-notch::after {
+      content: '';
+      width: 70px; height: 14px;
+      background: #111;
+      border-radius: 0 0 14px 14px;
+      border: 1px solid rgba(240,65,53,0.12);
+      border-top: none;
+    }
+    .ad-phone-screen {
+      background: #0d0d0d;
+      overflow: hidden;
+    }
+    .ad-phone-chin {
+      height: 24px;
+      background: #0d0d0d;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .ad-phone-chin::after {
+      content: '';
+      width: 80px; height: 4px;
+      background: rgba(255,255,255,0.12);
+      border-radius: 2px;
+    }
+    .ad-ig-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 10px;
+      background: #0d0d0d;
+    }
+    .ad-ig-avatar {
+      width: 30px; height: 30px;
+      border-radius: 50%;
+      background: #181818;
+      border: 1.5px solid rgba(240,65,53,0.5);
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    .ad-ig-avatar img {
+      width: 80%; height: auto;
+      object-fit: contain;
+    }
+    .ad-ig-meta {
+      display: flex; flex-direction: column;
+      flex: 1; min-width: 0;
+    }
+    .ad-ig-handle {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 10px; font-weight: 600;
+      color: #F4F4F0;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .ad-ig-sub {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 8px; color: rgba(244,244,240,0.35);
+    }
+    .ad-ig-dots {
+      color: rgba(244,244,240,0.4);
+      flex-shrink: 0;
+    }
+    .ad-phone-video-wrap {
+      width: 100%;
+      aspect-ratio: 9/14;
+      overflow: hidden;
+      background: #0d0d0d;
+    }
+    .ad-phone-video-wrap video {
+      width: 100%; height: 100%;
+      object-fit: cover; display: block;
+    }
+    .ad-ig-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 10px 4px;
+      color: rgba(244,244,240,0.8);
+    }
+    .ad-ig-left { display: flex; gap: 12px; align-items: center; }
+    .ad-ig-likes {
+      padding: 0 10px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 9.5px; font-weight: 600;
+      color: #F4F4F0;
+    }
+    .ad-ig-caption {
+      padding: 2px 10px 10px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 8.5px; line-height: 1.5;
+      color: rgba(244,244,240,0.65);
+    }
+    .ad-ig-caption strong { color: #F4F4F0; }
+
+    /* Spotlight text column */
+    .ad-spotlight-text { padding-top: 0; }
+    @media (min-width: 1024px) { .ad-spotlight-text { padding-top: 8px; } }
+
+    .ad-platform-list {
+      display: flex; flex-direction: column;
+      gap: 0;
+      margin-top: 32px;
+    }
+    .ad-platform-item {
+      display: flex; align-items: center;
+      gap: 14px;
+      padding: 13px 0;
+      border-bottom: 1px solid #1a1a1a;
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 11px; font-weight: 600;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: rgba(244,244,240,0.5);
+      transition: color 0.2s ease;
+    }
+    .ad-platform-item:first-child { border-top: 1px solid #1a1a1a; }
+    .ad-platform-item svg { color: #f04135; flex-shrink: 0; }
+
+    /* ── CTA inputs ── */
+    .ad-cta-input {
+      width: 100%;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.10);
+      color: #F4F4F0;
+      font-family: 'DM Sans', sans-serif; font-size: 13px;
+      padding: 12px 16px; outline: none;
+      transition: border-color 0.2s ease, background 0.2s ease;
+    }
+    .ad-cta-input::placeholder { color: rgba(244,244,240,0.30); }
+    .ad-cta-input:focus {
+      border-color: rgba(240,65,53,0.55);
+      background: rgba(240,65,53,0.04);
+    }
+    .cta-btn-ad {
+      display: inline-flex; align-items: center; gap: 10px;
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 11px; font-weight: 700;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      padding: 16px 32px;
+      background: linear-gradient(135deg, #f04135 0%, #f26352 100%);
+      color: #fff;
+      border: none; cursor: pointer;
+      box-shadow: 0 4px 24px rgba(240,65,53,0.40);
+      transition: box-shadow 0.25s ease, transform 0.2s ease, opacity 0.2s ease;
+    }
+    .cta-btn-ad:hover {
+      box-shadow: 0 6px 32px rgba(240,65,53,0.60);
+      transform: translateY(-1px);
+    }
+    .cta-btn-ad:active { transform: translateY(0); opacity: 0.9; }
+
+    /* ── Reveal animations ── */
+    .reveal-up {
+      opacity: 0; transform: translateY(20px);
+      transition: opacity 0.65s cubic-bezier(0.16,1,0.3,1),
+                  transform 0.65s cubic-bezier(0.16,1,0.3,1);
+    }
+    .reveal-up.in-view { opacity: 1; transform: translateY(0); }
+    .delay-1 { transition-delay: 0.08s; }
+    .delay-2 { transition-delay: 0.16s; }
+    .delay-3 { transition-delay: 0.24s; }
+
+    /* ── Scrollbar ── */
+    ::-webkit-scrollbar          { width: 3px; }
+    ::-webkit-scrollbar-track    { background: #0A0A0A; }
+    ::-webkit-scrollbar-thumb    { background: #f04135; }
+
+    a:focus-visible, button:focus-visible {
+      outline: 2px solid #f04135;
+      outline-offset: 3px;
+    }
+  </style>
+</head>
+<body>
+<div class="grain-overlay" aria-hidden="true"></div>
+
+<!-- NAV START -->
+  <!-- NAV -->
+  <nav id="navbar" class="fixed top-0 left-0 right-0 z-50">
+    <div class="max-w-7xl mx-auto px-6 lg:px-10 h-20 flex items-center justify-between">
+      <a href="/index.html" class="flex-shrink-0">
+        <img src="/brand_assets/PMM-Logo-white.png" alt="Perception Multimedia" class="h-11 w-auto">
+      </a>
+      <div class="hidden md:flex items-center gap-8">
+        <a href="/index.html" class="nav-link font-heading font-semibold text-xs tracking-[0.2em] uppercase text-white/60 hover:text-white transition-colors duration-200">Home</a>
+        <a href="/about.html" class="nav-link font-heading font-semibold text-xs tracking-[0.2em] uppercase text-white/60 hover:text-white transition-colors duration-200">About</a>
+        <div class="nav-dropdown-wrapper">
+          <a href="/services/index.html" class="nav-link font-heading font-semibold text-xs tracking-[0.2em] uppercase text-white/60 hover:text-white transition-colors duration-200 flex items-center gap-1.5">Services <svg class="nav-chevron-icon" width="8" height="5" viewBox="0 0 8 5" fill="none"><path d="M1 1l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+          <div class="nav-dropdown">
+            <a href="/services/video-production.html" class="nav-dropdown-item">Video Production</a>
+            <a href="/services/website-design.html" class="nav-dropdown-item">Website Design</a>
+            <a href="/services/social-media.html" class="nav-dropdown-item">Social Media</a>
+            <a href="/services/email-campaigns.html" class="nav-dropdown-item">Email Campaigns</a>
+            <a href="/services/photography.html" class="nav-dropdown-item">Photography</a>
+            <a href="/services/search-marketing.html" class="nav-dropdown-item">Search Marketing</a>
+            <a href="/services/graphic-design.html" class="nav-dropdown-item">Branding &amp; Logo Design</a>
+            <a href="/services/traditional-media.html" class="nav-dropdown-item">Traditional Media</a>
+            <a href="/services/google-business-profile.html" class="nav-dropdown-item">Google Business Profile</a>
+            <a href="/services/reputation-management.html" class="nav-dropdown-item">Reputation Management</a>
+          </div>
+        </div>
+        <a href="/clients/index.html" class="nav-link nav-active font-heading font-semibold text-xs tracking-[0.2em] uppercase text-white/60 hover:text-white transition-colors duration-200">Work</a>
+        <a href="/philanthropy.html" class="nav-link font-heading font-semibold text-xs tracking-[0.2em] uppercase text-white/60 hover:text-white transition-colors duration-200">Philanthropy</a>
+        <a href="/contact.html" class="nav-cta-btn font-heading font-bold text-xs tracking-[0.2em] uppercase px-6 py-3 bg-pmm-red text-white hover:bg-red-700 transition-colors duration-200">Contact</a>
+      </div>
+      <button id="menu-toggle" class="md:hidden text-white p-2 focus:outline-none" aria-label="Open menu">
+        <svg width="22" height="16" viewBox="0 0 22 16" fill="none">
+          <line x1="0" y1="1"  x2="22" y2="1"  stroke="currentColor" stroke-width="2"/>
+          <line x1="0" y1="8"  x2="22" y2="8"  stroke="currentColor" stroke-width="2"/>
+          <line x1="0" y1="15" x2="22" y2="15" stroke="currentColor" stroke-width="2"/>
+        </svg>
+      </button>
+    </div>
+  </nav>
+
+  <!-- MOBILE MENU -->
+  <div id="mobile-menu" class="fixed inset-0 z-[60] bg-pmm-black hidden flex-col items-center justify-center">
+    <button id="menu-close" class="absolute top-6 right-6 text-white/40 hover:text-white" aria-label="Close menu">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+      </svg>
+    </button>
+    <nav class="flex flex-col items-center gap-5 text-center">
+      <a href="/index.html" onclick="closeMobileMenu()" class="font-display text-5xl text-white hover:text-pmm-red transition-colors duration-200">HOME</a>
+      <a href="/about.html" onclick="closeMobileMenu()" class="font-display text-5xl text-white hover:text-pmm-red transition-colors duration-200">ABOUT</a>
+      <div class="flex flex-col items-center gap-2">
+        <button onclick="toggleMobileServices()" class="font-display text-5xl text-white hover:text-pmm-red flex items-center gap-3 bg-transparent border-none cursor-pointer">SERVICES <span id="mobile-svc-arrow" style="font-size:1.4rem;line-height:1;display:inline-block;transition:transform 0.25s cubic-bezier(0.16,1,0.3,1);">↓</span></button>
+        <div id="mobile-services-list" class="hidden flex-col items-center gap-1 mt-3">
+          <a href="/services/video-production.html" onclick="closeMobileMenu()" class="font-heading font-semibold text-sm tracking-[0.18em] uppercase text-white/50 hover:text-pmm-red transition-colors duration-200 py-2.5 px-6">Video Production</a>
+          <a href="/services/website-design.html" onclick="closeMobileMenu()" class="font-heading font-semibold text-sm tracking-[0.18em] uppercase text-white/50 hover:text-pmm-red transition-colors duration-200 py-2.5 px-6">Website Design</a>
+          <a href="/services/social-media.html" onclick="closeMobileMenu()" class="font-heading font-semibold text-sm tracking-[0.18em] uppercase text-white/50 hover:text-pmm-red transition-colors duration-200 py-2.5 px-6">Social Media</a>
+          <a href="/services/email-campaigns.html" onclick="closeMobileMenu()" class="font-heading font-semibold text-sm tracking-[0.18em] uppercase text-white/50 hover:text-pmm-red transition-colors duration-200 py-2.5 px-6">Email Campaigns</a>
+          <a href="/services/photography.html" onclick="closeMobileMenu()" class="font-heading font-semibold text-sm tracking-[0.18em] uppercase text-white/50 hover:text-pmm-red transition-colors duration-200 py-2.5 px-6">Photography</a>
+          <a href="/services/search-marketing.html" onclick="closeMobileMenu()" class="font-heading font-semibold text-sm tracking-[0.18em] uppercase text-white/50 hover:text-pmm-red transition-colors duration-200 py-2.5 px-6">Search Marketing</a>
+          <a href="/services/graphic-design.html" onclick="closeMobileMenu()" class="font-heading font-semibold text-sm tracking-[0.18em] uppercase text-white/50 hover:text-pmm-red transition-colors duration-200 py-2.5 px-6">Branding &amp; Logo Design</a>
+          <a href="/services/traditional-media.html" onclick="closeMobileMenu()" class="font-heading font-semibold text-sm tracking-[0.18em] uppercase text-white/50 hover:text-pmm-red transition-colors duration-200 py-2.5 px-6">Traditional Media</a>
+          <a href="/services/google-business-profile.html" onclick="closeMobileMenu()" class="font-heading font-semibold text-sm tracking-[0.18em] uppercase text-white/50 hover:text-pmm-red transition-colors duration-200 py-2.5 px-6">Google Business Profile</a>
+          <a href="/services/reputation-management.html" onclick="closeMobileMenu()" class="font-heading font-semibold text-sm tracking-[0.18em] uppercase text-white/50 hover:text-pmm-red transition-colors duration-200 py-2.5 px-6">Reputation Management</a>
+        </div>
+      </div>
+      <a href="/clients/index.html" onclick="closeMobileMenu()" class="font-display text-5xl text-white hover:text-pmm-red transition-colors duration-200">WORK</a>
+      <a href="/philanthropy.html" onclick="closeMobileMenu()" class="font-display text-5xl text-white hover:text-pmm-red transition-colors duration-200">PHILANTHROPY</a>
+      <a href="/contact.html" onclick="closeMobileMenu()" class="font-display text-5xl text-pmm-red">CONTACT</a>
+    </nav>
+    <div class="absolute bottom-10 font-heading text-xs tracking-[0.25em] uppercase text-white/20">440.340.1115</div>
+  </div>
+<!-- NAV END -->
+
+
+<!-- ===== SCROLL-EXPANSION HERO ===== -->
+<section id="expansion-hero">
+
+  <!-- Background: Action Door banner -->
+  <div id="expansion-bg">
+    <img src="../brand_assets/clients/action-door/actiondoorandwindow-banner.jpg" alt="Action Door and Window">
+    <div class="bg-vignette"></div>
+  </div>
+
+  <!-- Expanding media box -->
+  <div id="media-box">
+    <video src="../brand_assets/clients/action-door/videos/GarageService-Comercial.mp4"
+           autoplay muted loop playsinline preload="auto"
+           style="width:100%; height:100%; object-fit:cover; display:block; pointer-events:none;"></video>
+    <div id="media-overlay"></div>
+  </div>
+
+  <!-- Scroll hint -->
+  <div id="scroll-hint" style="flex-direction:column; align-items:center; gap:10px;">
+    <span class="font-display" style="font-size:clamp(1rem,2vw,1.5rem); letter-spacing:0.12em; color:rgba(244,244,240,0.85); line-height:1;">ACTION DOOR &amp; WINDOW</span>
+    <div style="display:flex; align-items:center; gap:10px;">
+      <span class="hint-bar"></span>
+      Scroll to explore
+      <span class="hint-bar"></span>
+    </div>
+  </div>
+
+</section>
+
+
+<!-- ===== CASE STUDY CONTENT ===== -->
+<div id="case-content">
+
+  <!-- Red marquee strip -->
+  <div class="marquee-track" aria-hidden="true">
+    <div class="marquee-inner">
+      <span>Video Production</span><span>Website Design</span><span>Paid Marketing</span><span>Email Campaigns</span><span>Action Door &amp; Window</span>
+      <span>Video Production</span><span>Website Design</span><span>Paid Marketing</span><span>Email Campaigns</span><span>Action Door &amp; Window</span>
+      <span>Video Production</span><span>Website Design</span><span>Paid Marketing</span><span>Email Campaigns</span><span>Action Door &amp; Window</span>
+    </div>
+  </div>
+
+
+  <!-- ── Project Overview ── -->
+  <section class="max-w-7xl mx-auto px-6 lg:px-16 py-24 lg:py-32">
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-start mb-12">
+
+      <!-- Left: eyebrow + heading -->
+      <div>
+        <div class="flex items-center gap-4 mb-8 reveal-up">
+          <div class="ad-rule"></div>
+          <span class="font-heading text-[10px] font-semibold tracking-[0.28em] uppercase" style="color:#f04135;">Client Overview</span>
+        </div>
+        <h2 class="font-display leading-[0.9] tracking-wide reveal-up delay-1"
+            style="font-size:clamp(3.5rem,8vw,7rem); color:#F4F4F0;">
+          OPEN<br>EVERY<br><span style="color:#f04135;">DOOR.</span>
+        </h2>
+      </div>
+
+      <!-- Right: meta -->
+      <div class="space-y-8 pt-2 lg:pt-16">
+        <div class="reveal-up">
+          <div class="font-heading text-[10px] font-semibold tracking-[0.24em] uppercase mb-4" style="color:#f04135;">Client</div>
+          <img src="../brand_assets/clients/action-door/actiondoor-logo.png"
+               alt="Action Door and Window"
+               style="height:52px; width:auto; margin-bottom:10px;">
+          <div class="font-heading text-sm font-semibold tracking-wide uppercase" style="color:rgba(244,244,240,0.40);">Action Door and Window</div>
+        </div>
+        <div style="height:1px; background:#1a1a1a;"></div>
+        <div class="reveal-up delay-1">
+          <div class="font-heading text-[10px] font-semibold tracking-[0.24em] uppercase mb-3" style="color:#f04135;">Services Provided</div>
+          <div class="flex flex-wrap gap-2">
+            <span class="ad-tag">Video Production</span>
+            <span class="ad-tag">Website Design</span>
+            <span class="ad-tag">Paid Marketing</span>
+            <span class="ad-tag">Email Campaigns</span>
+          </div>
+        </div>
+        <div style="height:1px; background:#1a1a1a;"></div>
+        <div class="reveal-up delay-2">
+          <div class="font-heading text-[10px] font-semibold tracking-[0.24em] uppercase mb-3" style="color:#f04135;">Industry</div>
+          <div class="font-body text-sm" style="color:rgba(244,244,240,0.55);">Garage Doors, Windows &amp; Home Services — Elyria, Ohio</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Body text -->
+    <div style="border-left:3px solid #f04135; padding-left:28px;" class="reveal-up">
+      <p class="font-body text-base leading-[1.8]" style="color:rgba(244,244,240,0.60);">
+        Action Door and Window has been the go-to garage door and window service provider in the Elyria area for decades. PMM built a full-service digital presence around the brand — producing commercials, redesigning their website, driving leads through targeted paid search campaigns, and keeping customers engaged with strategic email marketing. The result is a cohesive marketing engine that brings in new customers and keeps the existing ones coming back.
+      </p>
+    </div>
+
+  </section>
+
+
+  <!-- ── Video Production ── -->
+  <section class="pb-2">
+    <div class="max-w-7xl mx-auto px-6 lg:px-16 mb-10">
+      <div class="flex items-center gap-4 reveal-up">
+        <div class="ad-rule"></div>
+        <span class="font-heading text-[10px] font-semibold tracking-[0.28em] uppercase" style="color:#f04135;">Video Production</span>
+      </div>
+    </div>
+
+    <div class="video-grid">
+
+      <div class="video-card" style="aspect-ratio:16/9;" onclick="openVidModal('../brand_assets/clients/action-door/videos/NewGarageDoor-commercial.mp4')">
+        <video src="../brand_assets/clients/action-door/videos/NewGarageDoor-commercial.mp4"
+               autoplay muted loop playsinline preload="auto"
+               style="aspect-ratio:16/9;"></video>
+        <div class="video-card-overlay"></div>
+        <div class="video-card-play">
+          <svg width="16" height="18" viewBox="0 0 16 18" fill="white"><path d="M1 1.5l14 7.5-14 7.5V1.5z"/></svg>
+        </div>
+        <div class="video-card-label">New Garage Door Commercial</div>
+      </div>
+
+      <div class="video-card" style="aspect-ratio:16/9;" onclick="openVidModal('../brand_assets/clients/action-door/videos/GarageService-Comercial.mp4')">
+        <video src="../brand_assets/clients/action-door/videos/GarageService-Comercial.mp4"
+               autoplay muted loop playsinline preload="auto"
+               style="aspect-ratio:16/9;"></video>
+        <div class="video-card-overlay"></div>
+        <div class="video-card-play">
+          <svg width="16" height="18" viewBox="0 0 16 18" fill="white"><path d="M1 1.5l14 7.5-14 7.5V1.5z"/></svg>
+        </div>
+        <div class="video-card-label">Garage Service Commercial</div>
+      </div>
+
+      <div class="video-card" style="aspect-ratio:16/9;" onclick="openVidModal('../brand_assets/clients/action-door/videos/ActionDoor-SalvationArmy.mp4')">
+        <video src="../brand_assets/clients/action-door/videos/ActionDoor-SalvationArmy.mp4"
+               autoplay muted loop playsinline preload="auto"
+               style="aspect-ratio:16/9;"></video>
+        <div class="video-card-overlay"></div>
+        <div class="video-card-play">
+          <svg width="16" height="18" viewBox="0 0 16 18" fill="white"><path d="M1 1.5l14 7.5-14 7.5V1.5z"/></svg>
+        </div>
+        <div class="video-card-label">Community Giving Spot</div>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ── Social / Phone Mockup ── -->
+  <section class="ad-social-spotlight">
+    <div class="max-w-7xl mx-auto px-6 lg:px-16 py-24 lg:py-32">
+      <div class="ad-spotlight-grid">
+
+        <!-- Phone mockup — Instagram style -->
+        <div class="ad-phone-wrap reveal-up">
+          <div class="ad-phone-glow"></div>
+          <div class="ad-phone">
+            <div class="ad-phone-notch"></div>
+            <div class="ad-phone-screen">
+
+              <!-- Fake IG header -->
+              <div class="ad-ig-header">
+                <div class="ad-ig-avatar">
+                  <img src="../brand_assets/clients/action-door/actiondoor-logo.png" alt="Action Door and Window">
+                </div>
+                <div class="ad-ig-meta">
+                  <span class="ad-ig-handle">actiondoorandwindow</span>
+                  <span class="ad-ig-sub">Sponsored</span>
+                </div>
+                <svg class="ad-ig-dots" width="16" height="4" viewBox="0 0 16 4" fill="currentColor">
+                  <circle cx="2" cy="2" r="1.5"/>
+                  <circle cx="8" cy="2" r="1.5"/>
+                  <circle cx="14" cy="2" r="1.5"/>
+                </svg>
+              </div>
+
+              <!-- Video -->
+              <div class="ad-phone-video-wrap">
+                <video src="../brand_assets/clients/action-door/videos/15-Second-Ad-vertical.mp4"
+                       autoplay muted loop playsinline preload="auto"></video>
+              </div>
+
+              <!-- Fake IG actions -->
+              <div class="ad-ig-actions">
+                <div class="ad-ig-left">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                </div>
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+              </div>
+              <div class="ad-ig-likes">3,218 likes</div>
+              <div class="ad-ig-caption">
+                <strong>actiondoorandwindow</strong> New door. New look. Get a free quote today. 🚪 #GarageDoor #ActionDoor #Elyria
+              </div>
+
+            </div>
+            <div class="ad-phone-chin"></div>
+          </div>
+        </div>
+
+        <!-- Text column -->
+        <div class="ad-spotlight-text">
+          <div class="flex items-center gap-4 mb-8 reveal-up">
+            <div class="ad-rule"></div>
+            <span class="font-heading text-[10px] font-semibold tracking-[0.28em] uppercase" style="color:#f04135;">Paid Social</span>
+          </div>
+          <h3 class="font-display leading-[0.92] tracking-wide reveal-up delay-1"
+              style="font-size:clamp(2.8rem,5.5vw,5rem); color:#F4F4F0;">
+            ADS THAT<br>STOP THE<br><span style="color:#f04135;">SCROLL</span>
+          </h3>
+
+          <p class="font-body text-sm leading-[1.9] mt-8 reveal-up delay-2" style="color:rgba(244,244,240,0.58);">
+            Short-form vertical video ads placed across Meta and Google. Every spot is cut for mobile-first consumption — fast, punchy, and engineered to drive clicks from homeowners who need service now. Paired with hyper-local targeting to put the message in front of the right Northeast Ohio audience.
+          </p>
+
+          <div class="ad-platform-list reveal-up delay-3">
+            <div class="ad-platform-item">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+              </svg>
+              <span>Instagram &amp; Facebook Reels</span>
+            </div>
+            <div class="ad-platform-item">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+              </svg>
+              <span>Facebook Video Ads</span>
+            </div>
+            <div class="ad-platform-item">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.95 1.96C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.96A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/>
+                <polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="#0a0a0a"/>
+              </svg>
+              <span>YouTube Pre-Roll</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ── Website Design (light section) ── -->
+  <section class="approach-section">
+    <div class="max-w-7xl mx-auto px-6 lg:px-16 py-24 grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-start">
+
+      <!-- Left copy -->
+      <div>
+        <div class="flex items-center gap-4 mb-8">
+          <div class="approach-ad-rule"></div>
+          <span class="font-heading text-[10px] font-semibold tracking-[0.28em] uppercase" style="color:#c2332a;">Website Design</span>
+        </div>
+        <h3 class="font-display leading-[0.95] tracking-wide mb-8"
+            style="font-size:clamp(2.5rem,5vw,4.5rem); color:#0A0A0A;">
+          A SITE BUILT<br>TO CONVERT
+        </h3>
+        <p class="font-body text-sm leading-[1.9]" style="color:rgba(10,10,10,0.62);">
+          Homeowners looking for garage door and window service are ready to buy — they just need to find the right company and feel confident enough to call. Action Door's website was redesigned to do exactly that: lead with trust signals, surface services clearly, and make getting a quote the path of least resistance.
+        </p>
+        <p class="font-body text-sm leading-[1.9] mt-5" style="color:rgba(10,10,10,0.62);">
+          Clean architecture, fast load times, prominent call-to-actions, and a design that showcases their work and their brand partners — Clopay, Wayne Dalton, LiftMaster, Genie — all built to turn visitors into customers.
+        </p>
+        <div class="mt-10 approach-quote-border">
+          <p class="font-display leading-[1.2] tracking-wide mb-5"
+             style="font-size:clamp(1.4rem,2.8vw,2.2rem); color:#0A0A0A;">
+            "PMM helped us look as professional online as we are in person. The calls started coming in right away."
+          </p>
+          <div class="flex items-center gap-4">
+            <div style="width:40px; height:1px; background:#f04135;"></div>
+            <div>
+              <div class="font-heading text-[11px] font-semibold tracking-[0.18em] uppercase" style="color:#0A0A0A;">Management Team</div>
+              <div class="font-heading text-[10px] tracking-[0.14em] uppercase mt-0.5" style="color:#f04135;">Action Door and Window</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: website mockup -->
+      <div class="flex flex-col gap-6">
+        <div class="font-heading text-[9px] font-semibold tracking-[0.28em] uppercase mb-2" style="color:rgba(10,10,10,0.35);">
+          actiondoorandwindow.com
+        </div>
+        <div class="mockup-frame">
+          <div class="mockup-browser-bar">
+            <div class="browser-dot" style="background:#ff5f56;"></div>
+            <div class="browser-dot" style="background:#febc2e;"></div>
+            <div class="browser-dot" style="background:#28c840;"></div>
+            <div class="browser-url">actiondoorandwindow.com</div>
+          </div>
+          <div class="mockup-scroll-area">
+            <img src="../brand_assets/clients/action-door/website-screenshot.jpg"
+                 alt="Action Door and Window — Website Design">
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ── Email Campaigns ── -->
+  <section class="email-showcase">
+    <div class="max-w-7xl mx-auto px-6 lg:px-16 py-24 lg:py-32">
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
+
+        <!-- Left: email image -->
+        <div class="email-img-wrap reveal-up">
+          <img src="../brand_assets/clients/action-door/Action-Door-Emails.png"
+               alt="Action Door and Window — Email Campaigns">
+        </div>
+
+        <!-- Right: copy -->
+        <div>
+          <div class="flex items-center gap-4 mb-8 reveal-up">
+            <div class="ad-rule"></div>
+            <span class="font-heading text-[10px] font-semibold tracking-[0.28em] uppercase" style="color:#f04135;">Email Marketing</span>
+          </div>
+          <h3 class="font-display leading-[0.92] tracking-wide reveal-up delay-1"
+              style="font-size:clamp(2.8rem,5.5vw,4.8rem); color:#F4F4F0;">
+            SEASONAL<br>PROMOS THAT<br><span style="color:#f04135;">LAND</span>
+          </h3>
+          <p class="font-body text-sm leading-[1.9] mt-8 reveal-up delay-2"
+             style="color:rgba(244,244,240,0.58);">
+            Strategic email campaigns keep Action Door top-of-mind through every season. From winterization specials to spring installation deals, each campaign is timed to match homeowner intent — featuring clear offers, strong CTAs, and mobile-optimized layouts that drive clicks from inbox to phone call.
+          </p>
+
+          <div class="ad-platform-list reveal-up delay-3">
+            <div class="ad-platform-item">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                <polyline points="22,6 12,13 2,6"/>
+              </svg>
+              <span>Seasonal Promotional Campaigns</span>
+            </div>
+            <div class="ad-platform-item">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"/>
+                <polyline points="12 6 12 12 16 14"/>
+              </svg>
+              <span>Timed Offer &amp; Urgency Cadences</span>
+            </div>
+            <div class="ad-platform-item">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+              </svg>
+              <span>Open Rate &amp; Click Optimization</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ── Paid Search Marketing ── -->
+  <section class="max-w-7xl mx-auto px-6 lg:px-16 py-24 lg:py-32">
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-12 items-start">
+
+      <!-- Heading col -->
+      <div class="lg:col-span-1">
+        <div class="flex items-center gap-4 mb-8 reveal-up">
+          <div class="ad-rule"></div>
+          <span class="font-heading text-[10px] font-semibold tracking-[0.28em] uppercase" style="color:#f04135;">Paid Search</span>
+        </div>
+        <h3 class="font-display leading-[0.92] tracking-wide reveal-up delay-1"
+            style="font-size:clamp(2.8rem,5.5vw,4.5rem); color:#F4F4F0;">
+          FOUND<br>FIRST.<br><span style="color:#f04135;">EVERY<br>TIME.</span>
+        </h3>
+      </div>
+
+      <!-- Stats col -->
+      <div class="lg:col-span-2 grid grid-cols-1 sm:grid-cols-3 gap-px" style="background:#1a1a1a;">
+
+        <div class="reveal-up" style="background:#0d0d0d; padding:32px 28px;">
+          <div class="font-display" style="font-size:clamp(3rem,5vw,4.5rem); color:#f04135; line-height:1;">Google</div>
+          <div class="font-heading text-[10px] font-semibold tracking-[0.22em] uppercase mt-3" style="color:rgba(244,244,240,0.35);">Search &amp; Display</div>
+          <p class="font-body text-sm mt-4 leading-[1.8]" style="color:rgba(244,244,240,0.50);">Keyword targeting built around high-intent searches — "garage door repair Elyria", "garage door installation near me" — capturing leads at peak decision moments.</p>
+        </div>
+
+        <div class="reveal-up delay-1" style="background:#0d0d0d; padding:32px 28px;">
+          <div class="font-display" style="font-size:clamp(3rem,5vw,4.5rem); color:#f04135; line-height:1;">Local</div>
+          <div class="font-heading text-[10px] font-semibold tracking-[0.22em] uppercase mt-3" style="color:rgba(244,244,240,0.35);">Geo Targeting</div>
+          <p class="font-body text-sm mt-4 leading-[1.8]" style="color:rgba(244,244,240,0.50);">Hyper-local radius targeting around Elyria and greater Lorain County ensures every ad dollar reaches homeowners in the service area — not wasted on out-of-range clicks.</p>
+        </div>
+
+        <div class="reveal-up delay-2" style="background:#0d0d0d; padding:32px 28px;">
+          <div class="font-display" style="font-size:clamp(3rem,5vw,4.5rem); color:#f04135; line-height:1;">Meta</div>
+          <div class="font-heading text-[10px] font-semibold tracking-[0.22em] uppercase mt-3" style="color:rgba(244,244,240,0.35);">Social Paid Ads</div>
+          <p class="font-body text-sm mt-4 leading-[1.8]" style="color:rgba(244,244,240,0.50);">Facebook and Instagram ad campaigns combining video creative with lead-form objectives — generating quote requests directly from the feed without requiring a website visit.</p>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ── CTA ── -->
+  <section class="max-w-7xl mx-auto px-6 lg:px-16 pb-24 lg:pb-32 pt-0 lg:pt-4">
+    <div style="height:1px; background:#1a1a1a; margin-bottom:4rem;"></div>
+    <div class="flex flex-col lg:flex-row items-start lg:items-end justify-between gap-12">
+      <div>
+        <div class="flex items-center gap-4 mb-6">
+          <div class="ad-rule"></div>
+          <span class="font-heading text-[10px] font-semibold tracking-[0.28em] uppercase" style="color:#f04135;">Start a Project</span>
+        </div>
+        <h3 class="font-display leading-[0.9] tracking-wide" style="font-size:clamp(3rem,7vw,6.5rem); color:#F4F4F0;">
+          LET'S OPEN<br>YOUR NEXT<br>
+          <span style="color:#f04135;">DOOR.</span>
+        </h3>
+      </div>
+      <form style="display:flex; flex-direction:column; gap:12px; width:100%; max-width:420px;" onsubmit="return false;">
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+          <input type="text"  placeholder="Your Name"     class="ad-cta-input">
+          <input type="email" placeholder="Email Address" class="ad-cta-input">
+        </div>
+        <textarea placeholder="Tell us about your project…" class="ad-cta-input" rows="3" style="resize:none;"></textarea>
+        <button type="submit" class="cta-btn-ad" style="width:100%; justify-content:center;">
+          Send Message
+          <svg width="14" height="10" viewBox="0 0 14 10" fill="none">
+            <path d="M1 5h12M8 1l5 4-5 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </form>
+    </div>
+  </section>
+
+<!-- FOOTER START -->
+  <!-- ===== FOOTER ===== -->
+  <footer class="bg-pmm-surface border-t border-pmm-border pt-16 pb-10">
+    <div class="max-w-7xl mx-auto px-6 lg:px-10">
+      <div class="grid md:grid-cols-4 gap-12 mb-14">
+        <div class="md:col-span-2">
+          <img src="/brand_assets/PMM-Logo-white.png" alt="Perception Multimedia" class="h-14 w-auto mb-5">
+          <p class="font-body text-white/35 text-sm leading-relaxed max-w-xs">
+            Collaborative digital agency in Middleburg Heights, Ohio. Award-winning marketing with no long-term contracts — we earn your business every month.
+          </p>
+          <div class="flex flex-wrap gap-x-4 gap-y-2 mt-6">
+            <a href="tel:4403401115" class="font-heading font-semibold text-[10px] tracking-[0.2em] uppercase text-pmm-red hover:text-white transition-colors duration-200">(440) 340-1115</a>
+            <span class="text-pmm-border">·</span>
+            <a href="tel:4406552032" class="font-heading font-semibold text-[10px] tracking-[0.2em] uppercase text-white/30 hover:text-white transition-colors duration-200">(440) 655-2032</a>
+            <span class="text-pmm-border">·</span>
+            <a href="mailto:info@perceptionmm.com" class="font-heading font-semibold text-[10px] tracking-[0.2em] uppercase text-white/30 hover:text-white transition-colors duration-200">info@perceptionmm.com</a>
+          </div>
+          <div class="flex items-center gap-3 mt-5">
+            <a href="https://www.facebook.com/PerceptionMultimedia/" target="_blank" rel="noopener noreferrer" aria-label="Facebook" class="w-8 h-8 flex items-center justify-center rounded-full border border-pmm-border text-white/30 hover:text-white hover:border-white/40 transition-colors duration-200">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+            </a>
+            <a href="https://www.linkedin.com/company/perception-multimedia-inc-/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" class="w-8 h-8 flex items-center justify-center rounded-full border border-pmm-border text-white/30 hover:text-white hover:border-white/40 transition-colors duration-200">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
+            </a>
+            <a href="https://www.instagram.com/perception_multimedia/" target="_blank" rel="noopener noreferrer" aria-label="Instagram" class="w-8 h-8 flex items-center justify-center rounded-full border border-pmm-border text-white/30 hover:text-white hover:border-white/40 transition-colors duration-200">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+            </a>
+            <a href="https://www.youtube.com/c/Perceptionmm" target="_blank" rel="noopener noreferrer" aria-label="YouTube" class="w-8 h-8 flex items-center justify-center rounded-full border border-pmm-border text-white/30 hover:text-white hover:border-white/40 transition-colors duration-200">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.95 1.96C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.96A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="#161616"/></svg>
+            </a>
+          </div>
+        </div>
+        <div>
+          <h4 class="font-heading font-semibold text-[10px] tracking-[0.25em] uppercase text-white/30 mb-5">Services</h4>
+          <ul class="space-y-2.5">
+            <li><a href="/services/video-production.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Video Production</a></li>
+            <li><a href="/services/website-design.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Website Design</a></li>
+            <li><a href="/services/social-media.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Social Media</a></li>
+            <li><a href="/services/email-campaigns.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Email Campaigns</a></li>
+            <li><a href="/services/search-marketing.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Search Marketing</a></li>
+            <li><a href="/services/graphic-design.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Branding &amp; Logo Design</a></li>
+            <li><a href="/services/photography.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Photography</a></li>
+            <li><a href="/services/traditional-media.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Traditional Media</a></li>
+            <li><a href="/services/google-business-profile.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Google Business Profile</a></li>
+            <li><a href="/services/reputation-management.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Reputation Management</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="font-heading font-semibold text-[10px] tracking-[0.25em] uppercase text-white/30 mb-5">Company</h4>
+          <ul class="space-y-2.5">
+            <li><a href="/about.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">About Us</a></li>
+            <li><a href="/clients/index.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Portfolio</a></li>
+            <li><a href="/services/index.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Services</a></li>
+            <li><a href="/contact.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Contact</a></li>
+            <li><a href="/philanthropy.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Philanthropy</a></li>
+            <li><a href="/blog/index.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Blog</a></li>
+            <li><a href="mailto:careers@perceptionmm.com" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Careers</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="border-t border-pmm-border pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <p class="font-body text-xs text-white/20">© 2026 Perception Multimedia Inc. All rights reserved.</p>
+        <p class="font-heading font-semibold text-[10px] tracking-[0.25em] uppercase text-white/15">Middleburg Heights, OH · perceptionmm.com</p>
+      </div>
+    </div>
+  </footer>
+<!-- FOOTER END -->
+
+</div><!-- /#case-content -->
+
+
+<!-- ===== VIDEO MODAL ===== -->
+<div id="vid-modal">
+  <div id="vid-modal-inner">
+    <video id="vid-modal-video" controls></video>
+    <button id="vid-modal-close" aria-label="Close video">
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <path d="M1 1l10 10M11 1L1 11"/>
+      </svg>
+    </button>
+  </div>
+</div>
+
+
+<!-- ===== SCROLL-EXPANSION JS ===== -->
+<script>
+(function () {
+  const hero        = document.getElementById('expansion-hero');
+  const mediaBox    = document.getElementById('media-box');
+  const mediaOvl    = document.getElementById('media-overlay');
+  const bgLayer     = document.getElementById('expansion-bg');
+  const scrollHint  = document.getElementById('scroll-hint');
+  const caseContent = document.getElementById('case-content');
+  const navbar      = document.getElementById('navbar');
+
+  let progress      = 0;
+  let fullyExpanded = false;
+  let showContent   = false;
+  let touchStartY   = 0;
+  let rafPending    = false;
+
+  const INIT_W         = 320;
+  const INIT_H         = 420;
+  const GROW_W_DESKTOP = 1220;
+  const GROW_H_DESKTOP = 380;
+  const GROW_W_MOBILE  = 640;
+  const GROW_H_MOBILE  = 200;
+
+  function isMob() { return window.innerWidth < 768; }
+
+  function applyProgress(p) {
+    const mob  = isMob();
+    const newW = INIT_W + p * (mob ? GROW_W_MOBILE : GROW_W_DESKTOP);
+    const newH = INIT_H + p * (mob ? GROW_H_MOBILE : GROW_H_DESKTOP);
+    const maxW = window.innerWidth  * 0.96;
+    const maxH = window.innerHeight * 0.88;
+
+    mediaBox.style.width  = Math.min(newW, maxW) + 'px';
+    mediaBox.style.height = Math.min(newH, maxH) + 'px';
+
+    bgLayer.style.opacity    = (1 - p).toString();
+    mediaOvl.style.opacity   = (0.4 - p * 0.25).toString();
+    scrollHint.style.opacity = (1 - p * 2.5).toString();
+
+    if (showContent && !caseContent.classList.contains('visible')) {
+      caseContent.classList.add('visible');
+    } else if (!showContent && caseContent.classList.contains('visible')) {
+      caseContent.classList.remove('visible');
+    }
+  }
+
+  function scheduleRender(p) {
+    if (rafPending) return;
+    rafPending = true;
+    requestAnimationFrame(() => { applyProgress(p); rafPending = false; });
+  }
+
+  function onWheel(e) {
+    if (fullyExpanded) {
+      if (e.deltaY < 0 && window.scrollY <= 2) {
+        fullyExpanded = false; showContent = false;
+        e.preventDefault();
+      }
+      return;
+    }
+    e.preventDefault();
+    const delta = e.deltaY * 0.00095;
+    progress = Math.min(Math.max(progress + delta, 0), 1);
+    if (progress >= 1)       { fullyExpanded = true; showContent = true; }
+    else if (progress < 0.75){ showContent = false; }
+    scheduleRender(progress);
+  }
+
+  function onTouchStart(e) { touchStartY = e.touches[0].clientY; }
+
+  function onTouchMove(e) {
+    if (!touchStartY) return;
+    const touchY = e.touches[0].clientY;
+    const deltaY = touchStartY - touchY;
+    if (fullyExpanded) {
+      if (deltaY < -20 && window.scrollY <= 2) { fullyExpanded = false; showContent = false; e.preventDefault(); }
+      return;
+    }
+    e.preventDefault();
+    const sensitivity = deltaY < 0 ? 0.009 : 0.006;
+    progress = Math.min(Math.max(progress + deltaY * sensitivity, 0), 1);
+    if (progress >= 1)       { fullyExpanded = true; showContent = true; }
+    else if (progress < 0.75){ showContent = false; }
+    scheduleRender(progress);
+    touchStartY = touchY;
+  }
+
+  function onTouchEnd() { touchStartY = 0; }
+
+  function onScroll() {
+    if (!fullyExpanded && window.scrollY > 0) window.scrollTo(0, 0);
+    navbar.classList.toggle('nav-scrolled', window.scrollY > 60);
+  }
+
+  window.addEventListener('wheel',      onWheel,      { passive: false });
+  window.addEventListener('scroll',     onScroll);
+  window.addEventListener('touchstart', onTouchStart, { passive: false });
+  window.addEventListener('touchmove',  onTouchMove,  { passive: false });
+  window.addEventListener('touchend',   onTouchEnd);
+  window.addEventListener('resize',     () => applyProgress(progress));
+
+  /* ── Scroll-reveal ── */
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in-view'); });
+  }, { threshold: 0.07 });
+
+  function attachReveal() {
+    document.querySelectorAll('.reveal-up').forEach(el => revealObserver.observe(el));
+  }
+  caseContent.addEventListener('transitionend', () => {
+    if (caseContent.classList.contains('visible')) attachReveal();
+  });
+  attachReveal();
+
+  applyProgress(0);
+  window.scrollTo(0, 0);
+})();
+</script>
+
+
+<!-- ===== VIDEO MODAL JS ===== -->
+<script>
+(function () {
+  const modal    = document.getElementById('vid-modal');
+  const vidEl    = document.getElementById('vid-modal-video');
+  const closeBtn = document.getElementById('vid-modal-close');
+
+  window.openVidModal = function (src) {
+    vidEl.src = src;
+    modal.classList.add('open');
+    requestAnimationFrame(() => modal.classList.add('fade-in'));
+    document.body.style.overflow = 'hidden';
+  };
+
+  function closeModal() {
+    modal.classList.remove('fade-in');
+    setTimeout(() => {
+      modal.classList.remove('open');
+      vidEl.pause();
+      vidEl.src = '';
+      document.body.style.overflow = '';
+    }, 300);
+  }
+
+  closeBtn.addEventListener('click', closeModal);
+  modal.addEventListener('click', function (e) {
+    if (e.target === modal) closeModal();
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && modal.classList.contains('open')) closeModal();
+  });
+})();
+</script>
+
+
+<!-- ===== MOBILE MENU JS ===== -->
+<script>
+(function () {
+  const menuToggle   = document.getElementById('menu-toggle');
+  const menuCloseBtn = document.getElementById('menu-close');
+  const mobileMenuEl = document.getElementById('mobile-menu');
+  window.closeMobileMenu = function () {
+    mobileMenuEl.classList.remove('flex');
+    mobileMenuEl.classList.add('hidden');
+  };
+  window.toggleMobileServices = function () {
+    const list  = document.getElementById('mobile-services-list');
+    const arrow = document.getElementById('mobile-svc-arrow');
+    const open  = list.classList.contains('flex');
+    list.classList.toggle('hidden', open);
+    list.classList.toggle('flex',   !open);
+    arrow.style.transform = open ? '' : 'rotate(180deg)';
+  };
+  menuToggle.addEventListener('click', function () {
+    mobileMenuEl.classList.remove('hidden');
+    mobileMenuEl.classList.add('flex');
+  });
+  menuCloseBtn.addEventListener('click', window.closeMobileMenu);
+})();
+</script>
+
+</body>
+</html>

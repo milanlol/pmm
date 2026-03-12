@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Email Campaigns — Perception Multimedia Inc.</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Josefin+Sans:ital,wght@0,300;0,400;0,600;0,700;1,300&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../styles.css">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'pmm-red':     '#E81B1E',
+            'pmm-black':   '#0A0A0A',
+            'pmm-dark':    '#111111',
+            'pmm-surface': '#161616',
+            'pmm-border':  '#222222',
+            'pmm-muted':   '#3A3A3A',
+            'pmm-white':   '#F4F4F0',
+            'pmm-cream':   '#EDECEA',
+            'pmm-gray':    '#5C5C5C',
+          },
+          fontFamily: {
+            'display': ['"Bebas Neue"', 'cursive'],
+            'heading': ['"Josefin Sans"', 'sans-serif'],
+            'body':    ['"DM Sans"', 'sans-serif'],
+          },
+        }
+      }
+    }
+  </script>
+  <style>
+    /* ---- Scroll reveal ---- */
+    .reveal-up {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .reveal-up.in-view { opacity: 1; transform: translateY(0); }
+    .delay-1 { transition-delay: 0.07s; }
+    .delay-2 { transition-delay: 0.14s; }
+    .delay-3 { transition-delay: 0.21s; }
+
+    /* ---- Section eyebrow ---- */
+    .eyebrow-rule {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .eyebrow-rule::before {
+      content: '';
+      display: block;
+      width: 36px;
+      height: 2px;
+      background: var(--pmm-red);
+      flex-shrink: 0;
+    }
+
+    /* ---- 3-col capabilities grid ---- */
+    .caps-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1px;
+      background: #d8d6d3;
+      border: 1px solid #d8d6d3;
+    }
+    @media (min-width: 640px) {
+      .caps-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (min-width: 1024px) {
+      .caps-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+
+    /* ---- Work rows ---- */
+    .work-media {
+      position: relative;
+      overflow: hidden;
+      background: #fefefe;
+      min-height: 520px;
+    }
+    .work-media img,
+    .work-media video {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+    .work-content {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 72px 48px;
+      border: none;
+    }
+    @media (min-width: 1024px) {
+      .work-content {
+        padding: 88px 64px;
+        border: none;
+      }
+    }
+    .work-content-left {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 72px 48px;
+      border: none;
+    }
+    @media (min-width: 1024px) {
+      .work-content-left {
+        padding: 88px 64px;
+        border: none;
+      }
+    }
+
+    /* ---- Process steps ---- */
+    .process-step {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .process-step.in-view { opacity: 1; transform: translateY(0); }
+    .process-step:nth-child(1) { transition-delay: 0s;    }
+    .process-step:nth-child(2) { transition-delay: 0.10s; }
+    .process-step:nth-child(3) { transition-delay: 0.20s; }
+    .process-step:nth-child(4) { transition-delay: 0.30s; }
+  </style>
+</head>
+<body class="bg-pmm-black text-pmm-white font-body">
+<div class="overflow-x-hidden">
+
+  <!-- GRAIN OVERLAY -->
+  <div class="grain-overlay" aria-hidden="true"></div>
+
+  <!-- NAV START -->
+  <!-- NAV -->
+  <nav id="navbar" class="fixed top-0 left-0 right-0 z-50">
+    <div class="max-w-7xl mx-auto px-6 lg:px-10 h-20 flex items-center justify-between">
+      <a href="/index.html" class="flex-shrink-0">
+        <img src="/brand_assets/PMM-Logo-white.png" alt="Perception Multimedia" class="h-11 w-auto">
+      </a>
+      <div class="hidden md:flex items-center gap-8">
+        <a href="/index.html" class="nav-link font-heading font-semibold text-xs tracking-[0.2em] uppercase text-white/60 hover:text-white transition-colors duration-200">Home</a>
+        <a href="/about.html" class="nav-link font-heading font-semibold text-xs tracking-[0.2em] uppercase text-white/60 hover:text-white transition-colors duration-200">About</a>
+        <div class="nav-dropdown-wrapper">
+          <a href="/services/index.html" class="nav-link nav-active font-heading font-semibold text-xs tracking-[0.2em] uppercase transition-colors duration-200 flex items-center gap-1.5">Services <svg class="nav-chevron-icon" width="8" height="5" viewBox="0 0 8 5" fill="none"><path d="M1 1l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+          <div class="nav-dropdown">
+            <a href="/services/video-production.html" class="nav-dropdown-item">Video Production</a>
+            <a href="/services/website-design.html" class="nav-dropdown-item">Website Design</a>
+            <a href="/services/social-media.html" class="nav-dropdown-item">Social Media</a>
+            <a href="/services/email-campaigns.html" class="nav-dropdown-item active">Email Campaigns</a>
+            <a href="/services/photography.html" class="nav-dropdown-item">Photography</a>
+            <a href="/services/search-marketing.html" class="nav-dropdown-item">Search Marketing</a>
+            <a href="/services/graphic-design.html" class="nav-dropdown-item">Branding &amp; Logo Design</a>
+            <a href="/services/traditional-media.html" class="nav-dropdown-item">Traditional Media</a>
+            <a href="/services/google-business-profile.html" class="nav-dropdown-item">Google Business Profile</a>
+            <a href="/services/reputation-management.html" class="nav-dropdown-item">Reputation Management</a>
+          </div>
+        </div>
+        <a href="/clients/index.html" class="nav-link font-heading font-semibold text-xs tracking-[0.2em] uppercase text-white/60 hover:text-white transition-colors duration-200">Work</a>
+        <a href="/philanthropy.html" class="nav-link font-heading font-semibold text-xs tracking-[0.2em] uppercase text-white/60 hover:text-white transition-colors duration-200">Philanthropy</a>
+        <a href="/contact.html" class="nav-cta-btn font-heading font-bold text-xs tracking-[0.2em] uppercase px-6 py-3 bg-pmm-red text-white hover:bg-red-700 transition-colors duration-200">Contact</a>
+      </div>
+      <button id="menu-toggle" class="md:hidden text-white p-2 focus:outline-none" aria-label="Open menu">
+        <svg width="22" height="16" viewBox="0 0 22 16" fill="none">
+          <line x1="0" y1="1"  x2="22" y2="1"  stroke="currentColor" stroke-width="2"/>
+          <line x1="0" y1="8"  x2="22" y2="8"  stroke="currentColor" stroke-width="2"/>
+          <line x1="0" y1="15" x2="22" y2="15" stroke="currentColor" stroke-width="2"/>
+        </svg>
+      </button>
+    </div>
+  </nav>
+
+  <!-- MOBILE MENU -->
+  <div id="mobile-menu" class="fixed inset-0 z-[60] bg-pmm-black hidden flex-col items-center justify-center">
+    <button id="menu-close" class="absolute top-6 right-6 text-white/40 hover:text-white" aria-label="Close menu">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+      </svg>
+    </button>
+    <nav class="flex flex-col items-center gap-5 text-center">
+      <a href="/index.html" onclick="closeMobileMenu()" class="font-display text-5xl text-white hover:text-pmm-red transition-colors duration-200">HOME</a>
+      <a href="/about.html" onclick="closeMobileMenu()" class="font-display text-5xl text-white hover:text-pmm-red transition-colors duration-200">ABOUT</a>
+      <div class="flex flex-col items-center gap-2">
+        <button onclick="toggleMobileServices()" class="font-display text-5xl text-white hover:text-pmm-red flex items-center gap-3 bg-transparent border-none cursor-pointer">SERVICES <span id="mobile-svc-arrow" style="font-size:1.4rem;line-height:1;display:inline-block;transition:transform 0.25s cubic-bezier(0.16,1,0.3,1);">↓</span></button>
+        <div id="mobile-services-list" class="hidden flex-col items-center gap-1 mt-3">
+          <a href="/services/video-production.html" onclick="closeMobileMenu()" class="font-heading font-semibold text-sm tracking-[0.18em] uppercase text-white/50 hover:text-pmm-red transition-colors duration-200 py-2.5 px-6">Video Production</a>
+          <a href="/services/website-design.html" onclick="closeMobileMenu()" class="font-heading font-semibold text-sm tracking-[0.18em] uppercase text-white/50 hover:text-pmm-red transition-colors duration-200 py-2.5 px-6">Website Design</a>
+          <a href="/services/social-media.html" onclick="closeMobileMenu()" class="font-heading font-semibold text-sm tracking-[0.18em] uppercase text-white/50 hover:text-pmm-red transition-colors duration-200 py-2.5 px-6">Social Media</a>
+          <a href="/services/email-campaigns.html" onclick="closeMobileMenu()" class="font-heading font-semibold text-sm tracking-[0.18em] uppercase text-white/50 hover:text-pmm-red transition-colors duration-200 py-2.5 px-6">Email Campaigns</a>
+          <a href="/services/photography.html" onclick="closeMobileMenu()" class="font-heading font-semibold text-sm tracking-[0.18em] uppercase text-white/50 hover:text-pmm-red transition-colors duration-200 py-2.5 px-6">Photography</a>
+          <a href="/services/search-marketing.html" onclick="closeMobileMenu()" class="font-heading font-semibold text-sm tracking-[0.18em] uppercase text-white/50 hover:text-pmm-red transition-colors duration-200 py-2.5 px-6">Search Marketing</a>
+          <a href="/services/graphic-design.html" onclick="closeMobileMenu()" class="font-heading font-semibold text-sm tracking-[0.18em] uppercase text-white/50 hover:text-pmm-red transition-colors duration-200 py-2.5 px-6">Branding &amp; Logo Design</a>
+          <a href="/services/traditional-media.html" onclick="closeMobileMenu()" class="font-heading font-semibold text-sm tracking-[0.18em] uppercase text-white/50 hover:text-pmm-red transition-colors duration-200 py-2.5 px-6">Traditional Media</a>
+          <a href="/services/google-business-profile.html" onclick="closeMobileMenu()" class="font-heading font-semibold text-sm tracking-[0.18em] uppercase text-white/50 hover:text-pmm-red transition-colors duration-200 py-2.5 px-6">Google Business Profile</a>
+          <a href="/services/reputation-management.html" onclick="closeMobileMenu()" class="font-heading font-semibold text-sm tracking-[0.18em] uppercase text-white/50 hover:text-pmm-red transition-colors duration-200 py-2.5 px-6">Reputation Management</a>
+        </div>
+      </div>
+      <a href="/clients/index.html" onclick="closeMobileMenu()" class="font-display text-5xl text-white hover:text-pmm-red transition-colors duration-200">WORK</a>
+      <a href="/philanthropy.html" onclick="closeMobileMenu()" class="font-display text-5xl text-white hover:text-pmm-red transition-colors duration-200">PHILANTHROPY</a>
+      <a href="/contact.html" onclick="closeMobileMenu()" class="font-display text-5xl text-pmm-red">CONTACT</a>
+    </nav>
+    <div class="absolute bottom-10 font-heading text-xs tracking-[0.25em] uppercase text-white/20">440.340.1115</div>
+  </div>
+<!-- NAV END -->
+
+  <!-- ===== HERO — video only, no text ===== -->
+  <section class="relative overflow-hidden" style="min-height: 100vh;">
+    <video autoplay muted loop playsinline class="hero-video">
+      <source src="../brand_assets/clients/emails/Email-Video.mp4" type="video/mp4">
+    </video>
+    <div class="hero-video-overlay"></div>
+    <div class="absolute bottom-0 left-0 right-0 h-px bg-pmm-border z-10"></div>
+  </section>
+
+  <!-- ===== MARQUEE STRIP ===== -->
+  <div class="bg-pmm-red py-3 overflow-hidden" aria-hidden="true">
+    <div class="marquee-track">
+      <div class="marquee-inner font-heading font-bold text-[11px] tracking-[0.25em] uppercase text-white">
+        <span>Campaign Strategy</span><span class="marquee-dot">&middot;</span>
+        <span>Template Design</span><span class="marquee-dot">&middot;</span>
+        <span>Copywriting</span><span class="marquee-dot">&middot;</span>
+        <span>List Segmentation</span><span class="marquee-dot">&middot;</span>
+        <span>Automation</span><span class="marquee-dot">&middot;</span>
+        <span>A/B Testing</span><span class="marquee-dot">&middot;</span>
+        <span>Mailchimp</span><span class="marquee-dot">&middot;</span>
+        <span>Open Rate Optimization</span><span class="marquee-dot">&middot;</span>
+        <span>Analytics</span><span class="marquee-dot">&middot;</span>
+        <span>Lead Nurturing</span><span class="marquee-dot">&middot;</span>
+        <span>Campaign Strategy</span><span class="marquee-dot">&middot;</span>
+        <span>Template Design</span><span class="marquee-dot">&middot;</span>
+        <span>Copywriting</span><span class="marquee-dot">&middot;</span>
+        <span>List Segmentation</span><span class="marquee-dot">&middot;</span>
+        <span>Automation</span><span class="marquee-dot">&middot;</span>
+        <span>A/B Testing</span><span class="marquee-dot">&middot;</span>
+        <span>Mailchimp</span><span class="marquee-dot">&middot;</span>
+        <span>Open Rate Optimization</span><span class="marquee-dot">&middot;</span>
+        <span>Analytics</span><span class="marquee-dot">&middot;</span>
+        <span>Lead Nurturing</span><span class="marquee-dot">&middot;</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== CAPABILITIES ===== -->
+  <section class="py-20 lg:py-28" style="background: #EDECEA;">
+    <div class="max-w-7xl mx-auto px-6 lg:px-10">
+
+      <div class="mb-14 reveal-up">
+        <div class="eyebrow-rule">
+          <span class="font-heading font-semibold text-[10px] tracking-[0.3em] uppercase text-pmm-gray">What We Deliver</span>
+        </div>
+        <h2 class="font-display text-pmm-black leading-[0.9] tracking-[0.01em]"
+            style="font-size: clamp(2.5rem, 5vw, 4.5rem);">
+          Email That Engages.<br>Results That Matter.
+        </h2>
+      </div>
+
+      <div class="caps-grid">
+
+        <!-- 01 -->
+        <div class="svc-card">
+          <span class="svc-num font-heading font-semibold text-[10px] tracking-[0.3em] uppercase" style="color: #aaa;">01</span>
+          <div class="svc-icon-wrap">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9 11l3 3L22 4"/>
+              <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+            </svg>
+          </div>
+          <h3 class="svc-name font-heading font-bold tracking-[0.02em] uppercase text-pmm-black" style="font-size: 1.2rem;">Campaign Strategy</h3>
+          <p class="font-body text-sm leading-[1.75]" style="color: #5C5C5C;">
+            We develop a custom email plan around your goals, audience, and timing — so every send has a clear purpose and every campaign moves the needle for your business.
+          </p>
+          <div class="svc-tags">
+            <span class="svc-tag">Goal Setting</span>
+            <span class="svc-tag">Audience Research</span>
+            <span class="svc-tag">Send Scheduling</span>
+          </div>
+        </div>
+
+        <!-- 02 -->
+        <div class="svc-card">
+          <span class="svc-num font-heading font-semibold text-[10px] tracking-[0.3em] uppercase" style="color: #aaa;">02</span>
+          <div class="svc-icon-wrap">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="18" height="18" rx="2"/>
+              <path d="M3 9h18M9 21V9"/>
+            </svg>
+          </div>
+          <h3 class="svc-name font-heading font-bold tracking-[0.02em] uppercase text-pmm-black" style="font-size: 1.2rem;">Design &amp; Copywriting</h3>
+          <p class="font-body text-sm leading-[1.75]" style="color: #5C5C5C;">
+            On-brand email templates built to look great on every device — paired with sharp subject lines and body copy designed to drive opens, clicks, and conversions.
+          </p>
+          <div class="svc-tags">
+            <span class="svc-tag">Custom Templates</span>
+            <span class="svc-tag">Subject Lines</span>
+            <span class="svc-tag">Mobile-First</span>
+          </div>
+        </div>
+
+        <!-- 03 -->
+        <div class="svc-card">
+          <span class="svc-num font-heading font-semibold text-[10px] tracking-[0.3em] uppercase" style="color: #aaa;">03</span>
+          <div class="svc-icon-wrap">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+              <circle cx="9" cy="7" r="4"/>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>
+            </svg>
+          </div>
+          <h3 class="svc-name font-heading font-bold tracking-[0.02em] uppercase text-pmm-black" style="font-size: 1.2rem;">List Management &amp; Segmentation</h3>
+          <p class="font-body text-sm leading-[1.75]" style="color: #5C5C5C;">
+            The right message to the right person. We organize and segment your subscriber lists so campaigns are personalized, relevant, and far more likely to convert.
+          </p>
+          <div class="svc-tags">
+            <span class="svc-tag">Segmentation</span>
+            <span class="svc-tag">List Health</span>
+            <span class="svc-tag">Personalization</span>
+          </div>
+        </div>
+
+        <!-- 04 -->
+        <div class="svc-card">
+          <span class="svc-num font-heading font-semibold text-[10px] tracking-[0.3em] uppercase" style="color: #aaa;">04</span>
+          <div class="svc-icon-wrap">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/>
+              <polyline points="13 2 13 9 20 9"/>
+            </svg>
+          </div>
+          <h3 class="svc-name font-heading font-bold tracking-[0.02em] uppercase text-pmm-black" style="font-size: 1.2rem;">Automated Workflows</h3>
+          <p class="font-body text-sm leading-[1.75]" style="color: #5C5C5C;">
+            Welcome sequences, abandoned cart flows, re-engagement campaigns, and behavioral triggers that run automatically — keeping your audience engaged without constant manual effort.
+          </p>
+          <div class="svc-tags">
+            <span class="svc-tag">Drip Campaigns</span>
+            <span class="svc-tag">Welcome Series</span>
+            <span class="svc-tag">Behavioral Triggers</span>
+          </div>
+        </div>
+
+        <!-- 05 -->
+        <div class="svc-card">
+          <span class="svc-num font-heading font-semibold text-[10px] tracking-[0.3em] uppercase" style="color: #aaa;">05</span>
+          <div class="svc-icon-wrap">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="20" x2="18" y2="10"/>
+              <line x1="12" y1="20" x2="12" y2="4"/>
+              <line x1="6"  y1="20" x2="6"  y2="14"/>
+            </svg>
+          </div>
+          <h3 class="svc-name font-heading font-bold tracking-[0.02em] uppercase text-pmm-black" style="font-size: 1.2rem;">Analytics &amp; Reporting</h3>
+          <p class="font-body text-sm leading-[1.75]" style="color: #5C5C5C;">
+            Clear reporting on open rates, click-through rates, conversions, and list growth — with plain-English takeaways and ongoing optimization to maximize ROI every cycle.
+          </p>
+          <div class="svc-tags">
+            <span class="svc-tag">Open Rates</span>
+            <span class="svc-tag">Click Tracking</span>
+            <span class="svc-tag">ROI Reporting</span>
+          </div>
+        </div>
+
+        <!-- 06 -->
+        <div class="svc-card">
+          <span class="svc-num font-heading font-semibold text-[10px] tracking-[0.3em] uppercase" style="color: #aaa;">06</span>
+          <div class="svc-icon-wrap">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+            </svg>
+          </div>
+          <h3 class="svc-name font-heading font-bold tracking-[0.02em] uppercase text-pmm-black" style="font-size: 1.2rem;">A/B Testing &amp; Optimization</h3>
+          <p class="font-body text-sm leading-[1.75]" style="color: #5C5C5C;">
+            We test subject lines, send times, layouts, and CTAs to find what resonates best with your audience — then apply those learnings to every campaign that follows.
+          </p>
+          <div class="svc-tags">
+            <span class="svc-tag">Subject Line Testing</span>
+            <span class="svc-tag">Send Time Testing</span>
+            <span class="svc-tag">CTA Optimization</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Mailchimp partner badge -->
+      <div class="mt-12 flex items-center gap-4 reveal-up">
+        <img src="../brand_assets/Mailchimp-partners-badge.png" alt="Mailchimp Partner" class="h-14 w-auto opacity-70">
+        <p class="font-body text-sm leading-[1.7]" style="color: #5C5C5C; max-width: 340px;">
+          As a certified Mailchimp partner, we build, manage, and optimize email programs on the platform trusted by millions of businesses worldwide.
+        </p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===== WORK SAMPLES ===== -->
+  <section style="background: #fefefe;">
+    <div class="max-w-7xl mx-auto px-6 lg:px-10 pt-20 lg:pt-28">
+
+      <div class="mb-14 reveal-up">
+        <div class="eyebrow-rule">
+          <span class="font-heading font-semibold text-[10px] tracking-[0.3em] uppercase text-pmm-gray">Our Work</span>
+        </div>
+        <h2 class="font-display text-pmm-black leading-[0.9] tracking-[0.01em]"
+            style="font-size: clamp(2.5rem, 5vw, 4.5rem);">
+          Campaigns That Convert
+        </h2>
+      </div>
+
+    </div>
+
+    <!-- ── Row 1: CWRU — media left, content right ── -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 reveal-up">
+      <div class="work-media" style="background: #fefefe;">
+        <img src="../brand_assets/clients/emails/CWRU-Email.jpg"
+             alt="Case Western Reserve University Email Campaign"
+             style="object-fit: contain; position: absolute; inset: 0; width: 100%; height: 100%; padding: 16px 24px;">
+      </div>
+      <div class="work-content" style="background: #fefefe;">
+        <p class="font-heading font-semibold text-[10px] tracking-[0.28em] uppercase text-pmm-red mb-4">Case Western Reserve University &middot; Email Campaign</p>
+        <h3 class="font-display text-pmm-black leading-[0.9] tracking-[0.01em] mb-5"
+            style="font-size: clamp(2rem, 3.5vw, 3rem);">Automated Student<br>Recruitment Series</h3>
+        <p class="font-body leading-[1.75] mb-7" style="font-size: 0.95rem; color: #5C5C5C;">
+          The School of Medicine sought to boost student applications. We created a two-month automated email campaign featuring custom imagery and messaging tailored to individual prospect responses — reinforcing interest at every stage of the enrollment funnel.
+        </p>
+        <div class="flex flex-wrap gap-2">
+          <span class="svc-tag">Automation</span>
+          <span class="svc-tag">Custom Design</span>
+          <span class="svc-tag">Personalization</span>
+          <span class="svc-tag">Higher Education</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Row 2: Cleveland Boat Show — content left, media right ── -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 reveal-up">
+      <div class="work-content-left" style="background: #fefefe;">
+        <p class="font-heading font-semibold text-[10px] tracking-[0.28em] uppercase text-pmm-red mb-4">Cleveland Boat Show &middot; Ticket Sales Campaign</p>
+        <h3 class="font-display text-pmm-black leading-[0.9] tracking-[0.01em] mb-5"
+            style="font-size: clamp(2rem, 3.5vw, 3rem);">Holiday Gift Campaign<br>with Discount Code</h3>
+        <p class="font-body leading-[1.75] mb-7" style="font-size: 0.95rem; color: #5C5C5C;">
+          To drive online ticket sales, we developed a holiday-themed campaign emphasizing gift-giving for the boat enthusiast. The strategy centered on a limited-time discount code as the primary call-to-action — creating urgency and a clear reason to act before the show.
+        </p>
+        <div class="flex flex-wrap gap-2">
+          <span class="svc-tag">Holiday Campaign</span>
+          <span class="svc-tag">Promo Code</span>
+          <span class="svc-tag">Ticket Sales</span>
+          <span class="svc-tag">Urgency Messaging</span>
+        </div>
+      </div>
+      <div class="work-media" style="background: #fefefe;">
+        <img src="../brand_assets/clients/emails/Boat-Show-Email.png"
+             alt="Cleveland Boat Show Email Campaign"
+             style="object-fit: contain; position: absolute; inset: 0; width: 100%; height: 100%; padding: 16px 24px;">
+      </div>
+    </div>
+
+    <!-- ── Row 3: PSE Credit Union — media left, content right ── -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 reveal-up">
+      <div class="work-media" style="background: #fefefe;">
+        <img src="../brand_assets/clients/emails/PSE-Email.png"
+             alt="PSE Credit Union Email Campaign"
+             style="object-fit: contain; position: absolute; inset: 0; width: 100%; height: 100%; padding: 16px 24px;">
+      </div>
+      <div class="work-content" style="background: #fefefe;">
+        <p class="font-heading font-semibold text-[10px] tracking-[0.28em] uppercase text-pmm-red mb-4">PSE Credit Union &middot; Black Friday Promotion</p>
+        <h3 class="font-display text-pmm-black leading-[0.9] tracking-[0.01em] mb-5"
+            style="font-size: clamp(2rem, 3.5vw, 3rem);">Loan Discount That<br>Cut Through the Noise</h3>
+        <p class="font-body leading-[1.75] mb-7" style="font-size: 0.95rem; color: #5C5C5C;">
+          A Black Friday loan discount campaign targeted directly at existing members. Bold green-themed imagery combined with simplified messaging and direct application links cut through the holiday shopping clutter and drove strong click-to-apply rates.
+        </p>
+        <div class="flex flex-wrap gap-2">
+          <span class="svc-tag">Promotional Email</span>
+          <span class="svc-tag">Financial Services</span>
+          <span class="svc-tag">Direct CTA</span>
+          <span class="svc-tag">Bold Design</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Row 4: Roofing — content left, media right ── -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 reveal-up">
+      <div class="work-content-left" style="background: #fefefe;">
+        <p class="font-heading font-semibold text-[10px] tracking-[0.28em] uppercase text-pmm-red mb-4">Reader Roofing &middot; Seasonal Newsletter</p>
+        <h3 class="font-display text-pmm-black leading-[0.9] tracking-[0.01em] mb-5"
+            style="font-size: clamp(2rem, 3.5vw, 3rem);">Re-Engaging Past<br>Customers Seasonally</h3>
+        <p class="font-body leading-[1.75] mb-7" style="font-size: 0.95rem; color: #5C5C5C;">
+          Seasonal outreach reached past customers through branded email newsletters featuring special roofing offers and timely maintenance reminders — encouraging them to contact the company for new projects before peak season arrived.
+        </p>
+        <div class="flex flex-wrap gap-2">
+          <span class="svc-tag">Newsletter</span>
+          <span class="svc-tag">Re-Engagement</span>
+          <span class="svc-tag">Seasonal Timing</span>
+          <span class="svc-tag">Home Services</span>
+        </div>
+      </div>
+      <div class="work-media" style="background: #fefefe;">
+        <img src="../brand_assets/clients/emails/Roofing-Email.jpg"
+             alt="Reader Roofing Email Newsletter"
+             style="object-fit: contain; position: absolute; inset: 0; width: 100%; height: 100%; padding: 16px 24px;">
+      </div>
+    </div>
+
+    <!-- ── Row 5: Holiday/Christmas ── -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 reveal-up">
+      <div class="work-media" style="background: #fefefe;">
+        <img src="../brand_assets/clients/emails/Christmas-Email-908x1024.jpg"
+             alt="Holiday Email Campaign"
+             style="object-fit: contain; position: absolute; inset: 0; width: 100%; height: 100%; padding: 16px 24px;">
+      </div>
+      <div class="work-content" style="background: #fefefe;">
+        <p class="font-heading font-semibold text-[10px] tracking-[0.28em] uppercase text-pmm-red mb-4">Truly Julie &middot; Holiday Giveaway</p>
+        <h3 class="font-display text-pmm-black leading-[0.9] tracking-[0.01em] mb-5"
+            style="font-size: clamp(2rem, 3.5vw, 3rem);">Branded Holiday<br>Giveaway Campaign</h3>
+        <p class="font-body leading-[1.75] mb-7" style="font-size: 0.95rem; color: #5C5C5C;">
+          The clothing brand engaged consumers during the holiday season with branded graphics and messaging promoting a Christmas giveaway — driving online participation, growing the subscriber list, and building social buzz during the most competitive retail window of the year.
+        </p>
+        <div class="flex flex-wrap gap-2">
+          <span class="svc-tag">Holiday Campaign</span>
+          <span class="svc-tag">Giveaway</span>
+          <span class="svc-tag">Retail</span>
+          <span class="svc-tag">List Growth</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- View all link -->
+    <div class="px-6 lg:px-10 py-12 reveal-up flex justify-center" style="background: #fefefe;">
+      <a href="../clients/index.html"
+         class="inline-flex items-center gap-3 font-heading font-bold text-xs tracking-[0.2em] uppercase text-pmm-gray hover:text-pmm-black transition-colors duration-200 group">
+        View All Client Work
+        <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+        </svg>
+      </a>
+    </div>
+
+  </section>
+
+  <!-- ===== PROCESS ===== -->
+  <section class="py-20 lg:py-28" style="background: #EDECEA;">
+    <div class="max-w-7xl mx-auto px-6 lg:px-10">
+
+      <div class="mb-14 reveal-up">
+        <div class="eyebrow-rule">
+          <span class="font-heading font-semibold text-[10px] tracking-[0.3em] uppercase text-pmm-gray">How It Works</span>
+        </div>
+        <h2 class="font-display text-pmm-black leading-[0.9] tracking-[0.01em]"
+            style="font-size: clamp(2.5rem, 5vw, 4.5rem);">
+          Strategy to Send.<br>Every Time.
+        </h2>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-px bg-[#c8c6c3] border border-[#c8c6c3]">
+
+        <div class="process-step bg-pmm-cream p-8">
+          <div class="font-display leading-[0.85] text-pmm-black/10 mb-4 tracking-tight" style="font-size: 5rem;">01</div>
+          <h3 class="font-heading font-bold text-sm tracking-[0.08em] uppercase text-pmm-black mb-3">Audience &amp; Goals</h3>
+          <p class="font-body text-sm leading-[1.75]" style="color: #5C5C5C;">
+            We start by understanding your subscribers, what you want to communicate, and what success looks like — so every campaign has a clear purpose from day one.
+          </p>
+        </div>
+
+        <div class="process-step bg-pmm-cream p-8">
+          <div class="font-display leading-[0.85] text-pmm-black/10 mb-4 tracking-tight" style="font-size: 5rem;">02</div>
+          <h3 class="font-heading font-bold text-sm tracking-[0.08em] uppercase text-pmm-black mb-3">Design &amp; Copy</h3>
+          <p class="font-body text-sm leading-[1.75]" style="color: #5C5C5C;">
+            Our team builds the template, writes the copy, and crafts subject lines — all reviewed and approved by you before anything goes out the door.
+          </p>
+        </div>
+
+        <div class="process-step bg-pmm-cream p-8">
+          <div class="font-display leading-[0.85] text-pmm-black/10 mb-4 tracking-tight" style="font-size: 5rem;">03</div>
+          <h3 class="font-heading font-bold text-sm tracking-[0.08em] uppercase text-pmm-black mb-3">Deploy &amp; Monitor</h3>
+          <p class="font-body text-sm leading-[1.75]" style="color: #5C5C5C;">
+            We handle scheduling, list deployment, and real-time monitoring — so your campaign lands at the right moment and reaches the right inboxes every time.
+          </p>
+        </div>
+
+        <div class="process-step bg-pmm-cream p-8">
+          <div class="font-display leading-[0.85] text-pmm-black/10 mb-4 tracking-tight" style="font-size: 5rem;">04</div>
+          <h3 class="font-heading font-bold text-sm tracking-[0.08em] uppercase text-pmm-black mb-3">Analyze &amp; Refine</h3>
+          <p class="font-body text-sm leading-[1.75]" style="color: #5C5C5C;">
+            After every send, we review performance data and apply what we learn — continuously improving open rates, click-throughs, and conversions with each campaign.
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CTA STRIP ===== -->
+  <section class="py-20 lg:py-24 bg-pmm-black relative overflow-hidden">
+    <div class="absolute inset-0 pointer-events-none" style="background: radial-gradient(ellipse 60% 80% at 50% 50%, rgba(232,27,30,0.07) 0%, transparent 70%);"></div>
+    <div class="relative max-w-3xl mx-auto px-6 lg:px-10 text-center">
+      <p class="font-heading font-semibold text-[10px] tracking-[0.3em] uppercase text-pmm-red mb-4">Get Started</p>
+      <h2 class="font-display text-pmm-white leading-[0.9] tracking-[0.01em] mb-6"
+          style="font-size: clamp(2.5rem, 6vw, 5rem);">
+        Ready to Fill<br>More Inboxes?
+      </h2>
+      <p class="font-body text-white/45 leading-[1.8] mb-10 mx-auto" style="font-size: 1rem; max-width: 480px;">
+        Call <a href="tel:14403401115" class="text-white/70 hover:text-white transition-colors duration-200">(440) 340-1115</a> for a free consultation with one of our email specialists — or send us a message and we'll get back to you same day.
+      </p>
+      <a href="../index.html#contact"
+         class="inline-flex items-center gap-3 bg-pmm-red text-white font-heading font-bold text-xs tracking-[0.2em] uppercase px-9 py-4 hover:bg-[#c91518] active:scale-[0.97] transition-colors duration-200 group"
+         style="transition: background 0.2s ease, transform 0.1s ease;">
+        Get a Free Consultation
+        <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+        </svg>
+      </a>
+    </div>
+  </section>
+
+  <!-- FOOTER START -->
+  <!-- ===== FOOTER ===== -->
+  <footer class="bg-pmm-surface border-t border-pmm-border pt-16 pb-10">
+    <div class="max-w-7xl mx-auto px-6 lg:px-10">
+      <div class="grid md:grid-cols-4 gap-12 mb-14">
+        <div class="md:col-span-2">
+          <img src="/brand_assets/PMM-Logo-white.png" alt="Perception Multimedia" class="h-14 w-auto mb-5">
+          <p class="font-body text-white/35 text-sm leading-relaxed max-w-xs">
+            Collaborative digital agency in Middleburg Heights, Ohio. Award-winning marketing with no long-term contracts — we earn your business every month.
+          </p>
+          <div class="flex flex-wrap gap-x-4 gap-y-2 mt-6">
+            <a href="tel:4403401115" class="font-heading font-semibold text-[10px] tracking-[0.2em] uppercase text-pmm-red hover:text-white transition-colors duration-200">(440) 340-1115</a>
+            <span class="text-pmm-border">·</span>
+            <a href="tel:4406552032" class="font-heading font-semibold text-[10px] tracking-[0.2em] uppercase text-white/30 hover:text-white transition-colors duration-200">(440) 655-2032</a>
+            <span class="text-pmm-border">·</span>
+            <a href="mailto:info@perceptionmm.com" class="font-heading font-semibold text-[10px] tracking-[0.2em] uppercase text-white/30 hover:text-white transition-colors duration-200">info@perceptionmm.com</a>
+          </div>
+          <div class="flex items-center gap-3 mt-5">
+            <a href="https://www.facebook.com/PerceptionMultimedia/" target="_blank" rel="noopener noreferrer" aria-label="Facebook" class="w-8 h-8 flex items-center justify-center rounded-full border border-pmm-border text-white/30 hover:text-white hover:border-white/40 transition-colors duration-200">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+            </a>
+            <a href="https://www.linkedin.com/company/perception-multimedia-inc-/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" class="w-8 h-8 flex items-center justify-center rounded-full border border-pmm-border text-white/30 hover:text-white hover:border-white/40 transition-colors duration-200">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
+            </a>
+            <a href="https://www.instagram.com/perception_multimedia/" target="_blank" rel="noopener noreferrer" aria-label="Instagram" class="w-8 h-8 flex items-center justify-center rounded-full border border-pmm-border text-white/30 hover:text-white hover:border-white/40 transition-colors duration-200">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+            </a>
+            <a href="https://www.youtube.com/c/Perceptionmm" target="_blank" rel="noopener noreferrer" aria-label="YouTube" class="w-8 h-8 flex items-center justify-center rounded-full border border-pmm-border text-white/30 hover:text-white hover:border-white/40 transition-colors duration-200">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.95 1.96C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.96A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="#161616"/></svg>
+            </a>
+          </div>
+        </div>
+        <div>
+          <h4 class="font-heading font-semibold text-[10px] tracking-[0.25em] uppercase text-white/30 mb-5">Services</h4>
+          <ul class="space-y-2.5">
+            <li><a href="/services/video-production.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Video Production</a></li>
+            <li><a href="/services/website-design.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Website Design</a></li>
+            <li><a href="/services/social-media.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Social Media</a></li>
+            <li><a href="/services/email-campaigns.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Email Campaigns</a></li>
+            <li><a href="/services/search-marketing.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Search Marketing</a></li>
+            <li><a href="/services/graphic-design.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Branding &amp; Logo Design</a></li>
+            <li><a href="/services/photography.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Photography</a></li>
+            <li><a href="/services/traditional-media.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Traditional Media</a></li>
+            <li><a href="/services/google-business-profile.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Google Business Profile</a></li>
+            <li><a href="/services/reputation-management.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Reputation Management</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="font-heading font-semibold text-[10px] tracking-[0.25em] uppercase text-white/30 mb-5">Company</h4>
+          <ul class="space-y-2.5">
+            <li><a href="/about.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">About Us</a></li>
+            <li><a href="/clients/index.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Portfolio</a></li>
+            <li><a href="/services/index.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Services</a></li>
+            <li><a href="/contact.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Contact</a></li>
+            <li><a href="/philanthropy.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Philanthropy</a></li>
+            <li><a href="/blog/index.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Blog</a></li>
+            <li><a href="mailto:careers@perceptionmm.com" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Careers</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="border-t border-pmm-border pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <p class="font-body text-xs text-white/20">© 2026 Perception Multimedia Inc. All rights reserved.</p>
+        <p class="font-heading font-semibold text-[10px] tracking-[0.25em] uppercase text-white/15">Middleburg Heights, OH · perceptionmm.com</p>
+      </div>
+    </div>
+  </footer>
+<!-- FOOTER END -->
+
+  <script>
+    // Navbar scroll
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('nav-scrolled', window.scrollY > 40);
+    }, { passive: true });
+
+    // Mobile menu
+    const menuToggle = document.getElementById('menu-toggle');
+    const menuClose  = document.getElementById('menu-close');
+    const mobileMenu = document.getElementById('mobile-menu');
+
+    menuToggle.addEventListener('click', () => {
+      mobileMenu.classList.remove('hidden');
+      mobileMenu.classList.add('flex');
+    });
+    menuClose.addEventListener('click', closeMobileMenu);
+
+    function closeMobileMenu() {
+      mobileMenu.classList.add('hidden');
+      mobileMenu.classList.remove('flex');
+    }
+    function toggleMobileServices() {
+      const list = document.getElementById('mobile-services-list');
+      const arrow = document.getElementById('mobile-svc-arrow');
+      const isOpen = list.classList.contains('flex');
+      list.classList.toggle('hidden', isOpen);
+      list.classList.toggle('flex', !isOpen);
+      arrow.style.transform = isOpen ? '' : 'rotate(180deg)';
+    }
+
+    // Scroll reveal
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('in-view');
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('.svc-card, .reveal-up, .process-step').forEach(el => observer.observe(el));
+  </script>
+
+</div><!-- /overflow-x-hidden -->
+</body>
+</html>

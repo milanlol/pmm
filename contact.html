@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Us — Perception Multimedia Inc.</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Josefin+Sans:ital,wght@0,300;0,400;0,600;0,700;1,300&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'pmm-red':     '#E81B1E',
+            'pmm-black':   '#0A0A0A',
+            'pmm-dark':    '#111111',
+            'pmm-surface': '#161616',
+            'pmm-border':  '#222222',
+            'pmm-muted':   '#3A3A3A',
+            'pmm-white':   '#F4F4F0',
+            'pmm-cream':   '#EDECEA',
+            'pmm-gray':    '#5C5C5C',
+          },
+          fontFamily: {
+            'display': ['"Bebas Neue"', 'cursive'],
+            'heading': ['"Josefin Sans"', 'sans-serif'],
+            'body':    ['"DM Sans"', 'sans-serif'],
+          },
+        }
+      }
+    }
+  </script>
+  <style>
+    /* Hero entrance */
+    .hero-line {
+      opacity: 0;
+      transform: translateY(32px);
+      animation: heroUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    .hero-line:nth-child(1) { animation-delay: 0.05s; }
+    .hero-line:nth-child(2) { animation-delay: 0.18s; }
+    .hero-line:nth-child(3) { animation-delay: 0.30s; }
+    @keyframes heroUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Scroll reveal */
+    .reveal-up {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .reveal-up.in-view { opacity: 1; transform: translateY(0); }
+    .delay-1 { transition-delay: 0.07s; }
+    .delay-2 { transition-delay: 0.14s; }
+    .delay-3 { transition-delay: 0.21s; }
+    .delay-4 { transition-delay: 0.28s; }
+
+    /* Eyebrow rule */
+    .eyebrow-rule {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .eyebrow-rule::before {
+      content: '';
+      display: block;
+      width: 36px;
+      height: 2px;
+      background: #E81B1E;
+      flex-shrink: 0;
+    }
+
+    /* Contact info items */
+    .contact-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      padding: 24px 0;
+      border-bottom: 1px solid #222222;
+    }
+    .contact-item:last-child {
+      border-bottom: none;
+    }
+    .contact-icon {
+      width: 40px;
+      height: 40px;
+      background: rgba(232,27,30,0.08);
+      border: 1px solid rgba(232,27,30,0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    /* Form inputs */
+    .form-field {
+      width: 100%;
+      background: #111111;
+      border: 1px solid #222222;
+      color: #F4F4F0;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      padding: 14px 18px;
+      outline: none;
+      transition: border-color 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+                  background 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      -webkit-appearance: none;
+      appearance: none;
+    }
+    .form-field::placeholder {
+      color: rgba(244,244,240,0.2);
+    }
+    .form-field:focus {
+      border-color: rgba(232,27,30,0.5);
+      background: #161616;
+    }
+    .form-label {
+      display: block;
+      font-family: 'Josefin Sans', sans-serif;
+      font-weight: 600;
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(244,244,240,0.4);
+      margin-bottom: 8px;
+    }
+    textarea.form-field {
+      resize: vertical;
+      min-height: 130px;
+    }
+    .form-select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='7' viewBox='0 0 12 7' fill='none'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%235C5C5C' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 16px center;
+      padding-right: 40px;
+      cursor: pointer;
+    }
+    .form-select option {
+      background: #111111;
+      color: #F4F4F0;
+    }
+
+    /* Submit button */
+    .btn-submit {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: #E81B1E;
+      color: #F4F4F0;
+      font-family: 'Josefin Sans', sans-serif;
+      font-weight: 700;
+      font-size: 11px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      padding: 16px 36px;
+      border: none;
+      cursor: pointer;
+      transition: background 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+      overflow: hidden;
+    }
+    .btn-submit:hover {
+      background: #c91517;
+      transform: translateY(-1px);
+    }
+    .btn-submit:active {
+      transform: translateY(0);
+    }
+    .btn-submit:focus-visible {
+      outline: 2px solid #E81B1E;
+      outline-offset: 3px;
+    }
+
+    /* Social rows */
+    .social-row { background: #111111; }
+    .social-row:hover { background: #161616; }
+    .social-row:hover .social-arrow { color: #E81B1E !important; }
+    .social-icon-wrap {
+      width: 36px;
+      height: 36px;
+      background: rgba(232,27,30,0.07);
+      border: 1px solid rgba(232,27,30,0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      color: #E81B1E;
+    }
+
+    /* Success state */
+    #form-success {
+      display: none;
+      padding: 24px;
+      border: 1px solid rgba(232,27,30,0.25);
+      background: rgba(232,27,30,0.05);
+      margin-top: 16px;
+    }
+
+  </style>
+</head>
+<body class="bg-pmm-black text-pmm-white font-body">
+<div class="overflow-x-hidden">
+
+  <!-- GRAIN OVERLAY -->
+  <div class="grain-overlay" aria-hidden="true"></div>
+
+  <!-- NAV START -->
+  <!-- NAV -->
+  <nav id="navbar" class="fixed top-0 left-0 right-0 z-50">
+    <div class="max-w-7xl mx-auto px-6 lg:px-10 h-20 flex items-center justify-between">
+      <a href="/index.html" class="flex-shrink-0">
+        <img src="/brand_assets/PMM-Logo-white.png" alt="Perception Multimedia" class="h-11 w-auto">
+      </a>
+      <div class="hidden md:flex items-center gap-8">
+        <a href="/index.html" class="nav-link font-heading font-semibold text-xs tracking-[0.2em] uppercase text-white/60 hover:text-white transition-colors duration-200">Home</a>
+        <a href="/about.html" class="nav-link font-heading font-semibold text-xs tracking-[0.2em] uppercase text-white/60 hover:text-white transition-colors duration-200">About</a>
+        <div class="nav-dropdown-wrapper">
+          <a href="/services/index.html" class="nav-link font-heading font-semibold text-xs tracking-[0.2em] uppercase text-white/60 hover:text-white transition-colors duration-200 flex items-center gap-1.5">Services <svg class="nav-chevron-icon" width="8" height="5" viewBox="0 0 8 5" fill="none"><path d="M1 1l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+          <div class="nav-dropdown">
+            <a href="/services/video-production.html" class="nav-dropdown-item">Video Production</a>
+            <a href="/services/website-design.html" class="nav-dropdown-item">Website Design</a>
+            <a href="/services/social-media.html" class="nav-dropdown-item">Social Media</a>
+            <a href="/services/email-campaigns.html" class="nav-dropdown-item">Email Campaigns</a>
+            <a href="/services/photography.html" class="nav-dropdown-item">Photography</a>
+            <a href="/services/search-marketing.html" class="nav-dropdown-item">Search Marketing</a>
+            <a href="/services/graphic-design.html" class="nav-dropdown-item">Branding &amp; Logo Design</a>
+            <a href="/services/traditional-media.html" class="nav-dropdown-item">Traditional Media</a>
+            <a href="/services/google-business-profile.html" class="nav-dropdown-item">Google Business Profile</a>
+            <a href="/services/reputation-management.html" class="nav-dropdown-item">Reputation Management</a>
+          </div>
+        </div>
+        <a href="/clients/index.html" class="nav-link font-heading font-semibold text-xs tracking-[0.2em] uppercase text-white/60 hover:text-white transition-colors duration-200">Work</a>
+        <a href="/philanthropy.html" class="nav-link font-heading font-semibold text-xs tracking-[0.2em] uppercase text-white/60 hover:text-white transition-colors duration-200">Philanthropy</a>
+        <a href="/contact.html" class="nav-cta-btn nav-active font-heading font-bold text-xs tracking-[0.2em] uppercase px-6 py-3 bg-pmm-red text-white">Contact</a>
+      </div>
+      <button id="menu-toggle" class="md:hidden text-white p-2 focus:outline-none" aria-label="Open menu">
+        <svg width="22" height="16" viewBox="0 0 22 16" fill="none">
+          <line x1="0" y1="1"  x2="22" y2="1"  stroke="currentColor" stroke-width="2"/>
+          <line x1="0" y1="8"  x2="22" y2="8"  stroke="currentColor" stroke-width="2"/>
+          <line x1="0" y1="15" x2="22" y2="15" stroke="currentColor" stroke-width="2"/>
+        </svg>
+      </button>
+    </div>
+  </nav>
+
+  <!-- MOBILE MENU -->
+  <div id="mobile-menu" class="fixed inset-0 z-[60] bg-pmm-black hidden flex-col items-center justify-center">
+    <button id="menu-close" class="absolute top-6 right-6 text-white/40 hover:text-white" aria-label="Close menu">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+      </svg>
+    </button>
+    <nav class="flex flex-col items-center gap-5 text-center">
+      <a href="/index.html" onclick="closeMobileMenu()" class="font-display text-5xl text-white hover:text-pmm-red transition-colors duration-200">HOME</a>
+      <a href="/about.html" onclick="closeMobileMenu()" class="font-display text-5xl text-white hover:text-pmm-red transition-colors duration-200">ABOUT</a>
+      <div class="flex flex-col items-center gap-2">
+        <button onclick="toggleMobileServices()" class="font-display text-5xl text-white hover:text-pmm-red flex items-center gap-3 bg-transparent border-none cursor-pointer">SERVICES <span id="mobile-svc-arrow" style="font-size:1.4rem;line-height:1;display:inline-block;transition:transform 0.25s cubic-bezier(0.16,1,0.3,1);">↓</span></button>
+        <div id="mobile-services-list" class="hidden flex-col items-center gap-1 mt-3">
+          <a href="/services/video-production.html" onclick="closeMobileMenu()" class="font-heading font-semibold text-sm tracking-[0.18em] uppercase text-white/50 hover:text-pmm-red transition-colors duration-200 py-2.5 px-6">Video Production</a>
+          <a href="/services/website-design.html" onclick="closeMobileMenu()" class="font-heading font-semibold text-sm tracking-[0.18em] uppercase text-white/50 hover:text-pmm-red transition-colors duration-200 py-2.5 px-6">Website Design</a>
+          <a href="/services/social-media.html" onclick="closeMobileMenu()" class="font-heading font-semibold text-sm tracking-[0.18em] uppercase text-white/50 hover:text-pmm-red transition-colors duration-200 py-2.5 px-6">Social Media</a>
+          <a href="/services/email-campaigns.html" onclick="closeMobileMenu()" class="font-heading font-semibold text-sm tracking-[0.18em] uppercase text-white/50 hover:text-pmm-red transition-colors duration-200 py-2.5 px-6">Email Campaigns</a>
+          <a href="/services/photography.html" onclick="closeMobileMenu()" class="font-heading font-semibold text-sm tracking-[0.18em] uppercase text-white/50 hover:text-pmm-red transition-colors duration-200 py-2.5 px-6">Photography</a>
+          <a href="/services/search-marketing.html" onclick="closeMobileMenu()" class="font-heading font-semibold text-sm tracking-[0.18em] uppercase text-white/50 hover:text-pmm-red transition-colors duration-200 py-2.5 px-6">Search Marketing</a>
+          <a href="/services/graphic-design.html" onclick="closeMobileMenu()" class="font-heading font-semibold text-sm tracking-[0.18em] uppercase text-white/50 hover:text-pmm-red transition-colors duration-200 py-2.5 px-6">Branding &amp; Logo Design</a>
+          <a href="/services/traditional-media.html" onclick="closeMobileMenu()" class="font-heading font-semibold text-sm tracking-[0.18em] uppercase text-white/50 hover:text-pmm-red transition-colors duration-200 py-2.5 px-6">Traditional Media</a>
+          <a href="/services/google-business-profile.html" onclick="closeMobileMenu()" class="font-heading font-semibold text-sm tracking-[0.18em] uppercase text-white/50 hover:text-pmm-red transition-colors duration-200 py-2.5 px-6">Google Business Profile</a>
+          <a href="/services/reputation-management.html" onclick="closeMobileMenu()" class="font-heading font-semibold text-sm tracking-[0.18em] uppercase text-white/50 hover:text-pmm-red transition-colors duration-200 py-2.5 px-6">Reputation Management</a>
+        </div>
+      </div>
+      <a href="/clients/index.html" onclick="closeMobileMenu()" class="font-display text-5xl text-white hover:text-pmm-red transition-colors duration-200">WORK</a>
+      <a href="/philanthropy.html" onclick="closeMobileMenu()" class="font-display text-5xl text-white hover:text-pmm-red transition-colors duration-200">PHILANTHROPY</a>
+      <a href="/contact.html" onclick="closeMobileMenu()" class="font-display text-5xl text-pmm-red">CONTACT</a>
+    </nav>
+    <div class="absolute bottom-10 font-heading text-xs tracking-[0.25em] uppercase text-white/20">440.340.1115</div>
+  </div>
+<!-- NAV END -->
+
+  <!-- ===== HERO ===== -->
+  <section class="relative" style="min-height: 52vh; display: flex; flex-direction: column; justify-content: flex-end;">
+    <!-- Background photo -->
+    <div class="absolute inset-0" style="
+      background-image: url('brand_assets/photos/pmm-1.jpg');
+      background-size: cover;
+      background-position: center 40%;
+      z-index: 0;
+    "></div>
+
+    <!-- Dark overlay -->
+    <div class="absolute inset-0 pointer-events-none" style="z-index: 1;
+      background: linear-gradient(to bottom,
+        rgba(10,10,10,0.55) 0%,
+        rgba(10,10,10,0.50) 35%,
+        rgba(10,10,10,0.82) 70%,
+        rgba(10,10,10,0.97) 100%);
+    "></div>
+
+    <!-- Red atmosphere tint -->
+    <div class="absolute inset-0 pointer-events-none" style="z-index: 2;
+      background: radial-gradient(ellipse 50% 55% at 10% 30%, rgba(232,27,30,0.10) 0%, transparent 60%);
+    "></div>
+
+    <!-- Text content -->
+    <div class="relative max-w-7xl mx-auto px-6 lg:px-10 w-full pb-16 pt-40" style="z-index: 5;">
+      <div class="hero-line eyebrow-rule">
+        <span class="font-heading font-semibold text-pmm-red text-xs tracking-[0.3em] uppercase">Contact &middot; Perception Multimedia</span>
+      </div>
+      <h1 class="hero-line font-display text-pmm-white leading-[0.86] tracking-[0.02em] mb-6"
+          style="font-size: clamp(4rem, 10vw, 9.5rem);">
+        Let's Build<br>Something Great
+      </h1>
+      <p class="hero-line font-body leading-[1.8] max-w-lg"
+         style="font-size: clamp(0.95rem, 1.3vw, 1.05rem); color: rgba(244,244,240,0.55);">
+        Ready to grow your brand? We'd love to hear what you're working on. Reach out — no long-term contracts, just results.
+      </p>
+    </div>
+
+    <!-- Bottom rule -->
+    <div class="absolute bottom-0 left-0 right-0 h-px" style="z-index: 4; background: rgba(255,255,255,0.07);"></div>
+  </section>
+
+  <!-- RED MARQUEE STRIP -->
+  <div class="bg-pmm-red py-3 overflow-hidden" aria-hidden="true">
+    <div class="marquee-track">
+      <div class="marquee-inner font-heading font-bold text-[11px] tracking-[0.25em] uppercase text-white">
+        <span>Video Production</span><span class="marquee-dot">&middot;</span>
+        <span>Website Design</span><span class="marquee-dot">&middot;</span>
+        <span>Social Media</span><span class="marquee-dot">&middot;</span>
+        <span>Search Marketing</span><span class="marquee-dot">&middot;</span>
+        <span>Email Campaigns</span><span class="marquee-dot">&middot;</span>
+        <span>Photography</span><span class="marquee-dot">&middot;</span>
+        <span>Graphic Design</span><span class="marquee-dot">&middot;</span>
+        <span>Traditional Media</span><span class="marquee-dot">&middot;</span>
+        <span>Video Production</span><span class="marquee-dot">&middot;</span>
+        <span>Website Design</span><span class="marquee-dot">&middot;</span>
+        <span>Social Media</span><span class="marquee-dot">&middot;</span>
+        <span>Search Marketing</span><span class="marquee-dot">&middot;</span>
+        <span>Email Campaigns</span><span class="marquee-dot">&middot;</span>
+        <span>Photography</span><span class="marquee-dot">&middot;</span>
+        <span>Graphic Design</span><span class="marquee-dot">&middot;</span>
+        <span>Traditional Media</span><span class="marquee-dot">&middot;</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== MAIN CONTACT SECTION ===== -->
+  <section class="py-20 lg:py-28" style="background: #111111;">
+    <div class="max-w-7xl mx-auto px-6 lg:px-10">
+      <div class="grid lg:grid-cols-[1fr_1.15fr] gap-12 xl:gap-20 items-start">
+
+        <!-- LEFT: Info + Map -->
+        <div class="reveal-up">
+
+          <div class="eyebrow-rule mb-6">
+            <span class="font-heading font-semibold text-[10px] tracking-[0.3em] uppercase text-pmm-red">Find Us</span>
+          </div>
+          <h2 class="font-display text-pmm-white leading-[0.92] tracking-[0.01em] mb-10"
+              style="font-size: clamp(2.2rem, 4vw, 3.8rem);">
+            Get In Touch
+          </h2>
+
+          <!-- Contact details -->
+          <div class="mb-10">
+
+            <!-- Address -->
+            <div class="contact-item">
+              <div class="contact-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#E81B1E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                  <circle cx="12" cy="10" r="3"/>
+                </svg>
+              </div>
+              <div>
+                <p class="font-heading font-semibold text-[10px] tracking-[0.22em] uppercase text-white/30 mb-1.5">Office</p>
+                <p class="font-body text-pmm-white text-sm leading-relaxed">
+                  15165 Bagley Road<br>
+                  Middleburg Hts., OH 44130
+                </p>
+              </div>
+            </div>
+
+            <!-- Phone 1 -->
+            <div class="contact-item">
+              <div class="contact-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#E81B1E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.14 13.5 19.79 19.79 0 0 1 1 5a2 2 0 0 1 2-2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.09 10.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21 18v2.08l.92-1.16z"/>
+                </svg>
+              </div>
+              <div>
+                <p class="font-heading font-semibold text-[10px] tracking-[0.22em] uppercase text-white/30 mb-1.5">Phone</p>
+                <a href="tel:4403401115" class="font-body text-pmm-white text-sm hover:text-pmm-red transition-colors duration-200 block leading-relaxed">
+                  (440) 340-1115
+                </a>
+                <a href="tel:4406552032" class="font-body text-pmm-white text-sm hover:text-pmm-red transition-colors duration-200 block leading-relaxed">
+                  (440) 655-2032
+                </a>
+              </div>
+            </div>
+
+            <!-- Email -->
+            <div class="contact-item">
+              <div class="contact-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#E81B1E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                  <polyline points="22,6 12,13 2,6"/>
+                </svg>
+              </div>
+              <div>
+                <p class="font-heading font-semibold text-[10px] tracking-[0.22em] uppercase text-white/30 mb-1.5">Email</p>
+                <a href="mailto:info@perceptionmm.com" class="font-body text-pmm-white text-sm hover:text-pmm-red transition-colors duration-200">
+                  info@perceptionmm.com
+                </a>
+              </div>
+            </div>
+
+            <!-- Hours -->
+            <div class="contact-item">
+              <div class="contact-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#E81B1E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10"/>
+                  <polyline points="12 6 12 12 16 14"/>
+                </svg>
+              </div>
+              <div>
+                <p class="font-heading font-semibold text-[10px] tracking-[0.22em] uppercase text-white/30 mb-1.5">Hours</p>
+                <p class="font-body text-pmm-white text-sm leading-relaxed">
+                  Monday – Friday<br>
+                  <span class="text-white/50">8:30 AM – 5:00 PM EST</span>
+                </p>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Social Media -->
+          <div class="reveal-up delay-1" style="border: 1px solid #222222; overflow: hidden;">
+            <div style="padding: 20px 24px; border-bottom: 1px solid #222222;">
+              <p class="font-heading font-semibold text-[10px] tracking-[0.28em] uppercase text-pmm-red">Follow Along</p>
+            </div>
+
+            <a href="https://www.facebook.com/PerceptionMultimedia/" target="_blank" rel="noopener noreferrer"
+               class="social-row" style="display: flex; align-items: center; justify-content: space-between; padding: 18px 24px; border-bottom: 1px solid #222222; text-decoration: none; transition: background 0.2s ease;">
+              <div style="display: flex; align-items: center; gap: 14px;">
+                <div class="social-icon-wrap">
+                  <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+                  </svg>
+                </div>
+                <div>
+                  <p class="font-heading font-semibold text-pmm-white text-xs tracking-[0.05em]">Facebook</p>
+                  <p class="font-body text-white/30 text-xs">@PerceptionMultimedia</p>
+                </div>
+              </div>
+              <svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="social-arrow" style="color: rgba(255,255,255,0.2);">
+                <path d="M1 11L11 1M11 1H4M11 1v7"/>
+              </svg>
+            </a>
+
+            <a href="https://www.linkedin.com/company/perception-multimedia-inc-/" target="_blank" rel="noopener noreferrer"
+               class="social-row" style="display: flex; align-items: center; justify-content: space-between; padding: 18px 24px; border-bottom: 1px solid #222222; text-decoration: none; transition: background 0.2s ease;">
+              <div style="display: flex; align-items: center; gap: 14px;">
+                <div class="social-icon-wrap">
+                  <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2z"/>
+                    <circle cx="4" cy="4" r="2"/>
+                  </svg>
+                </div>
+                <div>
+                  <p class="font-heading font-semibold text-pmm-white text-xs tracking-[0.05em]">LinkedIn</p>
+                  <p class="font-body text-white/30 text-xs">Perception Multimedia Inc.</p>
+                </div>
+              </div>
+              <svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="social-arrow" style="color: rgba(255,255,255,0.2);">
+                <path d="M1 11L11 1M11 1H4M11 1v7"/>
+              </svg>
+            </a>
+
+            <a href="https://www.instagram.com/perception_multimedia/" target="_blank" rel="noopener noreferrer"
+               class="social-row" style="display: flex; align-items: center; justify-content: space-between; padding: 18px 24px; border-bottom: 1px solid #222222; text-decoration: none; transition: background 0.2s ease;">
+              <div style="display: flex; align-items: center; gap: 14px;">
+                <div class="social-icon-wrap">
+                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+                    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+                    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+                  </svg>
+                </div>
+                <div>
+                  <p class="font-heading font-semibold text-pmm-white text-xs tracking-[0.05em]">Instagram</p>
+                  <p class="font-body text-white/30 text-xs">@perception_multimedia</p>
+                </div>
+              </div>
+              <svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="social-arrow" style="color: rgba(255,255,255,0.2);">
+                <path d="M1 11L11 1M11 1H4M11 1v7"/>
+              </svg>
+            </a>
+
+            <a href="https://www.youtube.com/c/Perceptionmm" target="_blank" rel="noopener noreferrer"
+               class="social-row" style="display: flex; align-items: center; justify-content: space-between; padding: 18px 24px; text-decoration: none; transition: background 0.2s ease;">
+              <div style="display: flex; align-items: center; gap: 14px;">
+                <div class="social-icon-wrap">
+                  <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 0 0-1.95 1.96A29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58A2.78 2.78 0 0 0 3.41 19.6C5.12 20 12 20 12 20s6.88 0 8.59-.4a2.78 2.78 0 0 0 1.95-1.95A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/>
+                    <polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="#0A0A0A"/>
+                  </svg>
+                </div>
+                <div>
+                  <p class="font-heading font-semibold text-pmm-white text-xs tracking-[0.05em]">YouTube</p>
+                  <p class="font-body text-white/30 text-xs">Perception Multimedia</p>
+                </div>
+              </div>
+              <svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="social-arrow" style="color: rgba(255,255,255,0.2);">
+                <path d="M1 11L11 1M11 1H4M11 1v7"/>
+              </svg>
+            </a>
+
+          </div>
+
+        </div>
+
+        <!-- RIGHT: Contact Form -->
+        <div class="reveal-up delay-1">
+
+          <div style="background: #0D0D0D; border: 1px solid #222222; padding: 44px 40px;">
+
+            <div class="eyebrow-rule mb-6">
+              <span class="font-heading font-semibold text-[10px] tracking-[0.3em] uppercase text-pmm-red">Send A Message</span>
+            </div>
+            <h3 class="font-display text-pmm-white leading-[0.92] mb-8"
+                style="font-size: clamp(1.8rem, 3vw, 2.8rem);">
+              Start The Conversation
+            </h3>
+
+            <form id="contact-form" novalidate>
+
+              <!-- Name row -->
+              <div class="grid sm:grid-cols-2 gap-4 mb-4">
+                <div>
+                  <label for="first-name" class="form-label">First Name <span class="text-pmm-red">*</span></label>
+                  <input type="text" id="first-name" name="first_name" class="form-field" placeholder="Mike" required>
+                </div>
+                <div>
+                  <label for="last-name" class="form-label">Last Name <span class="text-pmm-red">*</span></label>
+                  <input type="text" id="last-name" name="last_name" class="form-field" placeholder="Johnson" required>
+                </div>
+              </div>
+
+              <!-- Email + Phone -->
+              <div class="grid sm:grid-cols-2 gap-4 mb-4">
+                <div>
+                  <label for="email" class="form-label">Email Address <span class="text-pmm-red">*</span></label>
+                  <input type="email" id="email" name="email" class="form-field" placeholder="you@company.com" required>
+                </div>
+                <div>
+                  <label for="phone" class="form-label">Phone Number</label>
+                  <input type="tel" id="phone" name="phone" class="form-field" placeholder="(440) 000-0000">
+                </div>
+              </div>
+
+              <!-- Company -->
+              <div class="mb-4">
+                <label for="company" class="form-label">Company / Organization</label>
+                <input type="text" id="company" name="company" class="form-field" placeholder="Your Company Name">
+              </div>
+
+              <!-- Service Interest -->
+              <div class="mb-4">
+                <label for="service" class="form-label">Service Interest</label>
+                <select id="service" name="service" class="form-field form-select">
+                  <option value="" disabled selected>Select a service...</option>
+                  <option value="video-production">Video Production</option>
+                  <option value="website-design">Website Design</option>
+                  <option value="social-media">Social Media</option>
+                  <option value="search-marketing">Search Marketing</option>
+                  <option value="email-campaigns">Email Campaigns</option>
+                  <option value="photography">Photography</option>
+                  <option value="graphic-design">Graphic Design</option>
+                  <option value="traditional-media">Traditional Media</option>
+                  <option value="multiple">Multiple Services</option>
+                  <option value="not-sure">Not Sure Yet</option>
+                </select>
+              </div>
+
+              <!-- Budget -->
+              <div class="mb-4">
+                <label for="budget" class="form-label">Approximate Budget</label>
+                <select id="budget" name="budget" class="form-field form-select">
+                  <option value="" disabled selected>Select a range...</option>
+                  <option value="under-2500">Under $2,500</option>
+                  <option value="2500-5000">$2,500 – $5,000</option>
+                  <option value="5000-10000">$5,000 – $10,000</option>
+                  <option value="10000-25000">$10,000 – $25,000</option>
+                  <option value="25000-plus">$25,000+</option>
+                  <option value="ongoing">Ongoing / Retainer</option>
+                </select>
+              </div>
+
+              <!-- Message -->
+              <div class="mb-8">
+                <label for="message" class="form-label">Tell Us About Your Project <span class="text-pmm-red">*</span></label>
+                <textarea id="message" name="message" class="form-field" placeholder="Share a bit about your goals, timeline, or anything else we should know..." required></textarea>
+              </div>
+
+              <!-- Error message -->
+              <p id="form-error" class="font-body text-pmm-red text-xs mb-4 hidden">Please fill in all required fields.</p>
+
+              <!-- Submit -->
+              <div class="flex items-center gap-6 flex-wrap">
+                <button type="submit" class="btn-submit" id="submit-btn">
+                  <span id="submit-text">Send Message</span>
+                  <svg id="submit-arrow" width="14" height="10" viewBox="0 0 14 10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M1 5h12M8 1l5 4-5 4"/>
+                  </svg>
+                  <svg id="submit-spinner" class="hidden" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="animation: spin 0.8s linear infinite;">
+                    <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+                  </svg>
+                </button>
+                <p class="font-body text-[11px] text-white/25 leading-snug max-w-[200px]">
+                  We typically respond within one business day.
+                </p>
+              </div>
+
+              <!-- Success -->
+              <div id="form-success">
+                <p class="font-heading font-bold text-xs tracking-[0.15em] uppercase text-pmm-red mb-1">Message Sent</p>
+                <p class="font-body text-sm text-white/60 leading-relaxed">Thank you for reaching out! A member of our team will be in touch with you shortly.</p>
+              </div>
+
+            </form>
+          </div>
+
+          <!-- Partner badges -->
+          <div class="flex items-center gap-6 mt-8 opacity-40">
+            <img src="brand_assets/google-partner-badge.png" alt="Google Partner" class="h-12 w-auto">
+            <img src="brand_assets/Mailchimp-partners-badge.png" alt="Mailchimp Partner" class="h-10 w-auto">
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FULL-WIDTH MAP ===== -->
+  <section style="background: #0A0A0A;">
+    <!-- Label bar -->
+    <div class="border-t border-b border-pmm-border py-4" style="background: #111111;">
+      <div class="max-w-7xl mx-auto px-6 lg:px-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+        <div class="flex items-center gap-4">
+          <div class="eyebrow-rule" style="margin-bottom: 0;">
+            <span class="font-heading font-semibold text-[10px] tracking-[0.3em] uppercase text-pmm-red">Our Location</span>
+          </div>
+        </div>
+        <a
+          href="https://maps.google.com/?q=15165+Bagley+Road,+Middleburg+Heights,+OH+44130"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="font-heading font-semibold text-[10px] tracking-[0.2em] uppercase text-white/30 hover:text-pmm-red transition-colors duration-200 flex items-center gap-2"
+        >
+          15165 Bagley Road, Middleburg Hts., OH 44130
+          <svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M1 11L11 1M11 1H4M11 1v7"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+    <!-- Map -->
+    <div style="position: relative; width: 100%; height: 480px; overflow: hidden;">
+      <iframe
+        src="https://www.google.com/maps?q=15165+Bagley+Road,+Middleburg+Heights,+OH+44130&output=embed"
+        allowfullscreen=""
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade"
+        title="Perception Multimedia Inc. location map"
+        style="width: 100%; height: 100%; border: none; filter: grayscale(100%) invert(92%) contrast(89%) hue-rotate(180deg) brightness(0.82) saturate(0.9);"
+      ></iframe>
+      <!-- Brand tint overlay -->
+      <div style="position: absolute; inset: 0; background: rgba(10,10,10,0.10); pointer-events: none; z-index: 2;"></div>
+    </div>
+  </section>
+
+  <!-- FOOTER START -->
+  <!-- ===== FOOTER ===== -->
+  <footer class="bg-pmm-surface border-t border-pmm-border pt-16 pb-10">
+    <div class="max-w-7xl mx-auto px-6 lg:px-10">
+      <div class="grid md:grid-cols-4 gap-12 mb-14">
+        <div class="md:col-span-2">
+          <img src="/brand_assets/PMM-Logo-white.png" alt="Perception Multimedia" class="h-14 w-auto mb-5">
+          <p class="font-body text-white/35 text-sm leading-relaxed max-w-xs">
+            Collaborative digital agency in Middleburg Heights, Ohio. Award-winning marketing with no long-term contracts — we earn your business every month.
+          </p>
+          <div class="flex flex-wrap gap-x-4 gap-y-2 mt-6">
+            <a href="tel:4403401115" class="font-heading font-semibold text-[10px] tracking-[0.2em] uppercase text-pmm-red hover:text-white transition-colors duration-200">(440) 340-1115</a>
+            <span class="text-pmm-border">·</span>
+            <a href="tel:4406552032" class="font-heading font-semibold text-[10px] tracking-[0.2em] uppercase text-white/30 hover:text-white transition-colors duration-200">(440) 655-2032</a>
+            <span class="text-pmm-border">·</span>
+            <a href="mailto:info@perceptionmm.com" class="font-heading font-semibold text-[10px] tracking-[0.2em] uppercase text-white/30 hover:text-white transition-colors duration-200">info@perceptionmm.com</a>
+          </div>
+          <div class="flex items-center gap-3 mt-5">
+            <a href="https://www.facebook.com/PerceptionMultimedia/" target="_blank" rel="noopener noreferrer" aria-label="Facebook" class="w-8 h-8 flex items-center justify-center rounded-full border border-pmm-border text-white/30 hover:text-white hover:border-white/40 transition-colors duration-200">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+            </a>
+            <a href="https://www.linkedin.com/company/perception-multimedia-inc-/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" class="w-8 h-8 flex items-center justify-center rounded-full border border-pmm-border text-white/30 hover:text-white hover:border-white/40 transition-colors duration-200">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
+            </a>
+            <a href="https://www.instagram.com/perception_multimedia/" target="_blank" rel="noopener noreferrer" aria-label="Instagram" class="w-8 h-8 flex items-center justify-center rounded-full border border-pmm-border text-white/30 hover:text-white hover:border-white/40 transition-colors duration-200">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+            </a>
+            <a href="https://www.youtube.com/c/Perceptionmm" target="_blank" rel="noopener noreferrer" aria-label="YouTube" class="w-8 h-8 flex items-center justify-center rounded-full border border-pmm-border text-white/30 hover:text-white hover:border-white/40 transition-colors duration-200">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.95 1.96C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.96A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="#161616"/></svg>
+            </a>
+          </div>
+        </div>
+        <div>
+          <h4 class="font-heading font-semibold text-[10px] tracking-[0.25em] uppercase text-white/30 mb-5">Services</h4>
+          <ul class="space-y-2.5">
+            <li><a href="/services/video-production.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Video Production</a></li>
+            <li><a href="/services/website-design.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Website Design</a></li>
+            <li><a href="/services/social-media.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Social Media</a></li>
+            <li><a href="/services/email-campaigns.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Email Campaigns</a></li>
+            <li><a href="/services/search-marketing.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Search Marketing</a></li>
+            <li><a href="/services/graphic-design.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Branding &amp; Logo Design</a></li>
+            <li><a href="/services/photography.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Photography</a></li>
+            <li><a href="/services/traditional-media.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Traditional Media</a></li>
+            <li><a href="/services/google-business-profile.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Google Business Profile</a></li>
+            <li><a href="/services/reputation-management.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Reputation Management</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="font-heading font-semibold text-[10px] tracking-[0.25em] uppercase text-white/30 mb-5">Company</h4>
+          <ul class="space-y-2.5">
+            <li><a href="/about.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">About Us</a></li>
+            <li><a href="/clients/index.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Portfolio</a></li>
+            <li><a href="/services/index.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Services</a></li>
+            <li><a href="/contact.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Contact</a></li>
+            <li><a href="/philanthropy.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Philanthropy</a></li>
+            <li><a href="/blog/index.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Blog</a></li>
+            <li><a href="mailto:careers@perceptionmm.com" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Careers</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="border-t border-pmm-border pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <p class="font-body text-xs text-white/20">© 2026 Perception Multimedia Inc. All rights reserved.</p>
+        <p class="font-heading font-semibold text-[10px] tracking-[0.25em] uppercase text-white/15">Middleburg Heights, OH · perceptionmm.com</p>
+      </div>
+    </div>
+  </footer>
+<!-- FOOTER END -->
+
+</div><!-- /overflow-x-hidden -->
+
+<style>
+  @keyframes spin {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+  }
+</style>
+
+<script>
+  // Navbar scroll
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('nav-scrolled', window.scrollY > 40);
+  }, { passive: true });
+
+  // Mobile menu
+  const menuToggle = document.getElementById('menu-toggle');
+  const menuClose  = document.getElementById('menu-close');
+  const mobileMenu = document.getElementById('mobile-menu');
+
+  menuToggle.addEventListener('click', () => {
+    mobileMenu.classList.remove('hidden');
+    mobileMenu.classList.add('flex');
+    document.body.style.overflow = 'hidden';
+  });
+
+  function closeMobileMenu() {
+    mobileMenu.classList.add('hidden');
+    mobileMenu.classList.remove('flex');
+    document.body.style.overflow = '';
+  }
+
+  menuClose.addEventListener('click', closeMobileMenu);
+
+  function toggleMobileServices() {
+    const list  = document.getElementById('mobile-services-list');
+    const arrow = document.getElementById('mobile-svc-arrow');
+    const open  = !list.classList.contains('hidden');
+    if (open) {
+      list.classList.add('hidden');
+      list.classList.remove('flex');
+      arrow.style.transform = 'rotate(0deg)';
+    } else {
+      list.classList.remove('hidden');
+      list.classList.add('flex');
+      arrow.style.transform = 'rotate(180deg)';
+    }
+  }
+
+  // Scroll reveal
+  const revealEls = document.querySelectorAll('.reveal-up');
+  const observer  = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in-view'); observer.unobserve(e.target); } });
+  }, { threshold: 0.07 });
+  revealEls.forEach(el => observer.observe(el));
+
+  // Contact form
+  const form       = document.getElementById('contact-form');
+  const submitBtn  = document.getElementById('submit-btn');
+  const submitText = document.getElementById('submit-text');
+  const submitArrow   = document.getElementById('submit-arrow');
+  const submitSpinner = document.getElementById('submit-spinner');
+  const formError  = document.getElementById('form-error');
+  const formSuccess = document.getElementById('form-success');
+
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    // Simple validation
+    const firstName = document.getElementById('first-name').value.trim();
+    const lastName  = document.getElementById('last-name').value.trim();
+    const email     = document.getElementById('email').value.trim();
+    const message   = document.getElementById('message').value.trim();
+
+    if (!firstName || !lastName || !email || !message) {
+      formError.classList.remove('hidden');
+      return;
+    }
+    formError.classList.add('hidden');
+
+    // Loading state
+    submitBtn.disabled = true;
+    submitText.textContent = 'Sending...';
+    submitArrow.classList.add('hidden');
+    submitSpinner.classList.remove('hidden');
+
+    // Simulate send (replace with your actual form handler / Formspree / etc.)
+    setTimeout(() => {
+      submitBtn.style.display = 'none';
+      formSuccess.style.display = 'block';
+    }, 1400);
+  });
+</script>
+
+</body>
+</html>

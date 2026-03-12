@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About Us — Perception Multimedia Inc.</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Josefin+Sans:ital,wght@0,300;0,400;0,600;0,700;1,300&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'pmm-red':     '#E81B1E',
+            'pmm-black':   '#0A0A0A',
+            'pmm-dark':    '#111111',
+            'pmm-surface': '#161616',
+            'pmm-border':  '#222222',
+            'pmm-muted':   '#3A3A3A',
+            'pmm-white':   '#F4F4F0',
+            'pmm-cream':   '#EDECEA',
+            'pmm-gray':    '#5C5C5C',
+          },
+          fontFamily: {
+            'display': ['"Bebas Neue"', 'cursive'],
+            'heading': ['"Josefin Sans"', 'sans-serif'],
+            'body':    ['"DM Sans"', 'sans-serif'],
+          },
+        }
+      }
+    }
+  </script>
+  <style>
+    /* ── Scroll reveal ── */
+    .reveal-up {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .reveal-up.in-view { opacity: 1; transform: translateY(0); }
+
+    .reveal-fade {
+      opacity: 0;
+      transition: opacity 0.9s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .reveal-fade.in-view { opacity: 1; }
+
+    /* Stagger delays */
+    .delay-1 { transition-delay: 0.06s; }
+    .delay-2 { transition-delay: 0.14s; }
+    .delay-3 { transition-delay: 0.22s; }
+    .delay-4 { transition-delay: 0.30s; }
+    .delay-5 { transition-delay: 0.38s; }
+    .delay-6 { transition-delay: 0.46s; }
+    .delay-7 { transition-delay: 0.54s; }
+    .delay-8 { transition-delay: 0.62s; }
+
+    /* ── Hero ── */
+    .about-hero-bg {
+      position: relative;
+    }
+    .about-hero-photo {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+    }
+    .about-hero-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+    }
+    .about-hero-photo::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(to right, rgba(10,10,10,0.85) 0%, rgba(10,10,10,0.55) 60%, rgba(10,10,10,0.3) 100%),
+        linear-gradient(to bottom, rgba(10,10,10,0.3) 0%, transparent 40%, rgba(10,10,10,0.6) 100%);
+    }
+
+    /* ── Story section ── */
+    .story-img-wrap {
+      position: relative;
+      overflow: hidden;
+    }
+    .story-img-wrap::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(232,27,30,0.12) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .story-img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .story-img-wrap:hover img {
+      transform: scale(1.03);
+    }
+
+    /* ── Team cards ── */
+    .team-card {
+      position: relative;
+      overflow: hidden;
+      aspect-ratio: 3 / 4;
+      background: #161616;
+    }
+    .team-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center top;
+      display: block;
+      transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .team-card:hover img {
+      transform: scale(1.05);
+    }
+    .team-card-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.3) 40%, transparent 70%);
+      transition: background 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .team-card:hover .team-card-overlay {
+      background: linear-gradient(to top, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.4) 45%, rgba(232,27,30,0.08) 100%);
+    }
+    .team-card-info {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 1.25rem 1.1rem 1.1rem;
+    }
+    .team-card-name {
+      font-family: 'Bebas Neue', cursive;
+      font-size: clamp(1.35rem, 2.2vw, 1.7rem);
+      letter-spacing: 0.04em;
+      color: #F4F4F0;
+      line-height: 1;
+      margin-bottom: 0.3rem;
+    }
+    .team-card-title {
+      font-family: 'Josefin Sans', sans-serif;
+      font-weight: 600;
+      font-size: 0.62rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: #E81B1E;
+    }
+
+    /* ── Values section red rule ── */
+    .values-rule {
+      width: 1px;
+      background: linear-gradient(to bottom, transparent 0%, #E81B1E 20%, #E81B1E 80%, transparent 100%);
+      flex-shrink: 0;
+    }
+
+    /* ── Gallery ── */
+    .gallery-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .gallery-item {
+      position: relative;
+      overflow: hidden;
+    }
+    .gallery-item::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(10,10,10,0.5) 0%, transparent 50%);
+      pointer-events: none;
+    }
+    .gallery-item:hover .gallery-img {
+      transform: scale(1.04);
+    }
+
+    /* ── Careers CTA ── */
+    .careers-section {
+      background:
+        radial-gradient(ellipse 60% 80% at 100% 50%, rgba(255,255,255,0.06) 0%, transparent 70%),
+        #E81B1E;
+    }
+  </style>
+</head>
+<body class="bg-pmm-black text-pmm-white font-body">
+<div class="overflow-x-hidden">
+
+  <!-- GRAIN OVERLAY -->
+  <div class="grain-overlay" aria-hidden="true"></div>
+
+  <!-- NAV START -->
+  <!-- NAV -->
+  <nav id="navbar" class="fixed top-0 left-0 right-0 z-50">
+    <div class="max-w-7xl mx-auto px-6 lg:px-10 h-20 flex items-center justify-between">
+      <a href="/index.html" class="flex-shrink-0">
+        <img src="/brand_assets/PMM-Logo-white.png" alt="Perception Multimedia" class="h-11 w-auto">
+      </a>
+      <div class="hidden md:flex items-center gap-8">
+        <a href="/index.html" class="nav-link font-heading font-semibold text-xs tracking-[0.2em] uppercase text-white/60 hover:text-white transition-colors duration-200">Home</a>
+        <a href="/about.html" class="nav-link nav-active font-heading font-semibold text-xs tracking-[0.2em] uppercase text-white/60 hover:text-white transition-colors duration-200">About</a>
+        <div class="nav-dropdown-wrapper">
+          <a href="/services/index.html" class="nav-link font-heading font-semibold text-xs tracking-[0.2em] uppercase text-white/60 hover:text-white transition-colors duration-200 flex items-center gap-1.5">Services <svg class="nav-chevron-icon" width="8" height="5" viewBox="0 0 8 5" fill="none"><path d="M1 1l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+          <div class="nav-dropdown">
+            <a href="/services/video-production.html" class="nav-dropdown-item">Video Production</a>
+            <a href="/services/website-design.html" class="nav-dropdown-item">Website Design</a>
+            <a href="/services/social-media.html" class="nav-dropdown-item">Social Media</a>
+            <a href="/services/email-campaigns.html" class="nav-dropdown-item">Email Campaigns</a>
+            <a href="/services/photography.html" class="nav-dropdown-item">Photography</a>
+            <a href="/services/search-marketing.html" class="nav-dropdown-item">Search Marketing</a>
+            <a href="/services/graphic-design.html" class="nav-dropdown-item">Branding &amp; Logo Design</a>
+            <a href="/services/traditional-media.html" class="nav-dropdown-item">Traditional Media</a>
+            <a href="/services/google-business-profile.html" class="nav-dropdown-item">Google Business Profile</a>
+            <a href="/services/reputation-management.html" class="nav-dropdown-item">Reputation Management</a>
+          </div>
+        </div>
+        <a href="/clients/index.html" class="nav-link font-heading font-semibold text-xs tracking-[0.2em] uppercase text-white/60 hover:text-white transition-colors duration-200">Work</a>
+        <a href="/philanthropy.html" class="nav-link font-heading font-semibold text-xs tracking-[0.2em] uppercase text-white/60 hover:text-white transition-colors duration-200">Philanthropy</a>
+        <a href="/contact.html" class="nav-cta-btn font-heading font-bold text-xs tracking-[0.2em] uppercase px-6 py-3 bg-pmm-red text-white hover:bg-red-700 transition-colors duration-200">Contact</a>
+      </div>
+      <button id="menu-toggle" class="md:hidden text-white p-2 focus:outline-none" aria-label="Open menu">
+        <svg width="22" height="16" viewBox="0 0 22 16" fill="none">
+          <line x1="0" y1="1"  x2="22" y2="1"  stroke="currentColor" stroke-width="2"/>
+          <line x1="0" y1="8"  x2="22" y2="8"  stroke="currentColor" stroke-width="2"/>
+          <line x1="0" y1="15" x2="22" y2="15" stroke="currentColor" stroke-width="2"/>
+        </svg>
+      </button>
+    </div>
+  </nav>
+
+  <!-- MOBILE MENU -->
+  <div id="mobile-menu" class="fixed inset-0 z-[60] bg-pmm-black hidden flex-col items-center justify-center">
+    <button id="menu-close" class="absolute top-6 right-6 text-white/40 hover:text-white" aria-label="Close menu">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+      </svg>
+    </button>
+    <nav class="flex flex-col items-center gap-5 text-center">
+      <a href="/index.html" onclick="closeMobileMenu()" class="font-display text-5xl text-white hover:text-pmm-red transition-colors duration-200">HOME</a>
+      <a href="/about.html" onclick="closeMobileMenu()" class="font-display text-5xl text-white hover:text-pmm-red transition-colors duration-200">ABOUT</a>
+      <div class="flex flex-col items-center gap-2">
+        <button onclick="toggleMobileServices()" class="font-display text-5xl text-white hover:text-pmm-red flex items-center gap-3 bg-transparent border-none cursor-pointer">SERVICES <span id="mobile-svc-arrow" style="font-size:1.4rem;line-height:1;display:inline-block;transition:transform 0.25s cubic-bezier(0.16,1,0.3,1);">↓</span></button>
+        <div id="mobile-services-list" class="hidden flex-col items-center gap-1 mt-3">
+          <a href="/services/video-production.html" onclick="closeMobileMenu()" class="font-heading font-semibold text-sm tracking-[0.18em] uppercase text-white/50 hover:text-pmm-red transition-colors duration-200 py-2.5 px-6">Video Production</a>
+          <a href="/services/website-design.html" onclick="closeMobileMenu()" class="font-heading font-semibold text-sm tracking-[0.18em] uppercase text-white/50 hover:text-pmm-red transition-colors duration-200 py-2.5 px-6">Website Design</a>
+          <a href="/services/social-media.html" onclick="closeMobileMenu()" class="font-heading font-semibold text-sm tracking-[0.18em] uppercase text-white/50 hover:text-pmm-red transition-colors duration-200 py-2.5 px-6">Social Media</a>
+          <a href="/services/email-campaigns.html" onclick="closeMobileMenu()" class="font-heading font-semibold text-sm tracking-[0.18em] uppercase text-white/50 hover:text-pmm-red transition-colors duration-200 py-2.5 px-6">Email Campaigns</a>
+          <a href="/services/photography.html" onclick="closeMobileMenu()" class="font-heading font-semibold text-sm tracking-[0.18em] uppercase text-white/50 hover:text-pmm-red transition-colors duration-200 py-2.5 px-6">Photography</a>
+          <a href="/services/search-marketing.html" onclick="closeMobileMenu()" class="font-heading font-semibold text-sm tracking-[0.18em] uppercase text-white/50 hover:text-pmm-red transition-colors duration-200 py-2.5 px-6">Search Marketing</a>
+          <a href="/services/graphic-design.html" onclick="closeMobileMenu()" class="font-heading font-semibold text-sm tracking-[0.18em] uppercase text-white/50 hover:text-pmm-red transition-colors duration-200 py-2.5 px-6">Branding &amp; Logo Design</a>
+          <a href="/services/traditional-media.html" onclick="closeMobileMenu()" class="font-heading font-semibold text-sm tracking-[0.18em] uppercase text-white/50 hover:text-pmm-red transition-colors duration-200 py-2.5 px-6">Traditional Media</a>
+          <a href="/services/google-business-profile.html" onclick="closeMobileMenu()" class="font-heading font-semibold text-sm tracking-[0.18em] uppercase text-white/50 hover:text-pmm-red transition-colors duration-200 py-2.5 px-6">Google Business Profile</a>
+          <a href="/services/reputation-management.html" onclick="closeMobileMenu()" class="font-heading font-semibold text-sm tracking-[0.18em] uppercase text-white/50 hover:text-pmm-red transition-colors duration-200 py-2.5 px-6">Reputation Management</a>
+        </div>
+      </div>
+      <a href="/clients/index.html" onclick="closeMobileMenu()" class="font-display text-5xl text-white hover:text-pmm-red transition-colors duration-200">WORK</a>
+      <a href="/philanthropy.html" onclick="closeMobileMenu()" class="font-display text-5xl text-white hover:text-pmm-red transition-colors duration-200">PHILANTHROPY</a>
+      <a href="/contact.html" onclick="closeMobileMenu()" class="font-display text-5xl text-pmm-red">CONTACT</a>
+    </nav>
+    <div class="absolute bottom-10 font-heading text-xs tracking-[0.25em] uppercase text-white/20">440.340.1115</div>
+  </div>
+<!-- NAV END -->
+
+  <!-- ===== HERO ===== -->
+  <section class="about-hero-bg relative min-h-[65vh] flex flex-col justify-center pt-20 overflow-hidden">
+
+    <!-- Background photo -->
+    <div class="about-hero-photo" aria-hidden="true">
+      <img src="brand_assets/photos/pmm-4.jpg" alt="">
+    </div>
+
+    <!-- Red left accent line -->
+    <div class="absolute left-0 top-20 bottom-0 w-px" style="background: linear-gradient(to bottom, transparent 0%, #E81B1E 20%, #E81B1E 70%, transparent 100%);" aria-hidden="true"></div>
+
+    <div class="relative z-10 max-w-7xl mx-auto px-6 lg:px-10 py-20 w-full">
+
+      <div class="hero-eyebrow flex items-center gap-3 mb-8 reveal-up">
+        <span class="block w-8 h-px bg-pmm-red"></span>
+        <span class="font-heading font-semibold text-pmm-red text-xs tracking-[0.3em] uppercase">About Us · Perception Multimedia</span>
+      </div>
+
+      <h1 class="font-display leading-[0.88] tracking-[0.03em] text-pmm-white reveal-up delay-1"
+          style="font-size: clamp(5rem, 12vw, 11rem);">
+        Who<br>
+        <span class="text-outline-hero">We Are</span>
+      </h1>
+
+      <p class="font-heading font-light text-white/50 text-sm tracking-[0.2em] uppercase mt-8 max-w-lg reveal-up delay-2">
+        Award-winning marketing agency · Cleveland, Ohio · Est. 1998
+      </p>
+
+    </div>
+
+  </section>
+
+  <!-- ===== STORY / MISSION ===== -->
+  <section class="bg-pmm-cream">
+    <div class="max-w-7xl mx-auto px-6 lg:px-10 py-24 lg:py-32">
+      <div class="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+
+        <!-- Text -->
+        <div>
+          <p class="font-heading font-semibold text-[10px] tracking-[0.3em] uppercase text-pmm-red mb-5 reveal-up">Our Story</p>
+          <h2 class="font-display text-pmm-black leading-[0.92] tracking-[0.02em] mb-8 reveal-up delay-1"
+              style="font-size: clamp(3rem, 5.5vw, 5rem);">
+            28 Years of<br>Bold Marketing
+          </h2>
+          <div class="space-y-5 reveal-up delay-2">
+            <p class="font-body text-pmm-black/70 text-[1.05rem] leading-[1.75]">
+              Perception Multimedia is an award-winning marketing agency based in Middleburg Heights, Ohio. Founded in 1998, we've spent more than 28 years helping businesses across the country grow through strategic, creative marketing that actually moves the needle.
+            </p>
+            <p class="font-body text-pmm-black/70 text-[1.05rem] leading-[1.75]">
+              We're young, energetic, and highly skilled — a boutique agency that punches well above its weight. No long-term contracts, no bloated retainers. We earn your business every single month by delivering work you're proud of.
+            </p>
+          </div>
+
+          <div class="flex flex-wrap gap-8 mt-10 reveal-up delay-3">
+            <div>
+              <div class="font-display text-pmm-red" style="font-size: 3rem; line-height: 1;">28+</div>
+              <div class="font-heading font-semibold text-[10px] tracking-[0.25em] uppercase text-pmm-black/40 mt-1">Years in Business</div>
+            </div>
+            <div class="w-px bg-pmm-black/10 self-stretch"></div>
+            <div>
+              <div class="font-display text-pmm-black" style="font-size: 3rem; line-height: 1;">200+</div>
+              <div class="font-heading font-semibold text-[10px] tracking-[0.25em] uppercase text-pmm-black/40 mt-1">Projects Delivered</div>
+            </div>
+            <div class="w-px bg-pmm-black/10 self-stretch"></div>
+            <div>
+              <div class="font-display text-pmm-black" style="font-size: 3rem; line-height: 1;">8</div>
+              <div class="font-heading font-semibold text-[10px] tracking-[0.25em] uppercase text-pmm-black/40 mt-1">Core Specialists</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Photo -->
+        <div class="story-img-wrap reveal-fade" style="height: clamp(380px, 55vh, 580px);">
+          <img src="brand_assets/photos/mike-and-kari.jpg" alt="Mike and Kari — Founders of Perception Multimedia">
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== TEAM ===== -->
+  <section class="bg-pmm-dark py-24 lg:py-32">
+    <div class="max-w-7xl mx-auto px-6 lg:px-10">
+
+      <!-- Section header -->
+      <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-14">
+        <div>
+          <p class="font-heading font-semibold text-[10px] tracking-[0.3em] uppercase text-pmm-red mb-4 reveal-up">The People</p>
+          <h2 class="font-display text-pmm-white leading-[0.92] tracking-[0.02em] reveal-up delay-1"
+              style="font-size: clamp(3rem, 6vw, 5.5rem);">
+            Meet the Team
+          </h2>
+        </div>
+        <p class="font-body text-white/40 text-sm leading-relaxed max-w-xs reveal-up delay-2">
+          A small, mighty crew of specialists — each one dedicated to making your brand unforgettable.
+        </p>
+      </div>
+
+      <!-- Team grid -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-3 lg:gap-4">
+
+        <!-- Mike -->
+        <div class="team-card reveal-up delay-1">
+          <img src="brand_assets/pmm-headshots/Mike23.jpg" alt="Mike — CEO & Creative Director">
+          <div class="team-card-overlay"></div>
+          <div class="team-card-info">
+            <div class="team-card-name">Mike</div>
+            <div class="team-card-title">CEO &amp; Creative Director</div>
+          </div>
+        </div>
+
+        <!-- Kari -->
+        <div class="team-card reveal-up delay-2">
+          <img src="brand_assets/pmm-headshots/Kari-profile-picture.jpg" alt="Kari — Video Producer">
+          <div class="team-card-overlay"></div>
+          <div class="team-card-info">
+            <div class="team-card-name">Kari</div>
+            <div class="team-card-title">Video Producer</div>
+          </div>
+        </div>
+
+        <!-- Lauren -->
+        <div class="team-card reveal-up delay-3">
+          <img src="brand_assets/pmm-headshots/lauren-pic.jpg" alt="Lauren — Social Media Manager">
+          <div class="team-card-overlay"></div>
+          <div class="team-card-info">
+            <div class="team-card-name">Lauren</div>
+            <div class="team-card-title">Social Media Manager</div>
+          </div>
+        </div>
+
+        <!-- Milan -->
+        <div class="team-card reveal-up delay-4">
+          <img src="brand_assets/pmm-headshots/milan-for-site.jpg" alt="Milan — Web Designer">
+          <div class="team-card-overlay"></div>
+          <div class="team-card-info">
+            <div class="team-card-name">Milan</div>
+            <div class="team-card-title">Web Designer</div>
+          </div>
+        </div>
+
+        <!-- Maryanne -->
+        <div class="team-card reveal-up delay-1">
+          <img src="brand_assets/pmm-headshots/Maryanne23.jpg" alt="Maryanne — Project Manager">
+          <div class="team-card-overlay"></div>
+          <div class="team-card-info">
+            <div class="team-card-name">Maryanne</div>
+            <div class="team-card-title">Project Manager</div>
+          </div>
+        </div>
+
+        <!-- Devin -->
+        <div class="team-card reveal-up delay-2">
+          <img src="brand_assets/pmm-headshots/Devin23.jpg" alt="Devin — Video Intern">
+          <div class="team-card-overlay"></div>
+          <div class="team-card-info">
+            <div class="team-card-name">Devin</div>
+            <div class="team-card-title">Video Intern</div>
+          </div>
+        </div>
+
+        <!-- Karen -->
+        <div class="team-card reveal-up delay-3">
+          <img src="brand_assets/pmm-headshots/karen-for-site.jpg" alt="Karen — Finance Manager">
+          <div class="team-card-overlay"></div>
+          <div class="team-card-info">
+            <div class="team-card-name">Karen</div>
+            <div class="team-card-title">Finance Manager</div>
+          </div>
+        </div>
+
+        <!-- Richard -->
+        <div class="team-card reveal-up delay-4">
+          <img src="brand_assets/pmm-headshots/animator2.png" alt="Richard — Animator">
+          <div class="team-card-overlay"></div>
+          <div class="team-card-info">
+            <div class="team-card-name">Richard</div>
+            <div class="team-card-title">Animator</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== VALUES / CULTURE ===== -->
+  <section class="bg-pmm-surface py-24 lg:py-32">
+    <div class="max-w-7xl mx-auto px-6 lg:px-10">
+
+      <div class="flex flex-col lg:flex-row gap-0">
+
+        <!-- Left: stat callouts -->
+        <div class="lg:w-5/12 flex flex-col justify-center gap-10 lg:pr-16 pb-14 lg:pb-0">
+
+          <p class="font-heading font-semibold text-[10px] tracking-[0.3em] uppercase text-pmm-red reveal-up">How We Work</p>
+
+          <div class="reveal-up delay-1">
+            <div class="font-display text-pmm-white leading-none tracking-[0.02em]"
+                 style="font-size: clamp(3rem, 5.5vw, 5.5rem);">
+              Research.<br>Strategy.<br>Execute.<br>Analyze.
+            </div>
+          </div>
+
+          <div class="flex flex-col gap-5 reveal-up delay-2">
+            <div class="flex items-center gap-4">
+              <span class="flex-shrink-0 w-8 h-px bg-pmm-red"></span>
+              <span class="font-heading font-semibold text-[10px] tracking-[0.22em] uppercase text-white/50">No Long-Term Contracts</span>
+            </div>
+            <div class="flex items-center gap-4">
+              <span class="flex-shrink-0 w-8 h-px bg-pmm-red"></span>
+              <span class="font-heading font-semibold text-[10px] tracking-[0.22em] uppercase text-white/50">Award-Winning Results</span>
+            </div>
+            <div class="flex items-center gap-4">
+              <span class="flex-shrink-0 w-8 h-px bg-pmm-red"></span>
+              <span class="font-heading font-semibold text-[10px] tracking-[0.22em] uppercase text-white/50">Transparent Reporting</span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Divider -->
+        <div class="hidden lg:block values-rule self-stretch mx-2"></div>
+
+        <!-- Right: culture copy -->
+        <div class="lg:w-7/12 flex flex-col justify-center lg:pl-16 space-y-7">
+
+          <h3 class="font-display text-pmm-white leading-[0.92] tracking-[0.02em] reveal-up"
+              style="font-size: clamp(2rem, 3.5vw, 3rem);">
+            Creativity &amp; Flexibility<br>Go Hand in Hand
+          </h3>
+
+          <div class="space-y-5 reveal-up delay-1">
+            <p class="font-body text-white/55 text-[1.05rem] leading-[1.75]">
+              We do our research, create a balanced marketing strategy, execute efficiently, and analyze the results. Every campaign we build is backed by data, shaped by creativity, and refined through constant collaboration with our clients.
+            </p>
+            <p class="font-body text-white/55 text-[1.05rem] leading-[1.75]">
+              At PMM, we believe in a productive, open atmosphere where ideas are shared freely. Our team's diverse skill set means we can handle everything from video production to digital advertising — all under one roof, all working toward your goals.
+            </p>
+          </div>
+
+          <!-- Office info -->
+          <div class="border-t border-pmm-border pt-7 reveal-up delay-2">
+            <div class="grid sm:grid-cols-3 gap-6">
+              <div>
+                <p class="font-heading font-semibold text-[9px] tracking-[0.28em] uppercase text-pmm-gray mb-2">Location</p>
+                <p class="font-body text-white/60 text-sm leading-relaxed">15165 Bagley Road<br>Middleburg Heights, OH 44130</p>
+              </div>
+              <div>
+                <p class="font-heading font-semibold text-[9px] tracking-[0.28em] uppercase text-pmm-gray mb-2">Contact</p>
+                <p class="font-body text-sm">
+                  <a href="tel:4403401115" class="text-pmm-red hover:text-white transition-colors duration-200">(440) 340-1115</a><br>
+                  <a href="mailto:info@perceptionmm.com" class="text-white/60 hover:text-white transition-colors duration-200">info@perceptionmm.com</a>
+                </p>
+              </div>
+              <div>
+                <p class="font-heading font-semibold text-[9px] tracking-[0.28em] uppercase text-pmm-gray mb-2">Hours</p>
+                <p class="font-body text-white/60 text-sm leading-relaxed">Monday – Friday<br>9:00 AM – 5:00 PM</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== OFFICE GALLERY ===== -->
+  <section class="bg-pmm-black py-24 lg:py-32">
+    <div class="max-w-7xl mx-auto px-6 lg:px-10">
+
+      <div class="mb-12">
+        <p class="font-heading font-semibold text-[10px] tracking-[0.3em] uppercase text-pmm-red mb-4 reveal-up">Our Space</p>
+        <h2 class="font-display text-pmm-white leading-[0.92] tracking-[0.02em] reveal-up delay-1"
+            style="font-size: clamp(2.5rem, 5vw, 4.5rem);">
+          Where the Work Happens
+        </h2>
+      </div>
+
+      <!-- Photo grid -->
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-3 lg:gap-4">
+
+        <!-- Large left: pmm-1 -->
+        <div class="gallery-item md:col-span-7 reveal-fade" style="height: clamp(260px, 40vw, 500px);">
+          <img class="gallery-img" src="brand_assets/photos/pmm-1.jpg" alt="PMM Office — Creative Studio">
+        </div>
+
+        <!-- Right stack: pmm-3 -->
+        <div class="gallery-item md:col-span-5 reveal-fade delay-1" style="height: clamp(260px, 40vw, 500px);">
+          <img class="gallery-img" src="brand_assets/photos/pmm-3.jpg" alt="PMM Office — Production Area">
+        </div>
+
+        <!-- Full-width bottom: pmm-4 -->
+        <div class="gallery-item md:col-span-12 reveal-fade delay-2" style="height: clamp(200px, 28vw, 360px);">
+          <img class="gallery-img" src="brand_assets/photos/pmm-4.jpg" alt="PMM Office — Team Space">
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CAREERS CTA ===== -->
+  <section class="careers-section py-24 lg:py-28">
+    <div class="max-w-7xl mx-auto px-6 lg:px-10">
+      <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-10">
+
+        <div class="lg:max-w-xl">
+          <p class="font-heading font-semibold text-[10px] tracking-[0.3em] uppercase text-white/60 mb-5 reveal-up">Join the Team</p>
+          <h2 class="font-display text-white leading-[0.92] tracking-[0.02em] mb-6 reveal-up delay-1"
+              style="font-size: clamp(3rem, 6vw, 5.5rem);">
+            Work With People<br>Who Love What They Do
+          </h2>
+          <p class="font-body text-white/75 text-[1.05rem] leading-[1.7] reveal-up delay-2">
+            Are you a passionate marketing professional looking to join a dynamic, creative team? We're always open to hearing from talented people. Send us your portfolio and let's start a conversation.
+          </p>
+        </div>
+
+        <div class="reveal-up delay-3">
+          <a href="mailto:careers@perceptionmm.com"
+             class="inline-flex items-center gap-3 bg-pmm-white text-pmm-black font-heading font-bold text-xs tracking-[0.22em] uppercase px-10 py-5 hover:bg-pmm-black hover:text-white transition-colors duration-300 group focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-pmm-red">
+            Send Your Portfolio
+            <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+            </svg>
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER START -->
+  <!-- ===== FOOTER ===== -->
+  <footer class="bg-pmm-surface border-t border-pmm-border pt-16 pb-10">
+    <div class="max-w-7xl mx-auto px-6 lg:px-10">
+      <div class="grid md:grid-cols-4 gap-12 mb-14">
+        <div class="md:col-span-2">
+          <img src="/brand_assets/PMM-Logo-white.png" alt="Perception Multimedia" class="h-14 w-auto mb-5">
+          <p class="font-body text-white/35 text-sm leading-relaxed max-w-xs">
+            Collaborative digital agency in Middleburg Heights, Ohio. Award-winning marketing with no long-term contracts — we earn your business every month.
+          </p>
+          <div class="flex flex-wrap gap-x-4 gap-y-2 mt-6">
+            <a href="tel:4403401115" class="font-heading font-semibold text-[10px] tracking-[0.2em] uppercase text-pmm-red hover:text-white transition-colors duration-200">(440) 340-1115</a>
+            <span class="text-pmm-border">·</span>
+            <a href="tel:4406552032" class="font-heading font-semibold text-[10px] tracking-[0.2em] uppercase text-white/30 hover:text-white transition-colors duration-200">(440) 655-2032</a>
+            <span class="text-pmm-border">·</span>
+            <a href="mailto:info@perceptionmm.com" class="font-heading font-semibold text-[10px] tracking-[0.2em] uppercase text-white/30 hover:text-white transition-colors duration-200">info@perceptionmm.com</a>
+          </div>
+          <div class="flex items-center gap-3 mt-5">
+            <a href="https://www.facebook.com/PerceptionMultimedia/" target="_blank" rel="noopener noreferrer" aria-label="Facebook" class="w-8 h-8 flex items-center justify-center rounded-full border border-pmm-border text-white/30 hover:text-white hover:border-white/40 transition-colors duration-200">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+            </a>
+            <a href="https://www.linkedin.com/company/perception-multimedia-inc-/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" class="w-8 h-8 flex items-center justify-center rounded-full border border-pmm-border text-white/30 hover:text-white hover:border-white/40 transition-colors duration-200">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
+            </a>
+            <a href="https://www.instagram.com/perception_multimedia/" target="_blank" rel="noopener noreferrer" aria-label="Instagram" class="w-8 h-8 flex items-center justify-center rounded-full border border-pmm-border text-white/30 hover:text-white hover:border-white/40 transition-colors duration-200">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+            </a>
+            <a href="https://www.youtube.com/c/Perceptionmm" target="_blank" rel="noopener noreferrer" aria-label="YouTube" class="w-8 h-8 flex items-center justify-center rounded-full border border-pmm-border text-white/30 hover:text-white hover:border-white/40 transition-colors duration-200">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.95 1.96C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.96A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="#161616"/></svg>
+            </a>
+          </div>
+        </div>
+        <div>
+          <h4 class="font-heading font-semibold text-[10px] tracking-[0.25em] uppercase text-white/30 mb-5">Services</h4>
+          <ul class="space-y-2.5">
+            <li><a href="/services/video-production.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Video Production</a></li>
+            <li><a href="/services/website-design.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Website Design</a></li>
+            <li><a href="/services/social-media.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Social Media</a></li>
+            <li><a href="/services/email-campaigns.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Email Campaigns</a></li>
+            <li><a href="/services/search-marketing.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Search Marketing</a></li>
+            <li><a href="/services/graphic-design.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Branding &amp; Logo Design</a></li>
+            <li><a href="/services/photography.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Photography</a></li>
+            <li><a href="/services/traditional-media.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Traditional Media</a></li>
+            <li><a href="/services/google-business-profile.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Google Business Profile</a></li>
+            <li><a href="/services/reputation-management.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Reputation Management</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="font-heading font-semibold text-[10px] tracking-[0.25em] uppercase text-white/30 mb-5">Company</h4>
+          <ul class="space-y-2.5">
+            <li><a href="/about.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">About Us</a></li>
+            <li><a href="/clients/index.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Portfolio</a></li>
+            <li><a href="/services/index.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Services</a></li>
+            <li><a href="/contact.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Contact</a></li>
+            <li><a href="/philanthropy.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Philanthropy</a></li>
+            <li><a href="/blog/index.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Blog</a></li>
+            <li><a href="mailto:careers@perceptionmm.com" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Careers</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="border-t border-pmm-border pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <p class="font-body text-xs text-white/20">© 2026 Perception Multimedia Inc. All rights reserved.</p>
+        <p class="font-heading font-semibold text-[10px] tracking-[0.25em] uppercase text-white/15">Middleburg Heights, OH · perceptionmm.com</p>
+      </div>
+    </div>
+  </footer>
+<!-- FOOTER END -->
+
+  <script>
+    // Navbar scroll
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('nav-scrolled', window.scrollY > 40);
+    }, { passive: true });
+
+    // Mobile menu
+    const menuToggle = document.getElementById('menu-toggle');
+    const menuClose  = document.getElementById('menu-close');
+    const mobileMenu = document.getElementById('mobile-menu');
+
+    menuToggle.addEventListener('click', () => {
+      mobileMenu.classList.remove('hidden');
+      mobileMenu.classList.add('flex');
+    });
+    menuClose.addEventListener('click', closeMobileMenu);
+
+    function closeMobileMenu() {
+      mobileMenu.classList.add('hidden');
+      mobileMenu.classList.remove('flex');
+    }
+
+    function toggleMobileServices() {
+      const list = document.getElementById('mobile-services-list');
+      const arrow = document.getElementById('mobile-svc-arrow');
+      const isOpen = list.classList.contains('flex');
+      list.classList.toggle('hidden', isOpen);
+      list.classList.toggle('flex', !isOpen);
+      arrow.style.transform = isOpen ? '' : 'rotate(180deg)';
+    }
+
+    // Scroll reveal
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('in-view');
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
+
+    document.querySelectorAll('.reveal-up, .reveal-fade').forEach(el => observer.observe(el));
+  </script>
+
+</div><!-- /overflow-x-hidden -->
+</body>
+</html>

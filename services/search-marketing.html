@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Search Marketing — Perception Multimedia Inc.</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Josefin+Sans:ital,wght@0,300;0,400;0,600;0,700;1,300&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../styles.css">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'pmm-red':     '#E81B1E',
+            'pmm-black':   '#0A0A0A',
+            'pmm-dark':    '#111111',
+            'pmm-surface': '#161616',
+            'pmm-border':  '#222222',
+            'pmm-muted':   '#3A3A3A',
+            'pmm-white':   '#F4F4F0',
+            'pmm-cream':   '#EDECEA',
+            'pmm-gray':    '#5C5C5C',
+          },
+          fontFamily: {
+            'display': ['"Bebas Neue"', 'cursive'],
+            'heading': ['"Josefin Sans"', 'sans-serif'],
+            'body':    ['"DM Sans"', 'sans-serif'],
+          },
+        }
+      }
+    }
+  </script>
+  <style>
+    /* Hero entrance */
+    .hero-line {
+      opacity: 0;
+      transform: translateY(32px);
+      animation: heroUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    .hero-line:nth-child(1) { animation-delay: 0.05s; }
+    .hero-line:nth-child(2) { animation-delay: 0.18s; }
+    .hero-line:nth-child(3) { animation-delay: 0.30s; }
+    @keyframes heroUp { to { opacity: 1; transform: translateY(0); } }
+
+    /* Scroll reveal */
+    .reveal-up {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .reveal-up.in-view { opacity: 1; transform: translateY(0); }
+    .delay-1 { transition-delay: 0.07s; }
+    .delay-2 { transition-delay: 0.14s; }
+    .delay-3 { transition-delay: 0.21s; }
+    .delay-4 { transition-delay: 0.28s; }
+
+    /* Eyebrow rule */
+    .eyebrow-rule {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .eyebrow-rule::before {
+      content: '';
+      display: block;
+      width: 36px;
+      height: 2px;
+      background: #E81B1E;
+      flex-shrink: 0;
+    }
+
+    /* Eyebrow rule — dark variant (light bg sections) */
+    .eyebrow-rule-dark::before { background: #E81B1E; }
+
+    /* Capability cards */
+    .cap-card {
+      padding: 36px 32px;
+      background: #ffffff;
+      border-top: 1px solid rgba(0,0,0,0.09);
+      transition: background 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .cap-card:hover { background: #f7f7f7; }
+    .cap-card:first-child { border-top: none; }
+    @media (min-width: 640px) {
+      .cap-card { border-top: none; border-left: 1px solid rgba(0,0,0,0.09); }
+      .cap-card:nth-child(3n+1) { border-left: none; }
+    }
+    @media (min-width: 1024px) {
+      .cap-card { border-left: 1px solid rgba(0,0,0,0.09); }
+      .cap-card:nth-child(3n+1) { border-left: none; }
+    }
+
+    /* Video thumbnails */
+    .vid-thumb {
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      background: #161616;
+      aspect-ratio: 16/9;
+      display: block;
+    }
+    .vid-thumb img {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+      filter: brightness(0.85) saturate(0.85);
+      transition: transform 0.65s cubic-bezier(0.16, 1, 0.3, 1),
+                  filter 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .vid-thumb:hover img { transform: scale(1.05); filter: brightness(0.55) saturate(0.6); }
+    .vid-thumb-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(10,10,10,0.65) 0%, transparent 55%);
+      pointer-events: none;
+    }
+    .vid-play-btn {
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%, -50%) scale(0.8);
+      opacity: 0; width: 56px; height: 56px;
+      background: rgba(232,27,30,0.92); border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      transition: opacity 0.3s ease, transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 8px 32px rgba(232,27,30,0.4);
+    }
+    .vid-thumb:hover .vid-play-btn { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+    .vid-client-name {
+      position: absolute; bottom: 14px; left: 16px;
+      font-family: 'Josefin Sans', sans-serif; font-weight: 600; font-size: 10px;
+      letter-spacing: 0.22em; text-transform: uppercase; color: rgba(244,244,240,0.92);
+      opacity: 0; transform: translateY(5px);
+      transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 3; pointer-events: none;
+    }
+    .vid-thumb:hover .vid-client-name { opacity: 1; transform: translateY(0); }
+
+    /* Modal */
+    #vid-modal {
+      position: fixed; inset: 0; z-index: 500;
+      background: rgba(0,0,0,0.93);
+      display: flex; align-items: center; justify-content: center;
+      padding: 20px; opacity: 0; pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    #vid-modal.open { opacity: 1; pointer-events: all; }
+    #vid-modal-inner {
+      position: relative; width: 100%; max-width: 920px;
+      transform: translateY(12px);
+      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    #vid-modal.open #vid-modal-inner { transform: translateY(0); }
+    .yt-ratio { position: relative; width: 100%; padding-bottom: 56.25%; }
+    .yt-ratio iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: none; }
+    #vid-modal-close {
+      position: absolute; top: -44px; right: 0;
+      background: none; border: none; color: rgba(244,244,240,0.5); cursor: pointer;
+      font-family: 'Josefin Sans', sans-serif; font-size: 10px; font-weight: 600;
+      letter-spacing: 0.25em; text-transform: uppercase;
+      display: flex; align-items: center; gap: 8px;
+      transition: color 0.2s ease; padding: 0;
+    }
+    #vid-modal-close:hover { color: #F4F4F0; }
+
+    /* Facebook video container */
+    .fb-video-wrap {
+      border-radius: 14px;
+      overflow: hidden;
+    }
+    .fb-video-wrap video { width: 100%; display: block; }
+
+    /* Geo map image */
+    .geo-map-wrap {
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow:
+        0 0 0 1px rgba(0,0,0,0.07),
+        0 20px 50px rgba(0,0,0,0.10);
+    }
+    .geo-map-wrap img { width: 100%; display: block; }
+  </style>
+</head>
+<body class="bg-pmm-black text-pmm-white font-body">
+<div class="overflow-x-hidden">
+
+  <!-- GRAIN OVERLAY -->
+  <div class="grain-overlay" aria-hidden="true"></div>
+
+  <!-- NAV START -->
+  <!-- NAV -->
+  <nav id="navbar" class="fixed top-0 left-0 right-0 z-50">
+    <div class="max-w-7xl mx-auto px-6 lg:px-10 h-20 flex items-center justify-between">
+      <a href="/index.html" class="flex-shrink-0">
+        <img src="/brand_assets/PMM-Logo-white.png" alt="Perception Multimedia" class="h-11 w-auto">
+      </a>
+      <div class="hidden md:flex items-center gap-8">
+        <a href="/index.html" class="nav-link font-heading font-semibold text-xs tracking-[0.2em] uppercase text-white/60 hover:text-white transition-colors duration-200">Home</a>
+        <a href="/about.html" class="nav-link font-heading font-semibold text-xs tracking-[0.2em] uppercase text-white/60 hover:text-white transition-colors duration-200">About</a>
+        <div class="nav-dropdown-wrapper">
+          <a href="/services/index.html" class="nav-link nav-active font-heading font-semibold text-xs tracking-[0.2em] uppercase transition-colors duration-200 flex items-center gap-1.5">Services <svg class="nav-chevron-icon" width="8" height="5" viewBox="0 0 8 5" fill="none"><path d="M1 1l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+          <div class="nav-dropdown">
+            <a href="/services/video-production.html" class="nav-dropdown-item">Video Production</a>
+            <a href="/services/website-design.html" class="nav-dropdown-item">Website Design</a>
+            <a href="/services/social-media.html" class="nav-dropdown-item">Social Media</a>
+            <a href="/services/email-campaigns.html" class="nav-dropdown-item">Email Campaigns</a>
+            <a href="/services/photography.html" class="nav-dropdown-item">Photography</a>
+            <a href="/services/search-marketing.html" class="nav-dropdown-item active">Search Marketing</a>
+            <a href="/services/graphic-design.html" class="nav-dropdown-item">Branding &amp; Logo Design</a>
+            <a href="/services/traditional-media.html" class="nav-dropdown-item">Traditional Media</a>
+            <a href="/services/google-business-profile.html" class="nav-dropdown-item">Google Business Profile</a>
+            <a href="/services/reputation-management.html" class="nav-dropdown-item">Reputation Management</a>
+          </div>
+        </div>
+        <a href="/clients/index.html" class="nav-link font-heading font-semibold text-xs tracking-[0.2em] uppercase text-white/60 hover:text-white transition-colors duration-200">Work</a>
+        <a href="/philanthropy.html" class="nav-link font-heading font-semibold text-xs tracking-[0.2em] uppercase text-white/60 hover:text-white transition-colors duration-200">Philanthropy</a>
+        <a href="/contact.html" class="nav-cta-btn font-heading font-bold text-xs tracking-[0.2em] uppercase px-6 py-3 bg-pmm-red text-white hover:bg-red-700 transition-colors duration-200">Contact</a>
+      </div>
+      <button id="menu-toggle" class="md:hidden text-white p-2 focus:outline-none" aria-label="Open menu">
+        <svg width="22" height="16" viewBox="0 0 22 16" fill="none">
+          <line x1="0" y1="1"  x2="22" y2="1"  stroke="currentColor" stroke-width="2"/>
+          <line x1="0" y1="8"  x2="22" y2="8"  stroke="currentColor" stroke-width="2"/>
+          <line x1="0" y1="15" x2="22" y2="15" stroke="currentColor" stroke-width="2"/>
+        </svg>
+      </button>
+    </div>
+  </nav>
+
+  <!-- MOBILE MENU -->
+  <div id="mobile-menu" class="fixed inset-0 z-[60] bg-pmm-black hidden flex-col items-center justify-center">
+    <button id="menu-close" class="absolute top-6 right-6 text-white/40 hover:text-white" aria-label="Close menu">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+      </svg>
+    </button>
+    <nav class="flex flex-col items-center gap-5 text-center">
+      <a href="/index.html" onclick="closeMobileMenu()" class="font-display text-5xl text-white hover:text-pmm-red transition-colors duration-200">HOME</a>
+      <a href="/about.html" onclick="closeMobileMenu()" class="font-display text-5xl text-white hover:text-pmm-red transition-colors duration-200">ABOUT</a>
+      <div class="flex flex-col items-center gap-2">
+        <button onclick="toggleMobileServices()" class="font-display text-5xl text-white hover:text-pmm-red flex items-center gap-3 bg-transparent border-none cursor-pointer">SERVICES <span id="mobile-svc-arrow" style="font-size:1.4rem;line-height:1;display:inline-block;transition:transform 0.25s cubic-bezier(0.16,1,0.3,1);">↓</span></button>
+        <div id="mobile-services-list" class="hidden flex-col items-center gap-1 mt-3">
+          <a href="/services/video-production.html" onclick="closeMobileMenu()" class="font-heading font-semibold text-sm tracking-[0.18em] uppercase text-white/50 hover:text-pmm-red transition-colors duration-200 py-2.5 px-6">Video Production</a>
+          <a href="/services/website-design.html" onclick="closeMobileMenu()" class="font-heading font-semibold text-sm tracking-[0.18em] uppercase text-white/50 hover:text-pmm-red transition-colors duration-200 py-2.5 px-6">Website Design</a>
+          <a href="/services/social-media.html" onclick="closeMobileMenu()" class="font-heading font-semibold text-sm tracking-[0.18em] uppercase text-white/50 hover:text-pmm-red transition-colors duration-200 py-2.5 px-6">Social Media</a>
+          <a href="/services/email-campaigns.html" onclick="closeMobileMenu()" class="font-heading font-semibold text-sm tracking-[0.18em] uppercase text-white/50 hover:text-pmm-red transition-colors duration-200 py-2.5 px-6">Email Campaigns</a>
+          <a href="/services/photography.html" onclick="closeMobileMenu()" class="font-heading font-semibold text-sm tracking-[0.18em] uppercase text-white/50 hover:text-pmm-red transition-colors duration-200 py-2.5 px-6">Photography</a>
+          <a href="/services/search-marketing.html" onclick="closeMobileMenu()" class="font-heading font-semibold text-sm tracking-[0.18em] uppercase text-white/50 hover:text-pmm-red transition-colors duration-200 py-2.5 px-6">Search Marketing</a>
+          <a href="/services/graphic-design.html" onclick="closeMobileMenu()" class="font-heading font-semibold text-sm tracking-[0.18em] uppercase text-white/50 hover:text-pmm-red transition-colors duration-200 py-2.5 px-6">Branding &amp; Logo Design</a>
+          <a href="/services/traditional-media.html" onclick="closeMobileMenu()" class="font-heading font-semibold text-sm tracking-[0.18em] uppercase text-white/50 hover:text-pmm-red transition-colors duration-200 py-2.5 px-6">Traditional Media</a>
+          <a href="/services/google-business-profile.html" onclick="closeMobileMenu()" class="font-heading font-semibold text-sm tracking-[0.18em] uppercase text-white/50 hover:text-pmm-red transition-colors duration-200 py-2.5 px-6">Google Business Profile</a>
+          <a href="/services/reputation-management.html" onclick="closeMobileMenu()" class="font-heading font-semibold text-sm tracking-[0.18em] uppercase text-white/50 hover:text-pmm-red transition-colors duration-200 py-2.5 px-6">Reputation Management</a>
+        </div>
+      </div>
+      <a href="/clients/index.html" onclick="closeMobileMenu()" class="font-display text-5xl text-white hover:text-pmm-red transition-colors duration-200">WORK</a>
+      <a href="/philanthropy.html" onclick="closeMobileMenu()" class="font-display text-5xl text-white hover:text-pmm-red transition-colors duration-200">PHILANTHROPY</a>
+      <a href="/contact.html" onclick="closeMobileMenu()" class="font-display text-5xl text-pmm-red">CONTACT</a>
+    </nav>
+    <div class="absolute bottom-10 font-heading text-xs tracking-[0.25em] uppercase text-white/20">440.340.1115</div>
+  </div>
+<!-- NAV END -->
+
+  <!-- ===== HERO ===== -->
+  <section class="relative overflow-hidden" style="min-height: 100vh; display: flex; flex-direction: column; justify-content: flex-end;">
+    <!-- Background: analytics chart image -->
+    <div class="absolute inset-0">
+      <img src="../brand_assets/clients/search-marketing/chart-bg.jpg" alt="" aria-hidden="true"
+           style="width:100%; height:100%; object-fit:cover; object-position: center top;">
+    </div>
+    <!-- Dark overlay — heavy so chart reads as subtle texture -->
+    <div class="absolute inset-0" style="background: rgba(10,10,10,0.83);"></div>
+    <!-- Red atmosphere bottom-left -->
+    <div class="absolute inset-0" style="background: radial-gradient(ellipse 65% 55% at 0% 85%, rgba(232,27,30,0.15) 0%, transparent 60%);"></div>
+    <!-- Fade top + bottom into page bg -->
+    <div class="absolute inset-0" style="background: linear-gradient(to bottom, #0A0A0A 0%, transparent 14%, transparent 68%, #0A0A0A 100%);"></div>
+
+    <!-- Text content -->
+    <div class="relative max-w-7xl mx-auto px-6 lg:px-10 w-full pb-20 pt-40" style="z-index: 4;">
+      <div class="hero-line eyebrow-rule">
+        <span class="font-heading font-semibold text-pmm-red text-xs tracking-[0.3em] uppercase">Services &middot; Perception Multimedia</span>
+      </div>
+      <h1 class="hero-line font-display text-pmm-white leading-[0.86] tracking-[0.02em] mb-8"
+          style="font-size: clamp(4.5rem, 11vw, 11rem);">
+        Search<br>Marketing
+      </h1>
+      <p class="hero-line font-body leading-[1.8] max-w-lg"
+         style="font-size: clamp(0.95rem, 1.35vw, 1.1rem); color: rgba(244,244,240,0.65);">
+        Put your brand in front of people the moment they're searching — then follow them everywhere they go. Paid search, social advertising, and remarketing that turns intent into action. Serving businesses across Cleveland and Northeast Ohio as a certified Google Partner.
+      </p>
+    </div>
+
+    <div class="absolute bottom-0 left-0 right-0 h-px" style="z-index: 4; background: rgba(255,255,255,0.07);"></div>
+  </section>
+
+  <!-- RED MARQUEE STRIP -->
+  <div class="bg-pmm-red py-3 overflow-hidden" aria-hidden="true">
+    <div class="marquee-track">
+      <div class="marquee-inner font-heading font-bold text-[11px] tracking-[0.25em] uppercase text-white">
+        <span>Google Ads</span><span class="marquee-dot">&middot;</span>
+        <span>Local SEO</span><span class="marquee-dot">&middot;</span>
+        <span>Meta Advertising</span><span class="marquee-dot">&middot;</span>
+        <span>Keyword Research</span><span class="marquee-dot">&middot;</span>
+        <span>Paid Search</span><span class="marquee-dot">&middot;</span>
+        <span>Retargeting</span><span class="marquee-dot">&middot;</span>
+        <span>Display Ads</span><span class="marquee-dot">&middot;</span>
+        <span>Technical SEO</span><span class="marquee-dot">&middot;</span>
+        <span>Instagram Ads</span><span class="marquee-dot">&middot;</span>
+        <span>Shopping Campaigns</span><span class="marquee-dot">&middot;</span>
+        <span>YouTube Ads</span><span class="marquee-dot">&middot;</span>
+        <span>Google Ads</span><span class="marquee-dot">&middot;</span>
+        <span>Local SEO</span><span class="marquee-dot">&middot;</span>
+        <span>Meta Advertising</span><span class="marquee-dot">&middot;</span>
+        <span>Keyword Research</span><span class="marquee-dot">&middot;</span>
+        <span>Paid Search</span><span class="marquee-dot">&middot;</span>
+        <span>Retargeting</span><span class="marquee-dot">&middot;</span>
+        <span>Display Ads</span><span class="marquee-dot">&middot;</span>
+        <span>Technical SEO</span><span class="marquee-dot">&middot;</span>
+        <span>Instagram Ads</span><span class="marquee-dot">&middot;</span>
+        <span>Shopping Campaigns</span><span class="marquee-dot">&middot;</span>
+        <span>YouTube Ads</span><span class="marquee-dot">&middot;</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== ONE MESSAGE / EVERY PLATFORM ===== -->
+  <section class="py-20 lg:py-28" style="background: #f2f2f2;">
+    <div class="max-w-7xl mx-auto px-6 lg:px-10">
+      <div class="flex flex-col lg:flex-row items-center gap-14 lg:gap-20">
+
+        <!-- Left: text -->
+        <div class="lg:flex-1 reveal-up">
+          <div class="eyebrow-rule">
+            <span class="font-heading font-semibold text-[10px] tracking-[0.3em] uppercase text-pmm-red">Reach Them Everywhere</span>
+          </div>
+          <h2 class="font-display text-pmm-black leading-[0.9] tracking-[0.01em] mb-6"
+              style="font-size: clamp(2.5rem, 5vw, 4.5rem);">
+            One Message.<br>Every Platform.
+          </h2>
+          <p class="font-body text-sm leading-[1.85] mb-8" style="color: rgba(10,10,10,0.52);">
+            Your customers don't live in just one place online. They search Google, scroll Facebook and Instagram, and watch YouTube — often all in the same hour. We run unified campaigns that put your message in front of them at every touchpoint, with creative tailored to how each platform works.
+          </p>
+          <ul class="space-y-4">
+            <li class="flex items-start gap-3">
+              <span class="mt-[9px] w-5 h-px bg-pmm-red flex-shrink-0"></span>
+              <span class="font-body text-sm" style="color: rgba(10,10,10,0.58);">Google Search, Display &amp; YouTube</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="mt-[9px] w-5 h-px bg-pmm-red flex-shrink-0"></span>
+              <span class="font-body text-sm" style="color: rgba(10,10,10,0.58);">Facebook &amp; Instagram (Meta)</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="mt-[9px] w-5 h-px bg-pmm-red flex-shrink-0"></span>
+              <span class="font-body text-sm" style="color: rgba(10,10,10,0.58);">Cross-platform retargeting sequences</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Right: Facebook platform demo video -->
+        <div class="lg:flex-1 w-full reveal-up delay-1">
+          <div class="fb-video-wrap">
+            <video autoplay muted loop playsinline>
+              <source src="../brand_assets/clients/search-marketing/facebook-video.mp4" type="video/mp4">
+            </video>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== GEOGRAPHIC TARGETING ===== -->
+  <section class="py-20 lg:py-28" style="background: #ffffff; border-bottom: 1px solid rgba(0,0,0,0.08);">
+    <div class="max-w-7xl mx-auto px-6 lg:px-10">
+      <div class="flex flex-col lg:flex-row items-center gap-14 lg:gap-20">
+
+        <!-- Left: map image -->
+        <div class="lg:flex-1 w-full reveal-up">
+          <div class="geo-map-wrap">
+            <img src="../brand_assets/clients/search-marketing/google-targeting-map.jpg"
+                 alt="Google Ads geographic targeting radius">
+          </div>
+        </div>
+
+        <!-- Right: text -->
+        <div class="lg:flex-1 reveal-up delay-1">
+          <div class="eyebrow-rule">
+            <span class="font-heading font-semibold text-[10px] tracking-[0.3em] uppercase text-pmm-red">Local &amp; Regional Targeting</span>
+          </div>
+          <h2 class="font-display text-pmm-black leading-[0.9] tracking-[0.01em] mb-6"
+              style="font-size: clamp(2rem, 4vw, 3.8rem);">
+            Reach the Right People<br>in the Right Place.
+          </h2>
+          <p class="font-body text-sm leading-[1.85] mb-8" style="color: rgba(10,10,10,0.52);">
+            Your ad budget shouldn't be spent on people who can't become customers. We use precise geographic targeting to show your ads only to people in your service area — whether that's a single zip code, a drive-time radius around your location, or an entire region. Every dollar goes toward people who can actually walk through your door or call your number.
+          </p>
+          <ul class="space-y-3.5">
+            <li class="flex items-start gap-3">
+              <span class="mt-[9px] w-5 h-px bg-pmm-red flex-shrink-0"></span>
+              <span class="font-body text-sm" style="color: rgba(10,10,10,0.55);">City, zip code, and radius-based targeting</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="mt-[9px] w-5 h-px bg-pmm-red flex-shrink-0"></span>
+              <span class="font-body text-sm" style="color: rgba(10,10,10,0.55);">Bid adjustments based on location performance data</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="mt-[9px] w-5 h-px bg-pmm-red flex-shrink-0"></span>
+              <span class="font-body text-sm" style="color: rgba(10,10,10,0.55);">Exclude areas that historically underperform</span>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SEO SECTION ===== -->
+  <section class="py-20 lg:py-28" style="background: #111111; border-bottom: 1px solid rgba(255,255,255,0.05);">
+    <div class="max-w-7xl mx-auto px-6 lg:px-10">
+      <div class="flex flex-col lg:flex-row items-start gap-14 lg:gap-24">
+
+        <!-- Left: text -->
+        <div class="lg:w-[52%] reveal-up">
+          <div class="eyebrow-rule">
+            <span class="font-heading font-semibold text-[10px] tracking-[0.3em] uppercase text-pmm-red">Search Engine Optimization</span>
+          </div>
+          <h2 class="font-display text-pmm-white leading-[0.9] tracking-[0.01em] mb-6"
+              style="font-size: clamp(2.5rem, 5vw, 4.5rem);">
+            Get Found Organically.<br>Stay Found.
+          </h2>
+          <p class="font-body text-white/50 text-sm leading-[1.85] mb-8">
+            Paid ads deliver immediate traffic — but organic SEO builds the lasting visibility that keeps your business growing long after any campaign ends. As a certified Google Partner, we optimize your site to rank higher for the searches that matter most to your business, your customers, and your market.
+          </p>
+          <p class="font-body text-white/40 text-sm leading-[1.85]">
+            From local search dominance in Cleveland and Northeast Ohio to technical site health and content strategy — we build the organic foundation that makes your entire digital marketing program more effective.
+          </p>
+        </div>
+
+        <!-- Right: SEO services list -->
+        <div class="lg:flex-1 reveal-up delay-1">
+          <div class="space-y-0" style="border: 1px solid rgba(255,255,255,0.07);">
+
+            <div class="flex items-start gap-5 px-7 py-6" style="border-bottom: 1px solid rgba(255,255,255,0.06);">
+              <span class="mt-1 w-4 h-px bg-pmm-red flex-shrink-0 mt-[10px]"></span>
+              <div>
+                <div class="font-heading font-bold text-[11px] tracking-[0.12em] uppercase text-pmm-white mb-1">Local SEO</div>
+                <div class="font-body text-xs text-white/35 leading-relaxed">Rank for the searches your customers are making in Cleveland, Northeast Ohio, and your specific service area.</div>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-5 px-7 py-6" style="border-bottom: 1px solid rgba(255,255,255,0.06);">
+              <span class="w-4 h-px bg-pmm-red flex-shrink-0 mt-[10px]"></span>
+              <div>
+                <div class="font-heading font-bold text-[11px] tracking-[0.12em] uppercase text-pmm-white mb-1">Keyword Research &amp; On-Page Optimization</div>
+                <div class="font-body text-xs text-white/35 leading-relaxed">We research what your customers actually search for and optimize every page to match their intent — from title tags to content structure.</div>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-5 px-7 py-6" style="border-bottom: 1px solid rgba(255,255,255,0.06);">
+              <span class="w-4 h-px bg-pmm-red flex-shrink-0 mt-[10px]"></span>
+              <div>
+                <div class="font-heading font-bold text-[11px] tracking-[0.12em] uppercase text-pmm-white mb-1">Technical SEO</div>
+                <div class="font-body text-xs text-white/35 leading-relaxed">Fast load times, clean architecture, proper indexing, and structured data — the technical foundation Google rewards with better rankings.</div>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-5 px-7 py-6" style="border-bottom: 1px solid rgba(255,255,255,0.06);">
+              <span class="w-4 h-px bg-pmm-red flex-shrink-0 mt-[10px]"></span>
+              <div>
+                <div class="font-heading font-bold text-[11px] tracking-[0.12em] uppercase text-pmm-white mb-1">Google Business Profile Optimization</div>
+                <div class="font-body text-xs text-white/35 leading-relaxed">Your GBP listing is often the first thing a local customer sees. We optimize and actively manage it to maximize map pack visibility.</div>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-5 px-7 py-6">
+              <span class="w-4 h-px bg-pmm-red flex-shrink-0 mt-[10px]"></span>
+              <div>
+                <div class="font-heading font-bold text-[11px] tracking-[0.12em] uppercase text-pmm-white mb-1">Content Strategy &amp; Development</div>
+                <div class="font-body text-xs text-white/35 leading-relaxed">We create and optimize content that ranks — building topical authority that attracts qualified traffic month after month.</div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CAPABILITIES ===== -->
+  <section class="py-20 lg:py-28" style="background: #f9f9f9; border-bottom: 1px solid rgba(0,0,0,0.08);">
+    <div class="max-w-7xl mx-auto px-6 lg:px-10">
+
+      <div class="mb-14 reveal-up">
+        <div class="eyebrow-rule">
+          <span class="font-heading font-semibold text-[10px] tracking-[0.3em] uppercase text-pmm-red">What We Manage</span>
+        </div>
+        <h2 class="font-display text-pmm-black leading-[0.9] tracking-[0.01em]"
+            style="font-size: clamp(2.5rem, 5vw, 4.5rem);">
+          Full-Funnel.<br>Every Channel.
+        </h2>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3" style="border: 1px solid rgba(0,0,0,0.09);">
+
+        <div class="cap-card reveal-up">
+          <div class="mb-5">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#E81B1E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+            </svg>
+          </div>
+          <h3 class="font-heading font-bold text-sm tracking-[0.06em] uppercase text-pmm-black mb-3">Google Search Ads</h3>
+          <p class="font-body text-sm leading-[1.8] text-black/50">
+            Appear at the top of Google results the moment a customer searches for what you sell. We handle keyword strategy, bidding, ad copy, and ongoing optimization.
+          </p>
+        </div>
+
+        <div class="cap-card reveal-up delay-1">
+          <div class="mb-5">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#E81B1E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/>
+            </svg>
+          </div>
+          <h3 class="font-heading font-bold text-sm tracking-[0.06em] uppercase text-pmm-black mb-3">Meta Advertising</h3>
+          <p class="font-body text-sm leading-[1.8] text-black/50">
+            Facebook and Instagram ads with laser-precise audience targeting. We create, test, and scale campaigns across the entire Meta ecosystem.
+          </p>
+        </div>
+
+        <div class="cap-card reveal-up delay-2">
+          <div class="mb-5">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#E81B1E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 014-4h14"/>
+              <polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 01-4 4H3"/>
+            </svg>
+          </div>
+          <h3 class="font-heading font-bold text-sm tracking-[0.06em] uppercase text-pmm-black mb-3">Retargeting</h3>
+          <p class="font-body text-sm leading-[1.8] text-black/50">
+            Re-engage people who visited your site but didn't convert. Pixel-based retargeting campaigns keep your brand front-of-mind across Google and Meta.
+          </p>
+        </div>
+
+        <div class="cap-card reveal-up delay-1">
+          <div class="mb-5">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#E81B1E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/>
+              <polygon points="10 8 16 12 10 16 10 8"/>
+            </svg>
+          </div>
+          <h3 class="font-heading font-bold text-sm tracking-[0.06em] uppercase text-pmm-black mb-3">YouTube Ads</h3>
+          <p class="font-body text-sm leading-[1.8] text-black/50">
+            Pre-roll and bumper ads placed against relevant content on the world's second-largest search engine. We produce the creative and manage the placement.
+          </p>
+        </div>
+
+        <div class="cap-card reveal-up delay-2">
+          <div class="mb-5">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#E81B1E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+              <line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>
+            </svg>
+          </div>
+          <h3 class="font-heading font-bold text-sm tracking-[0.06em] uppercase text-pmm-black mb-3">Display Advertising</h3>
+          <p class="font-body text-sm leading-[1.8] text-black/50">
+            Banner and responsive display ads served across millions of websites in the Google Display Network — building awareness at every stage of the funnel.
+          </p>
+        </div>
+
+        <div class="cap-card reveal-up delay-3">
+          <div class="mb-5">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#E81B1E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="20" x2="18" y2="10"/>
+              <line x1="12" y1="20" x2="12" y2="4"/>
+              <line x1="6"  y1="20" x2="6"  y2="14"/>
+            </svg>
+          </div>
+          <h3 class="font-heading font-bold text-sm tracking-[0.06em] uppercase text-pmm-black mb-3">Analytics &amp; Reporting</h3>
+          <p class="font-body text-sm leading-[1.8] text-black/50">
+            Clear, plain-language reporting on what's working and what it's generating. Every click, lead, and sale tracked so your budget goes where it actually performs.
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== PORTFOLIO ===== -->
+  <section class="py-20 lg:py-28" style="background: #ffffff;">
+    <div class="max-w-7xl mx-auto px-6 lg:px-10">
+
+      <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-6 mb-12 reveal-up">
+        <div>
+          <div class="eyebrow-rule">
+            <span class="font-heading font-semibold text-[10px] tracking-[0.3em] uppercase text-pmm-red">Client Work</span>
+          </div>
+          <h2 class="font-display text-pmm-black leading-[0.9] tracking-[0.01em]"
+              style="font-size: clamp(2.5rem, 5vw, 4.5rem);">
+            Ads That Actually<br>Drive Results
+          </h2>
+        </div>
+        <p class="font-body text-sm text-black/40 leading-[1.75] max-w-xs sm:text-right pb-1">
+          Click any thumbnail to watch. Three campaigns built and managed by PMM.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-1">
+
+        <div class="vid-thumb reveal-up" onclick="openModal('CS33JGKTF3k')" role="button" tabindex="0" aria-label="Play Polaris LPN video">
+          <img src="https://img.youtube.com/vi/CS33JGKTF3k/maxresdefault.jpg"
+               onerror="this.src='https://img.youtube.com/vi/CS33JGKTF3k/hqdefault.jpg'"
+               alt="" loading="lazy">
+          <div class="vid-thumb-overlay"></div>
+          <span class="vid-client-name">Polaris Career Center</span>
+          <div class="vid-play-btn">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          </div>
+        </div>
+
+        <div class="vid-thumb reveal-up delay-1" onclick="openModal('aJoZnTRdGMM')" role="button" tabindex="0" aria-label="Play PSE Home Equity video">
+          <img src="https://img.youtube.com/vi/aJoZnTRdGMM/maxresdefault.jpg"
+               onerror="this.src='https://img.youtube.com/vi/aJoZnTRdGMM/hqdefault.jpg'"
+               alt="" loading="lazy">
+          <div class="vid-thumb-overlay"></div>
+          <span class="vid-client-name">PSE Credit Union</span>
+          <div class="vid-play-btn">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          </div>
+        </div>
+
+        <div class="vid-thumb reveal-up delay-2" onclick="openModal('LC44Rb5O5DQ')" role="button" tabindex="0" aria-label="Play Fit 4 You video">
+          <img src="https://img.youtube.com/vi/LC44Rb5O5DQ/maxresdefault.jpg"
+               onerror="this.src='https://img.youtube.com/vi/LC44Rb5O5DQ/hqdefault.jpg'"
+               alt="" loading="lazy">
+          <div class="vid-thumb-overlay"></div>
+          <span class="vid-client-name">Fit 4 You</span>
+          <div class="vid-play-btn">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER START -->
+  <!-- ===== FOOTER ===== -->
+  <footer class="bg-pmm-surface border-t border-pmm-border pt-16 pb-10">
+    <div class="max-w-7xl mx-auto px-6 lg:px-10">
+      <div class="grid md:grid-cols-4 gap-12 mb-14">
+        <div class="md:col-span-2">
+          <img src="/brand_assets/PMM-Logo-white.png" alt="Perception Multimedia" class="h-14 w-auto mb-5">
+          <p class="font-body text-white/35 text-sm leading-relaxed max-w-xs">
+            Collaborative digital agency in Middleburg Heights, Ohio. Award-winning marketing with no long-term contracts — we earn your business every month.
+          </p>
+          <div class="flex flex-wrap gap-x-4 gap-y-2 mt-6">
+            <a href="tel:4403401115" class="font-heading font-semibold text-[10px] tracking-[0.2em] uppercase text-pmm-red hover:text-white transition-colors duration-200">(440) 340-1115</a>
+            <span class="text-pmm-border">·</span>
+            <a href="tel:4406552032" class="font-heading font-semibold text-[10px] tracking-[0.2em] uppercase text-white/30 hover:text-white transition-colors duration-200">(440) 655-2032</a>
+            <span class="text-pmm-border">·</span>
+            <a href="mailto:info@perceptionmm.com" class="font-heading font-semibold text-[10px] tracking-[0.2em] uppercase text-white/30 hover:text-white transition-colors duration-200">info@perceptionmm.com</a>
+          </div>
+          <div class="flex items-center gap-3 mt-5">
+            <a href="https://www.facebook.com/PerceptionMultimedia/" target="_blank" rel="noopener noreferrer" aria-label="Facebook" class="w-8 h-8 flex items-center justify-center rounded-full border border-pmm-border text-white/30 hover:text-white hover:border-white/40 transition-colors duration-200">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+            </a>
+            <a href="https://www.linkedin.com/company/perception-multimedia-inc-/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" class="w-8 h-8 flex items-center justify-center rounded-full border border-pmm-border text-white/30 hover:text-white hover:border-white/40 transition-colors duration-200">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
+            </a>
+            <a href="https://www.instagram.com/perception_multimedia/" target="_blank" rel="noopener noreferrer" aria-label="Instagram" class="w-8 h-8 flex items-center justify-center rounded-full border border-pmm-border text-white/30 hover:text-white hover:border-white/40 transition-colors duration-200">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+            </a>
+            <a href="https://www.youtube.com/c/Perceptionmm" target="_blank" rel="noopener noreferrer" aria-label="YouTube" class="w-8 h-8 flex items-center justify-center rounded-full border border-pmm-border text-white/30 hover:text-white hover:border-white/40 transition-colors duration-200">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.95 1.96C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.96A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="#161616"/></svg>
+            </a>
+          </div>
+        </div>
+        <div>
+          <h4 class="font-heading font-semibold text-[10px] tracking-[0.25em] uppercase text-white/30 mb-5">Services</h4>
+          <ul class="space-y-2.5">
+            <li><a href="/services/video-production.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Video Production</a></li>
+            <li><a href="/services/website-design.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Website Design</a></li>
+            <li><a href="/services/social-media.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Social Media</a></li>
+            <li><a href="/services/email-campaigns.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Email Campaigns</a></li>
+            <li><a href="/services/search-marketing.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Search Marketing</a></li>
+            <li><a href="/services/graphic-design.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Branding &amp; Logo Design</a></li>
+            <li><a href="/services/photography.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Photography</a></li>
+            <li><a href="/services/traditional-media.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Traditional Media</a></li>
+            <li><a href="/services/google-business-profile.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Google Business Profile</a></li>
+            <li><a href="/services/reputation-management.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Reputation Management</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="font-heading font-semibold text-[10px] tracking-[0.25em] uppercase text-white/30 mb-5">Company</h4>
+          <ul class="space-y-2.5">
+            <li><a href="/about.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">About Us</a></li>
+            <li><a href="/clients/index.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Portfolio</a></li>
+            <li><a href="/services/index.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Services</a></li>
+            <li><a href="/contact.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Contact</a></li>
+            <li><a href="/philanthropy.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Philanthropy</a></li>
+            <li><a href="/blog/index.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Blog</a></li>
+            <li><a href="mailto:careers@perceptionmm.com" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Careers</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="border-t border-pmm-border pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <p class="font-body text-xs text-white/20">© 2026 Perception Multimedia Inc. All rights reserved.</p>
+        <p class="font-heading font-semibold text-[10px] tracking-[0.25em] uppercase text-white/15">Middleburg Heights, OH · perceptionmm.com</p>
+      </div>
+    </div>
+  </footer>
+<!-- FOOTER END -->
+
+  <!-- VIDEO MODAL -->
+  <div id="vid-modal" role="dialog" aria-modal="true" aria-label="Video player">
+    <div id="vid-modal-inner">
+      <button id="vid-modal-close" onclick="closeModal()" aria-label="Close video">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+        Close
+      </button>
+      <div class="yt-ratio" style="box-shadow: 0 0 0 1px rgba(255,255,255,0.06), 0 40px 100px rgba(0,0,0,0.9);">
+        <iframe id="vid-modal-iframe" src=""
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen></iframe>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ── Navbar scroll ──
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('nav-scrolled', window.scrollY > 40);
+    }, { passive: true });
+
+    // ── Mobile menu ──
+    const menuToggle = document.getElementById('menu-toggle');
+    const menuClose  = document.getElementById('menu-close');
+    const mobileMenu = document.getElementById('mobile-menu');
+    menuToggle.addEventListener('click', () => {
+      mobileMenu.classList.remove('hidden');
+      mobileMenu.classList.add('flex');
+    });
+    menuClose.addEventListener('click', closeMobileMenu);
+    function closeMobileMenu() {
+      mobileMenu.classList.add('hidden');
+      mobileMenu.classList.remove('flex');
+    }
+    function toggleMobileServices() {
+      const list  = document.getElementById('mobile-services-list');
+      const arrow = document.getElementById('mobile-svc-arrow');
+      const isOpen = list.classList.contains('flex');
+      list.classList.toggle('hidden', isOpen);
+      list.classList.toggle('flex', !isOpen);
+      arrow.style.transform = isOpen ? '' : 'rotate(180deg)';
+    }
+
+    // ── Scroll reveal ──
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('in-view');
+          revealObserver.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.07, rootMargin: '0px 0px -30px 0px' });
+    document.querySelectorAll('.reveal-up').forEach(el => revealObserver.observe(el));
+
+    // ── Video modal ──
+    const modal       = document.getElementById('vid-modal');
+    const modalIframe = document.getElementById('vid-modal-iframe');
+
+    function openModal(videoId) {
+      modalIframe.src = 'https://www.youtube.com/embed/' + videoId + '?autoplay=1&rel=0&modestbranding=1';
+      modal.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+      modal.classList.remove('open');
+      setTimeout(() => { modalIframe.src = ''; }, 300);
+      document.body.style.overflow = '';
+    }
+
+    modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
+
+    document.querySelectorAll('.vid-thumb').forEach(thumb => {
+      thumb.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); thumb.click(); }
+      });
+    });
+  </script>
+
+</div><!-- /overflow-x-hidden -->
+</body>
+</html>

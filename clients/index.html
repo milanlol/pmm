@@ -1,0 +1,1012 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Client Work — Perception Multimedia</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Josefin+Sans:ital,wght@0,300;0,400;0,600;0,700;1,300&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../styles.css">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'pmm-red':     '#E81B1E',
+            'pmm-black':   '#0A0A0A',
+            'pmm-dark':    '#111111',
+            'pmm-surface': '#161616',
+            'pmm-border':  '#222222',
+            'pmm-muted':   '#3A3A3A',
+            'pmm-white':   '#F4F4F0',
+            'pmm-cream':   '#EDECEA',
+            'pmm-gray':    '#5C5C5C',
+          },
+          fontFamily: {
+            'display': ['"Bebas Neue"', 'cursive'],
+            'heading': ['"Josefin Sans"', 'sans-serif'],
+            'body':    ['"DM Sans"', 'sans-serif'],
+          },
+        }
+      }
+    }
+  </script>
+  <style>
+    /* ── Page reset ── */
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: #0A0A0A;
+      color: #F4F4F0;
+      -webkit-font-smoothing: antialiased;
+    }
+    ::selection { background: #E81B1E; color: #fff; }
+
+    /* ── Grain ── */
+    .grain-overlay {
+      position: fixed; inset: 0; z-index: 200;
+      pointer-events: none; opacity: 0.03;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size: 180px 180px;
+    }
+
+    /* ── Navigation ── */
+    /* ── Navigation handled by #navbar in styles.css ── */
+
+    /* ── Hero section ── */
+    .hero-stat-num {
+      font-family: 'Bebas Neue', cursive;
+      font-size: clamp(3rem, 6vw, 5rem);
+      line-height: 1;
+      letter-spacing: 0.02em;
+    }
+    .hero-stat-label {
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 9px; font-weight: 600;
+      letter-spacing: 0.22em; text-transform: uppercase;
+      color: #5C5C5C;
+      margin-top: 4px;
+    }
+
+    /* ── Cases grid ── */
+    .cases-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-auto-rows: 340px;
+      gap: 1px;
+      background: #191919;
+    }
+    @media (min-width: 640px) and (max-width: 1023px) {
+      .cases-grid {
+        grid-template-columns: repeat(2, 1fr);
+        grid-auto-rows: 300px;
+      }
+    }
+    @media (max-width: 639px) {
+      .cases-grid {
+        grid-template-columns: 1fr;
+        grid-auto-rows: 260px;
+      }
+    }
+
+    /* ── Case card (linked) ── */
+    .case-card {
+      position: relative;
+      overflow: hidden;
+      background: #0d0d0d;
+      display: block;
+      text-decoration: none;
+    }
+    .case-card--featured { grid-row: span 2; }
+    @media (max-width: 639px) { .case-card--featured { grid-row: span 1; } }
+
+    /* Image */
+    .case-card-img {
+      width: 100%; height: 100%;
+      object-fit: cover; display: block;
+      transition: transform 0.75s cubic-bezier(0.16,1,0.3,1),
+                  filter 0.75s ease;
+      filter: brightness(0.62) saturate(0.72);
+    }
+    a.case-card:hover .case-card-img {
+      transform: scale(1.06);
+      filter: brightness(0.42) saturate(0.85);
+    }
+
+    /* Gradient */
+    .case-card-grad {
+      position: absolute; inset: 0;
+      pointer-events: none;
+      background: linear-gradient(
+        to top,
+        rgba(0,0,0,0.94) 0%,
+        rgba(0,0,0,0.45) 35%,
+        rgba(0,0,0,0.08) 65%,
+        transparent 100%
+      );
+    }
+    /* Stronger gradient for featured */
+    .case-card--featured .case-card-grad {
+      background: linear-gradient(
+        to top,
+        rgba(0,0,0,0.95) 0%,
+        rgba(0,0,0,0.5) 40%,
+        rgba(0,0,0,0.1) 70%,
+        transparent 100%
+      );
+    }
+
+    /* Accent bottom line */
+    .case-card::after {
+      content: '';
+      position: absolute; bottom: 0; left: 0; right: 0;
+      height: 2px;
+      background: var(--accent, #E81B1E);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.5s cubic-bezier(0.16,1,0.3,1);
+      z-index: 5;
+    }
+    a.case-card:hover::after { transform: scaleX(1); }
+
+    /* Top row */
+    .case-card-top {
+      position: absolute; top: 0; left: 0; right: 0;
+      padding: 18px 20px;
+      display: flex; justify-content: space-between; align-items: flex-start;
+      z-index: 3;
+    }
+    .case-card-industry {
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 9px; font-weight: 600;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      color: rgba(255,255,255,0.45);
+      background: rgba(0,0,0,0.4);
+      padding: 4px 10px;
+      backdrop-filter: blur(4px);
+    }
+    .case-card-num {
+      font-family: 'Bebas Neue', cursive;
+      font-size: 20px; letter-spacing: 0.04em;
+      color: rgba(255,255,255,0.18);
+      line-height: 1;
+    }
+
+    /* Bottom info */
+    .case-card-info {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      padding: 18px 20px 22px;
+      z-index: 3;
+    }
+    .case-card-services {
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 9px; font-weight: 600;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--accent, #E81B1E);
+      margin-bottom: 7px;
+      opacity: 0;
+      transform: translateY(6px);
+      transition: opacity 0.3s ease, transform 0.4s cubic-bezier(0.16,1,0.3,1);
+    }
+    a.case-card:hover .case-card-services { opacity: 1; transform: translateY(0); }
+
+    .case-card-name-row {
+      display: flex; align-items: center;
+      justify-content: space-between; gap: 12px;
+    }
+    .case-card-name {
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: clamp(1rem, 2vw, 1.35rem);
+      font-weight: 700; letter-spacing: 0.06em;
+      text-transform: uppercase; color: #fff;
+      line-height: 1.1; margin: 0;
+    }
+    .case-card--featured .case-card-name {
+      font-size: clamp(1.35rem, 2.8vw, 1.85rem);
+    }
+    .case-card-arrow {
+      width: 32px; height: 32px;
+      border: 1px solid rgba(255,255,255,0.2);
+      display: inline-flex; align-items: center; justify-content: center;
+      flex-shrink: 0; color: #fff;
+      transition: border-color 0.25s ease, background 0.25s ease, transform 0.25s ease;
+    }
+    a.case-card:hover .case-card-arrow {
+      border-color: var(--accent, #E81B1E);
+      background: var(--accent, #E81B1E);
+      transform: translateX(3px);
+    }
+
+    /* ── Placeholder card ── */
+    .case-card--placeholder {
+      cursor: default;
+    }
+    .ph-pattern {
+      position: absolute; inset: 0;
+      background-color: #0d0d0d;
+      background-image:
+        repeating-linear-gradient(
+          -45deg,
+          rgba(255,255,255,0.016) 0,
+          rgba(255,255,255,0.016) 1px,
+          transparent 0,
+          transparent 26px
+        );
+    }
+    .ph-center {
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .ph-badge {
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 8px; font-weight: 600;
+      letter-spacing: 0.3em; text-transform: uppercase;
+      color: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.06);
+      padding: 6px 16px;
+    }
+    .ph-name { color: rgba(255,255,255,0.28) !important; }
+    .ph-industry { color: rgba(255,255,255,0.2) !important; background: transparent !important; }
+
+    /* ── Service filter buttons ── */
+    .filter-btn {
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: #5C5C5C;
+      border: 1px solid #222222;
+      padding: 12px 22px;
+      background: transparent;
+      cursor: pointer;
+      transition: color 0.2s ease, border-color 0.2s ease;
+    }
+    .filter-btn:hover {
+      color: #F4F4F0;
+      border-color: #3A3A3A;
+    }
+    .filter-btn.is-active {
+      color: #E81B1E;
+      border-color: #E81B1E;
+    }
+
+    /* Case card filter states */
+    .case-card.filter-hiding {
+      opacity: 0 !important;
+      transform: scale(0.97) !important;
+      pointer-events: none;
+      transition: opacity 0.18s ease, transform 0.18s ease !important;
+    }
+    .case-card.filter-hidden {
+      display: none !important;
+    }
+
+    /* ── Scroll reveal ── */
+    .case-card {
+      opacity: 0;
+      transform: translateY(14px);
+      transition:
+        opacity 0.65s cubic-bezier(0.16,1,0.3,1),
+        transform 0.65s cubic-bezier(0.16,1,0.3,1);
+    }
+    .case-card.in-view { opacity: 1; transform: translateY(0); }
+
+    .cases-grid .case-card:nth-child(1)  { transition-delay: 0s;    }
+    .cases-grid .case-card:nth-child(2)  { transition-delay: 0.06s; }
+    .cases-grid .case-card:nth-child(3)  { transition-delay: 0.12s; }
+    .cases-grid .case-card:nth-child(4)  { transition-delay: 0.06s; }
+    .cases-grid .case-card:nth-child(5)  { transition-delay: 0.12s; }
+    .cases-grid .case-card:nth-child(6)  { transition-delay: 0.18s; }
+    .cases-grid .case-card:nth-child(7)  { transition-delay: 0.08s; }
+    .cases-grid .case-card:nth-child(8)  { transition-delay: 0.14s; }
+    .cases-grid .case-card:nth-child(9)  { transition-delay: 0.20s; }
+    .cases-grid .case-card:nth-child(10) { transition-delay: 0.08s; }
+    .cases-grid .case-card:nth-child(11) { transition-delay: 0.14s; }
+    .cases-grid .case-card:nth-child(12) { transition-delay: 0.20s; }
+    .cases-grid .case-card:nth-child(13) { transition-delay: 0.08s; }
+    .cases-grid .case-card:nth-child(14) { transition-delay: 0.14s; }
+    .cases-grid .case-card:nth-child(15) { transition-delay: 0.20s; }
+    .cases-grid .case-card:nth-child(16) { transition-delay: 0.08s; }
+    .cases-grid .case-card:nth-child(17) { transition-delay: 0.14s; }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity 0.7s cubic-bezier(0.16,1,0.3,1),
+                  transform 0.7s cubic-bezier(0.16,1,0.3,1);
+    }
+    .reveal.in-view { opacity: 1; transform: translateY(0); }
+    .reveal-delay-1 { transition-delay: 0.08s; }
+    .reveal-delay-2 { transition-delay: 0.16s; }
+    .reveal-delay-3 { transition-delay: 0.24s; }
+
+  </style>
+</head>
+<body class="bg-pmm-black text-pmm-white font-body">
+<div class="overflow-x-hidden">
+
+  <!-- Grain -->
+  <div class="grain-overlay" aria-hidden="true"></div>
+
+  <!-- NAV START -->
+  <!-- NAV -->
+  <nav id="navbar" class="fixed top-0 left-0 right-0 z-50">
+    <div class="max-w-7xl mx-auto px-6 lg:px-10 h-20 flex items-center justify-between">
+      <a href="/index.html" class="flex-shrink-0">
+        <img src="/brand_assets/PMM-Logo-white.png" alt="Perception Multimedia" class="h-11 w-auto">
+      </a>
+      <div class="hidden md:flex items-center gap-8">
+        <a href="/index.html" class="nav-link font-heading font-semibold text-xs tracking-[0.2em] uppercase text-white/60 hover:text-white transition-colors duration-200">Home</a>
+        <a href="/about.html" class="nav-link font-heading font-semibold text-xs tracking-[0.2em] uppercase text-white/60 hover:text-white transition-colors duration-200">About</a>
+        <div class="nav-dropdown-wrapper">
+          <a href="/services/index.html" class="nav-link font-heading font-semibold text-xs tracking-[0.2em] uppercase text-white/60 hover:text-white transition-colors duration-200 flex items-center gap-1.5">Services <svg class="nav-chevron-icon" width="8" height="5" viewBox="0 0 8 5" fill="none"><path d="M1 1l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+          <div class="nav-dropdown">
+            <a href="/services/video-production.html" class="nav-dropdown-item">Video Production</a>
+            <a href="/services/website-design.html" class="nav-dropdown-item">Website Design</a>
+            <a href="/services/social-media.html" class="nav-dropdown-item">Social Media</a>
+            <a href="/services/email-campaigns.html" class="nav-dropdown-item">Email Campaigns</a>
+            <a href="/services/photography.html" class="nav-dropdown-item">Photography</a>
+            <a href="/services/search-marketing.html" class="nav-dropdown-item">Search Marketing</a>
+            <a href="/services/graphic-design.html" class="nav-dropdown-item">Branding &amp; Logo Design</a>
+            <a href="/services/traditional-media.html" class="nav-dropdown-item">Traditional Media</a>
+            <a href="/services/google-business-profile.html" class="nav-dropdown-item">Google Business Profile</a>
+            <a href="/services/reputation-management.html" class="nav-dropdown-item">Reputation Management</a>
+          </div>
+        </div>
+        <a href="/clients/index.html" class="nav-link nav-active font-heading font-semibold text-xs tracking-[0.2em] uppercase text-white/60 hover:text-white transition-colors duration-200">Work</a>
+        <a href="/philanthropy.html" class="nav-link font-heading font-semibold text-xs tracking-[0.2em] uppercase text-white/60 hover:text-white transition-colors duration-200">Philanthropy</a>
+        <a href="/contact.html" class="nav-cta-btn font-heading font-bold text-xs tracking-[0.2em] uppercase px-6 py-3 bg-pmm-red text-white hover:bg-red-700 transition-colors duration-200">Contact</a>
+      </div>
+      <button id="menu-toggle" class="md:hidden text-white p-2 focus:outline-none" aria-label="Open menu">
+        <svg width="22" height="16" viewBox="0 0 22 16" fill="none">
+          <line x1="0" y1="1"  x2="22" y2="1"  stroke="currentColor" stroke-width="2"/>
+          <line x1="0" y1="8"  x2="22" y2="8"  stroke="currentColor" stroke-width="2"/>
+          <line x1="0" y1="15" x2="22" y2="15" stroke="currentColor" stroke-width="2"/>
+        </svg>
+      </button>
+    </div>
+  </nav>
+
+  <!-- MOBILE MENU -->
+  <div id="mobile-menu" class="fixed inset-0 z-[60] bg-pmm-black hidden flex-col items-center justify-center">
+    <button id="menu-close" class="absolute top-6 right-6 text-white/40 hover:text-white" aria-label="Close menu">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+      </svg>
+    </button>
+    <nav class="flex flex-col items-center gap-5 text-center">
+      <a href="/index.html" onclick="closeMobileMenu()" class="font-display text-5xl text-white hover:text-pmm-red transition-colors duration-200">HOME</a>
+      <a href="/about.html" onclick="closeMobileMenu()" class="font-display text-5xl text-white hover:text-pmm-red transition-colors duration-200">ABOUT</a>
+      <div class="flex flex-col items-center gap-2">
+        <button onclick="toggleMobileServices()" class="font-display text-5xl text-white hover:text-pmm-red flex items-center gap-3 bg-transparent border-none cursor-pointer">SERVICES <span id="mobile-svc-arrow" style="font-size:1.4rem;line-height:1;display:inline-block;transition:transform 0.25s cubic-bezier(0.16,1,0.3,1);">↓</span></button>
+        <div id="mobile-services-list" class="hidden flex-col items-center gap-1 mt-3">
+          <a href="/services/video-production.html" onclick="closeMobileMenu()" class="font-heading font-semibold text-sm tracking-[0.18em] uppercase text-white/50 hover:text-pmm-red transition-colors duration-200 py-2.5 px-6">Video Production</a>
+          <a href="/services/website-design.html" onclick="closeMobileMenu()" class="font-heading font-semibold text-sm tracking-[0.18em] uppercase text-white/50 hover:text-pmm-red transition-colors duration-200 py-2.5 px-6">Website Design</a>
+          <a href="/services/social-media.html" onclick="closeMobileMenu()" class="font-heading font-semibold text-sm tracking-[0.18em] uppercase text-white/50 hover:text-pmm-red transition-colors duration-200 py-2.5 px-6">Social Media</a>
+          <a href="/services/email-campaigns.html" onclick="closeMobileMenu()" class="font-heading font-semibold text-sm tracking-[0.18em] uppercase text-white/50 hover:text-pmm-red transition-colors duration-200 py-2.5 px-6">Email Campaigns</a>
+          <a href="/services/photography.html" onclick="closeMobileMenu()" class="font-heading font-semibold text-sm tracking-[0.18em] uppercase text-white/50 hover:text-pmm-red transition-colors duration-200 py-2.5 px-6">Photography</a>
+          <a href="/services/search-marketing.html" onclick="closeMobileMenu()" class="font-heading font-semibold text-sm tracking-[0.18em] uppercase text-white/50 hover:text-pmm-red transition-colors duration-200 py-2.5 px-6">Search Marketing</a>
+          <a href="/services/graphic-design.html" onclick="closeMobileMenu()" class="font-heading font-semibold text-sm tracking-[0.18em] uppercase text-white/50 hover:text-pmm-red transition-colors duration-200 py-2.5 px-6">Branding &amp; Logo Design</a>
+          <a href="/services/traditional-media.html" onclick="closeMobileMenu()" class="font-heading font-semibold text-sm tracking-[0.18em] uppercase text-white/50 hover:text-pmm-red transition-colors duration-200 py-2.5 px-6">Traditional Media</a>
+          <a href="/services/google-business-profile.html" onclick="closeMobileMenu()" class="font-heading font-semibold text-sm tracking-[0.18em] uppercase text-white/50 hover:text-pmm-red transition-colors duration-200 py-2.5 px-6">Google Business Profile</a>
+          <a href="/services/reputation-management.html" onclick="closeMobileMenu()" class="font-heading font-semibold text-sm tracking-[0.18em] uppercase text-white/50 hover:text-pmm-red transition-colors duration-200 py-2.5 px-6">Reputation Management</a>
+        </div>
+      </div>
+      <a href="/clients/index.html" onclick="closeMobileMenu()" class="font-display text-5xl text-white hover:text-pmm-red transition-colors duration-200">WORK</a>
+      <a href="/philanthropy.html" onclick="closeMobileMenu()" class="font-display text-5xl text-white hover:text-pmm-red transition-colors duration-200">PHILANTHROPY</a>
+      <a href="/contact.html" onclick="closeMobileMenu()" class="font-display text-5xl text-pmm-red">CONTACT</a>
+    </nav>
+    <div class="absolute bottom-10 font-heading text-xs tracking-[0.25em] uppercase text-white/20">440.340.1115</div>
+  </div>
+<!-- NAV END -->
+
+  <!-- ===== HERO ===== -->
+  <section class="pt-36 md:pt-44 pb-16 md:pb-20 border-b border-[#1a1a1a] px-6 md:px-10 lg:px-16">
+    <div class="max-w-screen-2xl mx-auto">
+
+      <!-- Eyebrow -->
+      <div class="reveal flex items-center gap-3 mb-8 md:mb-10">
+        <span class="block flex-shrink-0" style="width:28px;height:1px;background:#E81B1E"></span>
+        <span class="font-heading text-[10px] tracking-[0.28em] uppercase text-pmm-red">
+          Perception Multimedia — Client Work
+        </span>
+      </div>
+
+      <!-- Main content row -->
+      <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-10 lg:gap-20">
+
+        <!-- Title -->
+        <div class="reveal reveal-delay-1 flex-shrink-0">
+          <h1 class="font-display leading-none tracking-tight text-pmm-white"
+              style="font-size: clamp(5.5rem, 16vw, 15rem); line-height: 0.9; letter-spacing: -0.01em;">
+            CASE<br>STUDIES
+          </h1>
+        </div>
+
+        <!-- Side panel -->
+        <div class="reveal reveal-delay-2 lg:pb-4">
+          <p class="font-heading text-[10px] tracking-[0.28em] uppercase text-pmm-gray mb-6">Filter by Service</p>
+          <div id="service-filters" class="flex flex-wrap gap-3">
+            <button data-filter="all"         class="filter-btn is-active">All Work</button>
+            <button data-filter="video"       class="filter-btn">Video</button>
+            <button data-filter="marketing"   class="filter-btn">Marketing</button>
+            <button data-filter="social"      class="filter-btn">Social</button>
+            <button data-filter="email"       class="filter-btn">Email</button>
+            <button data-filter="photography" class="filter-btn">Photography</button>
+            <button data-filter="web"         class="filter-btn">Web</button>
+            <button data-filter="design"      class="filter-btn">Design</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===== CASES GRID ===== -->
+  <div class="cases-grid border-b border-[#191919]">
+
+    <!-- 01 — Fat Head's Brewery -->
+    <a class="case-card"
+       style="--accent: #7fbb42"
+       data-services="marketing video design"
+       href="./fat-heads.html">
+      <img class="case-card-img"
+           src="../brand_assets/clients/fat-heads.jpg"
+           alt="Fat Head's Brewery">
+      <div class="case-card-grad" aria-hidden="true"></div>
+      <div class="case-card-top">
+        <span class="case-card-industry">Hospitality &amp; Food</span>
+        <span class="case-card-num">01</span>
+      </div>
+      <div class="case-card-info">
+        <div class="case-card-services">Marketing · Video · Design</div>
+        <div class="case-card-name-row">
+          <h2 class="case-card-name">Fat Head's Brewery</h2>
+          <span class="case-card-arrow" aria-hidden="true">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.5 7h9M7.5 3l4 4-4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+        </div>
+      </div>
+    </a>
+
+    <!-- 02 — Bob Evans -->
+    <a class="case-card"
+       style="--accent: #66579F"
+       data-services="video"
+       href="./bob-evans.html">
+      <img class="case-card-img"
+           src="../brand_assets/clients/Bob-Evans-Farms2.jpg"
+           alt="Bob Evans Farms">
+      <div class="case-card-grad" aria-hidden="true"></div>
+      <div class="case-card-top">
+        <span class="case-card-industry">Food &amp; Beverage</span>
+        <span class="case-card-num">02</span>
+      </div>
+      <div class="case-card-info">
+        <div class="case-card-services">Video Production</div>
+        <div class="case-card-name-row">
+          <h2 class="case-card-name">Bob Evans Farms</h2>
+          <span class="case-card-arrow" aria-hidden="true">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.5 7h9M7.5 3l4 4-4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+        </div>
+      </div>
+    </a>
+
+    <!-- 03 — Cleveland Boat Show -->
+    <a class="case-card"
+       style="--accent: #0E6EA0"
+       data-services="video email marketing social"
+       href="./cleveland-boat-show.html">
+      <img class="case-card-img"
+           src="../brand_assets/clients/boat-show.jpg"
+           alt="Cleveland Boat Show">
+      <div class="case-card-grad" aria-hidden="true"></div>
+      <div class="case-card-top">
+        <span class="case-card-industry">Events &amp; Recreation</span>
+        <span class="case-card-num">03</span>
+      </div>
+      <div class="case-card-info">
+        <div class="case-card-services">Video · Email · Marketing · Social</div>
+        <div class="case-card-name-row">
+          <h2 class="case-card-name">Cleveland Boat Show</h2>
+          <span class="case-card-arrow" aria-hidden="true">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.5 7h9M7.5 3l4 4-4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+        </div>
+      </div>
+    </a>
+
+    <!-- 04 — Southwest General -->
+    <a class="case-card"
+       style="--accent: #008833"
+       data-services="photography video web marketing design"
+       href="./southwest-general.html">
+      <img class="case-card-img"
+           src="../brand_assets/clients/SWG/Exterior_009.jpg"
+           alt="Southwest General Hospital">
+      <div class="case-card-grad" aria-hidden="true"></div>
+      <div class="case-card-top">
+        <span class="case-card-industry">Healthcare</span>
+        <span class="case-card-num">04</span>
+      </div>
+      <div class="case-card-info">
+        <div class="case-card-services">Photography · Video · Web · Marketing · Design</div>
+        <div class="case-card-name-row">
+          <h2 class="case-card-name">Southwest General</h2>
+          <span class="case-card-arrow" aria-hidden="true">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.5 7h9M7.5 3l4 4-4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+        </div>
+      </div>
+    </a>
+
+    <!-- 05 — NPA Coatings -->
+    <a class="case-card"
+       style="--accent: #f04f26"
+       data-services="web photography"
+       href="./npa-coatings.html">
+      <img class="case-card-img"
+           src="../brand_assets/clients/NPA-Coatings.jpg"
+           alt="NPA Coatings">
+      <div class="case-card-grad" aria-hidden="true"></div>
+      <div class="case-card-top">
+        <span class="case-card-industry">Specialty Coatings</span>
+        <span class="case-card-num">05</span>
+      </div>
+      <div class="case-card-info">
+        <div class="case-card-services">Web Design · Photography</div>
+        <div class="case-card-name-row">
+          <h2 class="case-card-name">NPA Coatings</h2>
+          <span class="case-card-arrow" aria-hidden="true">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.5 7h9M7.5 3l4 4-4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+        </div>
+      </div>
+    </a>
+
+    <!-- 06 — Moen -->
+    <a class="case-card"
+       style="--accent: #5B7F95"
+       data-services="video"
+       href="./moen.html">
+      <img class="case-card-img"
+           src="../brand_assets/clients/moen/moen_lifestyle1.webp"
+           alt="Moen">
+      <div class="case-card-grad" aria-hidden="true"></div>
+      <div class="case-card-top">
+        <span class="case-card-industry">Plumbing &amp; Hardware</span>
+        <span class="case-card-num">06</span>
+      </div>
+      <div class="case-card-info">
+        <div class="case-card-services">Video Production</div>
+        <div class="case-card-name-row">
+          <h2 class="case-card-name">Moen</h2>
+          <span class="case-card-arrow" aria-hidden="true">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.5 7h9M7.5 3l4 4-4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+        </div>
+      </div>
+    </a>
+
+    <!-- 07 — Oatey -->
+    <a class="case-card"
+       style="--accent: #eb0029"
+       data-services="video"
+       href="./oatey.html">
+      <img class="case-card-img"
+           src="../brand_assets/clients/oatey/impact_on_industry_0.webp"
+           alt="Oatey Co.">
+      <div class="case-card-grad" aria-hidden="true"></div>
+      <div class="case-card-top">
+        <span class="case-card-industry">Plumbing &amp; Building Products</span>
+        <span class="case-card-num">07</span>
+      </div>
+      <div class="case-card-info">
+        <div class="case-card-services">Video Production</div>
+        <div class="case-card-name-row">
+          <h2 class="case-card-name">Oatey Co.</h2>
+          <span class="case-card-arrow" aria-hidden="true">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.5 7h9M7.5 3l4 4-4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+        </div>
+      </div>
+    </a>
+
+    <!-- 08 — Polaris Career Center -->
+    <a class="case-card"
+       style="--accent: #1a4e95"
+       data-services="video photography marketing"
+       href="./polaris.html">
+      <img class="case-card-img"
+           src="../brand_assets/clients/polaris/P1020431.jpg"
+           alt="Polaris Career Center">
+      <div class="case-card-grad" aria-hidden="true"></div>
+      <div class="case-card-top">
+        <span class="case-card-industry">Career &amp; Technical Education</span>
+        <span class="case-card-num">08</span>
+      </div>
+      <div class="case-card-info">
+        <div class="case-card-services">Video · Photography · Marketing · Virtual Tour</div>
+        <div class="case-card-name-row">
+          <h2 class="case-card-name">Polaris Career Center</h2>
+          <span class="case-card-arrow" aria-hidden="true">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.5 7h9M7.5 3l4 4-4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+        </div>
+      </div>
+    </a>
+
+    <!-- 09 — Avery Dennison -->
+    <a class="case-card"
+       style="--accent: #E31F26"
+       data-services="video"
+       href="./avery-dennison.html">
+      <img class="case-card-img"
+           src="../brand_assets/clients/avery-dennison/ADSM119a.jpg"
+           alt="Avery Dennison">
+      <div class="case-card-grad" aria-hidden="true"></div>
+      <div class="case-card-top">
+        <span class="case-card-industry">Materials &amp; Labeling</span>
+        <span class="case-card-num">09</span>
+      </div>
+      <div class="case-card-info">
+        <div class="case-card-services">Video Production</div>
+        <div class="case-card-name-row">
+          <h2 class="case-card-name">Avery Dennison</h2>
+          <span class="case-card-arrow" aria-hidden="true">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.5 7h9M7.5 3l4 4-4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+        </div>
+      </div>
+    </a>
+
+    <!-- 10 — PSE Credit Union -->
+    <a class="case-card"
+       style="--accent: #911e37"
+       data-services="email marketing social video web"
+       href="./pse-credit-union.html">
+      <img class="case-card-img"
+           src="../brand_assets/clients/pse/Group_CLE_499-web.jpg"
+           alt="PSE Credit Union">
+      <div class="case-card-grad" aria-hidden="true"></div>
+      <div class="case-card-top">
+        <span class="case-card-industry">Financial Services</span>
+        <span class="case-card-num">10</span>
+      </div>
+      <div class="case-card-info">
+        <div class="case-card-services">Email · Marketing · Social · Video · Web</div>
+        <div class="case-card-name-row">
+          <h2 class="case-card-name">PSE Credit Union</h2>
+          <span class="case-card-arrow" aria-hidden="true">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.5 7h9M7.5 3l4 4-4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+        </div>
+      </div>
+    </a>
+
+    <!-- 11 — DAP -->
+    <a class="case-card"
+       style="--accent: #d6391d"
+       data-services="animation video"
+       href="./dap.html">
+      <img class="case-card-img"
+           src="../brand_assets/clients/DAP/dap_banner.webp"
+           alt="DAP">
+      <div class="case-card-grad" aria-hidden="true"></div>
+      <div class="case-card-top">
+        <span class="case-card-industry">Building Products</span>
+        <span class="case-card-num">11</span>
+      </div>
+      <div class="case-card-info">
+        <div class="case-card-services">Animation · Video Production</div>
+        <div class="case-card-name-row">
+          <h2 class="case-card-name">DAP</h2>
+          <span class="case-card-arrow" aria-hidden="true">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.5 7h9M7.5 3l4 4-4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+        </div>
+      </div>
+    </a>
+
+    <!-- 13 — Tovolo -->
+    <a class="case-card"
+       style="--accent: #6ea452"
+       data-services="social video photography"
+       href="./tovolo.html">
+      <img class="case-card-img"
+           src="../brand_assets/clients/tovolo/kitchen-set.jpg"
+           alt="Tovolo">
+      <div class="case-card-grad" aria-hidden="true"></div>
+      <div class="case-card-top">
+        <span class="case-card-industry">Kitchenware</span>
+        <span class="case-card-num">13</span>
+      </div>
+      <div class="case-card-info">
+        <div class="case-card-services">Social Media · Photography · Video</div>
+        <div class="case-card-name-row">
+          <h2 class="case-card-name">Tovolo</h2>
+          <span class="case-card-arrow" aria-hidden="true">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.5 7h9M7.5 3l4 4-4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+        </div>
+      </div>
+    </a>
+
+    <!-- 12 — Hill 'N Dale Club -->
+    <a class="case-card"
+       style="--accent: #e7ceb0"
+       data-services="web photography video design"
+       href="./hill-n-dale.html">
+      <img class="case-card-img"
+           src="../brand_assets/clients/Hill-N-Dale/photography/Grounds_133.jpg"
+           alt="Hill 'N Dale Club">
+      <div class="case-card-grad" aria-hidden="true"></div>
+      <div class="case-card-top">
+        <span class="case-card-industry">Sportsman's Club</span>
+        <span class="case-card-num">12</span>
+      </div>
+      <div class="case-card-info">
+        <div class="case-card-services">Web · Photography · Video · Design</div>
+        <div class="case-card-name-row">
+          <h2 class="case-card-name">Hill 'N Dale Club</h2>
+          <span class="case-card-arrow" aria-hidden="true">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.5 7h9M7.5 3l4 4-4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+        </div>
+      </div>
+    </a>
+
+    <!-- 15 — Action Door and Window -->
+    <a class="case-card"
+       style="--accent: #f04135"
+       data-services="video web marketing email"
+       href="./action-door.html">
+      <img class="case-card-img"
+           src="../brand_assets/clients/action-door/actiondoorandwindow-banner.jpg"
+           alt="Action Door and Window">
+      <div class="case-card-grad" aria-hidden="true"></div>
+      <div class="case-card-top">
+        <span class="case-card-industry">Home Services</span>
+        <span class="case-card-num">15</span>
+      </div>
+      <div class="case-card-info">
+        <div class="case-card-services">Video · Web · Marketing · Email</div>
+        <div class="case-card-name-row">
+          <h2 class="case-card-name">Action Door &amp; Window</h2>
+          <span class="case-card-arrow" aria-hidden="true">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.5 7h9M7.5 3l4 4-4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+        </div>
+      </div>
+    </a>
+
+    <!-- 14 — Hannah's Home -->
+    <a class="case-card"
+       style="--accent: #009688"
+       data-services="video photography design social"
+       href="./hannahs-home.html">
+      <img class="case-card-img"
+           src="../brand_assets/clients/hannahs-home/newborn-baby-feet-basket-161709.jpeg"
+           alt="Hannah's Home">
+      <div class="case-card-grad" aria-hidden="true"></div>
+      <div class="case-card-top">
+        <span class="case-card-industry">Nonprofit · Pregnancy Resource</span>
+        <span class="case-card-num">14</span>
+      </div>
+      <div class="case-card-info">
+        <div class="case-card-services">Video · Photography · Design · Social</div>
+        <div class="case-card-name-row">
+          <h2 class="case-card-name">Hannah's Home</h2>
+          <span class="case-card-arrow" aria-hidden="true">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.5 7h9M7.5 3l4 4-4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+        </div>
+      </div>
+    </a>
+
+    <!-- 16 — Jim Kaminski for Mayor -->
+    <a class="case-card"
+       style="--accent: #19452f"
+       data-services="web video photography design"
+       href="./jim-kaminski.html">
+      <img class="case-card-img"
+           src="../brand_assets/clients/jim-kaminski/Jim-Town-Center.jpg"
+           alt="Jim Kaminski for Mayor">
+      <div class="case-card-grad" aria-hidden="true"></div>
+      <div class="case-card-top">
+        <span class="case-card-industry">Political Campaign</span>
+        <span class="case-card-num">16</span>
+      </div>
+      <div class="case-card-info">
+        <div class="case-card-services">Web · Video · Photography · Design</div>
+        <div class="case-card-name-row">
+          <h2 class="case-card-name">Jim Kaminski for Mayor</h2>
+          <span class="case-card-arrow" aria-hidden="true">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.5 7h9M7.5 3l4 4-4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+        </div>
+      </div>
+    </a>
+
+    <!-- 17 — Gale's Garden Center -->
+    <a class="case-card"
+       style="--accent: #5a9e3a"
+       data-services="video marketing"
+       href="./gales-garden-center.html">
+      <img class="case-card-img"
+           src="../brand_assets/clients/gales/stock-photos/woman-walking-between-display-of-flowers-and-plants-906006.jpg"
+           alt="Gale's Garden Center">
+      <div class="case-card-grad" aria-hidden="true"></div>
+      <div class="case-card-top">
+        <span class="case-card-industry">Garden &amp; Nursery</span>
+        <span class="case-card-num">17</span>
+      </div>
+      <div class="case-card-info">
+        <div class="case-card-services">Video Production · Marketing</div>
+        <div class="case-card-name-row">
+          <h2 class="case-card-name">Gale's Garden Center</h2>
+          <span class="case-card-arrow" aria-hidden="true">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.5 7h9M7.5 3l4 4-4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+        </div>
+      </div>
+    </a>
+
+  </div>
+  <!-- /cases-grid -->
+
+  <!-- FOOTER START -->
+  <!-- ===== FOOTER ===== -->
+  <footer class="bg-pmm-surface border-t border-pmm-border pt-16 pb-10">
+    <div class="max-w-7xl mx-auto px-6 lg:px-10">
+      <div class="grid md:grid-cols-4 gap-12 mb-14">
+        <div class="md:col-span-2">
+          <img src="/brand_assets/PMM-Logo-white.png" alt="Perception Multimedia" class="h-14 w-auto mb-5">
+          <p class="font-body text-white/35 text-sm leading-relaxed max-w-xs">
+            Collaborative digital agency in Middleburg Heights, Ohio. Award-winning marketing with no long-term contracts — we earn your business every month.
+          </p>
+          <div class="flex flex-wrap gap-x-4 gap-y-2 mt-6">
+            <a href="tel:4403401115" class="font-heading font-semibold text-[10px] tracking-[0.2em] uppercase text-pmm-red hover:text-white transition-colors duration-200">(440) 340-1115</a>
+            <span class="text-pmm-border">·</span>
+            <a href="tel:4406552032" class="font-heading font-semibold text-[10px] tracking-[0.2em] uppercase text-white/30 hover:text-white transition-colors duration-200">(440) 655-2032</a>
+            <span class="text-pmm-border">·</span>
+            <a href="mailto:info@perceptionmm.com" class="font-heading font-semibold text-[10px] tracking-[0.2em] uppercase text-white/30 hover:text-white transition-colors duration-200">info@perceptionmm.com</a>
+          </div>
+          <div class="flex items-center gap-3 mt-5">
+            <a href="https://www.facebook.com/PerceptionMultimedia/" target="_blank" rel="noopener noreferrer" aria-label="Facebook" class="w-8 h-8 flex items-center justify-center rounded-full border border-pmm-border text-white/30 hover:text-white hover:border-white/40 transition-colors duration-200">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+            </a>
+            <a href="https://www.linkedin.com/company/perception-multimedia-inc-/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" class="w-8 h-8 flex items-center justify-center rounded-full border border-pmm-border text-white/30 hover:text-white hover:border-white/40 transition-colors duration-200">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
+            </a>
+            <a href="https://www.instagram.com/perception_multimedia/" target="_blank" rel="noopener noreferrer" aria-label="Instagram" class="w-8 h-8 flex items-center justify-center rounded-full border border-pmm-border text-white/30 hover:text-white hover:border-white/40 transition-colors duration-200">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+            </a>
+            <a href="https://www.youtube.com/c/Perceptionmm" target="_blank" rel="noopener noreferrer" aria-label="YouTube" class="w-8 h-8 flex items-center justify-center rounded-full border border-pmm-border text-white/30 hover:text-white hover:border-white/40 transition-colors duration-200">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.95 1.96C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.96A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="#161616"/></svg>
+            </a>
+          </div>
+        </div>
+        <div>
+          <h4 class="font-heading font-semibold text-[10px] tracking-[0.25em] uppercase text-white/30 mb-5">Services</h4>
+          <ul class="space-y-2.5">
+            <li><a href="/services/video-production.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Video Production</a></li>
+            <li><a href="/services/website-design.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Website Design</a></li>
+            <li><a href="/services/social-media.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Social Media</a></li>
+            <li><a href="/services/email-campaigns.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Email Campaigns</a></li>
+            <li><a href="/services/search-marketing.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Search Marketing</a></li>
+            <li><a href="/services/graphic-design.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Branding &amp; Logo Design</a></li>
+            <li><a href="/services/photography.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Photography</a></li>
+            <li><a href="/services/traditional-media.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Traditional Media</a></li>
+            <li><a href="/services/google-business-profile.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Google Business Profile</a></li>
+            <li><a href="/services/reputation-management.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Reputation Management</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="font-heading font-semibold text-[10px] tracking-[0.25em] uppercase text-white/30 mb-5">Company</h4>
+          <ul class="space-y-2.5">
+            <li><a href="/about.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">About Us</a></li>
+            <li><a href="/clients/index.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Portfolio</a></li>
+            <li><a href="/services/index.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Services</a></li>
+            <li><a href="/contact.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Contact</a></li>
+            <li><a href="/philanthropy.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Philanthropy</a></li>
+            <li><a href="/blog/index.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Blog</a></li>
+            <li><a href="mailto:careers@perceptionmm.com" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Careers</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="border-t border-pmm-border pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <p class="font-body text-xs text-white/20">© 2026 Perception Multimedia Inc. All rights reserved.</p>
+        <p class="font-heading font-semibold text-[10px] tracking-[0.25em] uppercase text-white/15">Middleburg Heights, OH · perceptionmm.com</p>
+      </div>
+    </div>
+  </footer>
+<!-- FOOTER END -->
+
+</div><!-- /overflow-x-hidden -->
+
+<script>
+  /* ── Nav scroll state ── */
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('nav-scrolled', window.scrollY > 40);
+  }, { passive: true });
+  navbar.classList.toggle('nav-scrolled', window.scrollY > 40);
+
+  /* ── Mobile menu ── */
+  const menuToggle   = document.getElementById('menu-toggle');
+  const menuCloseBtn = document.getElementById('menu-close');
+  const mobileMenuEl = document.getElementById('mobile-menu');
+  window.closeMobileMenu = function () {
+    mobileMenuEl.classList.remove('flex');
+    mobileMenuEl.classList.add('hidden');
+  };
+  menuToggle.addEventListener('click', function () {
+    mobileMenuEl.classList.remove('hidden');
+    mobileMenuEl.classList.add('flex');
+  });
+  menuCloseBtn.addEventListener('click', window.closeMobileMenu);
+  window.toggleMobileServices = function () {
+    const list = document.getElementById('mobile-services-list');
+    const arrow = document.getElementById('mobile-svc-arrow');
+    const isOpen = list.classList.contains('flex');
+    list.classList.toggle('hidden', isOpen);
+    list.classList.toggle('flex', !isOpen);
+    arrow.style.transform = isOpen ? '' : 'rotate(180deg)';
+  };
+
+  /* ── Scroll reveal ── */
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('in-view');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.08 });
+
+  document.querySelectorAll('.case-card, .reveal').forEach(el => io.observe(el));
+
+  /* ── Service filters ── */
+  const filterBtns  = document.querySelectorAll('#service-filters .filter-btn');
+  const allCards    = document.querySelectorAll('.cases-grid .case-card');
+  const casesGrid   = document.querySelector('.cases-grid');
+
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', function () {
+      filterBtns.forEach(b => b.classList.remove('is-active'));
+      this.classList.add('is-active');
+
+      const filter = this.dataset.filter;
+
+      // Phase 1: instantly show matching cards; start fade-out on non-matching
+      allCards.forEach(card => {
+        const matches = filter === 'all' || (card.dataset.services || '').split(' ').includes(filter);
+        if (matches) {
+          card.classList.remove('filter-hidden', 'filter-hiding');
+        } else {
+          card.classList.remove('filter-hidden');
+          card.classList.add('filter-hiding');
+        }
+      });
+
+      // Phase 2: after fade-out completes, collapse to display:none → grid reflows
+      setTimeout(() => {
+        allCards.forEach(card => {
+          if (card.classList.contains('filter-hiding')) {
+            card.classList.add('filter-hidden');
+            card.classList.remove('filter-hiding');
+          }
+        });
+        const gridTop = casesGrid.getBoundingClientRect().top + window.scrollY - 90;
+        window.scrollTo({ top: gridTop, behavior: 'smooth' });
+      }, 200);
+    });
+  });
+</script>
+</body>
+</html>

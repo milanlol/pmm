@@ -1,0 +1,1046 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Photography — Perception Multimedia Inc.</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Josefin+Sans:ital,wght@0,300;0,400;0,600;0,700;1,300&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../styles.css">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'pmm-red':     '#E81B1E',
+            'pmm-black':   '#0A0A0A',
+            'pmm-dark':    '#111111',
+            'pmm-surface': '#161616',
+            'pmm-border':  '#222222',
+            'pmm-muted':   '#3A3A3A',
+            'pmm-white':   '#F4F4F0',
+            'pmm-cream':   '#EDECEA',
+            'pmm-gray':    '#5C5C5C',
+          },
+          fontFamily: {
+            'display': ['"Bebas Neue"', 'cursive'],
+            'heading': ['"Josefin Sans"', 'sans-serif'],
+            'body':    ['"DM Sans"', 'sans-serif'],
+          },
+        }
+      }
+    }
+  </script>
+  <style>
+    /* Hero entrance */
+    .hero-line {
+      opacity: 0;
+      transform: translateY(32px);
+      animation: heroUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    .hero-line:nth-child(1) { animation-delay: 0.05s; }
+    .hero-line:nth-child(2) { animation-delay: 0.18s; }
+    .hero-line:nth-child(3) { animation-delay: 0.30s; }
+    @keyframes heroUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Scroll reveal */
+    .reveal-up {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .reveal-up.in-view { opacity: 1; transform: translateY(0); }
+    .delay-1 { transition-delay: 0.07s; }
+    .delay-2 { transition-delay: 0.14s; }
+    .delay-3 { transition-delay: 0.21s; }
+    .delay-4 { transition-delay: 0.28s; }
+
+    /* Eyebrow rule */
+    .eyebrow-rule {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .eyebrow-rule::before {
+      content: '';
+      display: block;
+      width: 36px;
+      height: 2px;
+      background: var(--pmm-red);
+      flex-shrink: 0;
+    }
+
+    /* Hero portrait */
+    .hero-portrait {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      user-select: none;
+    }
+    .hero-portrait img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 20%;
+      display: block;
+      filter: brightness(0.75) saturate(0.85);
+    }
+
+    /* Capability cards */
+    .cap-card {
+      padding: 36px 32px;
+      background: #111111;
+      border-top: 1px solid #222;
+      transition: background 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .cap-card:hover { background: #161616; }
+    .cap-card:first-child { border-top: none; }
+    @media (min-width: 640px) {
+      .cap-card { border-top: none; border-left: 1px solid #222; }
+      .cap-card:nth-child(odd) { border-left: none; }
+    }
+    @media (min-width: 1024px) {
+      .cap-card { border-left: 1px solid #222; }
+      .cap-card:nth-child(4n+1) { border-left: none; }
+    }
+
+    /* Category filter tabs */
+    .cat-tab {
+      font-family: 'Josefin Sans', sans-serif;
+      font-weight: 600;
+      font-size: 10px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: rgba(244,244,240,0.35);
+      padding: 9px 16px;
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: color 0.2s ease, border-color 0.2s ease;
+      white-space: nowrap;
+      background: none;
+    }
+    .cat-tab:hover { color: rgba(244,244,240,0.7); }
+    .cat-tab.active {
+      color: #F4F4F0;
+      border-color: rgba(255,255,255,0.12);
+    }
+    .cat-tab.active::after {
+      content: '';
+      display: block;
+      width: 16px;
+      height: 2px;
+      background: var(--pmm-red);
+      margin: 5px auto 0;
+    }
+
+    /* Photo grid item */
+    .photo-item {
+      position: relative;
+      overflow: hidden;
+      background: #161616;
+      display: block;
+      cursor: pointer;
+    }
+    .photo-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      filter: brightness(0.88) saturate(0.9);
+      transition: transform 0.65s cubic-bezier(0.16, 1, 0.3, 1),
+                  filter 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .photo-item:hover img {
+      transform: scale(1.04);
+      filter: brightness(0.6) saturate(0.75);
+    }
+    .photo-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(10,10,10,0.65) 0%, transparent 55%);
+      pointer-events: none;
+    }
+    .photo-label {
+      position: absolute;
+      bottom: 14px;
+      left: 16px;
+      font-family: 'Josefin Sans', sans-serif;
+      font-weight: 600;
+      font-size: 10px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: rgba(244,244,240,0.9);
+      opacity: 0;
+      transform: translateY(5px);
+      transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      pointer-events: none;
+      z-index: 3;
+    }
+    .photo-item:hover .photo-label {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .photo-zoom-icon {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.7);
+      opacity: 0;
+      width: 44px;
+      height: 44px;
+      background: rgba(232,27,30,0.9);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.3s ease, transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 8px 32px rgba(232,27,30,0.35);
+      pointer-events: none;
+    }
+    .photo-item:hover .photo-zoom-icon {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
+    }
+
+    /* Hidden photo items */
+    .photo-item[data-hidden="true"] {
+      display: none;
+    }
+
+    /* Lightbox */
+    #lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 500;
+      background: rgba(0,0,0,0.95);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    #lightbox.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+    #lightbox-inner {
+      position: relative;
+      max-width: 1100px;
+      width: 100%;
+      transform: scale(0.96);
+      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    #lightbox.open #lightbox-inner { transform: scale(1); }
+    #lightbox-img {
+      width: 100%;
+      height: auto;
+      max-height: 82vh;
+      object-fit: contain;
+      display: block;
+      box-shadow: 0 0 0 1px rgba(255,255,255,0.05), 0 40px 100px rgba(0,0,0,0.9);
+    }
+    #lightbox-close {
+      position: absolute;
+      top: -44px;
+      right: 0;
+      background: none;
+      border: none;
+      color: rgba(244,244,240,0.45);
+      cursor: pointer;
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0;
+      transition: color 0.2s ease;
+    }
+    #lightbox-close:hover { color: #F4F4F0; }
+    #lightbox-caption {
+      margin-top: 14px;
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: rgba(244,244,240,0.3);
+      text-align: center;
+    }
+
+    /* CTA symbol */
+    .cta-symbol {
+      position: absolute;
+      right: -5%;
+      top: 50%;
+      transform: translateY(-50%);
+      height: 140%;
+      width: auto;
+      opacity: 0.06;
+      filter: invert(1);
+      pointer-events: none;
+      user-select: none;
+      object-fit: contain;
+    }
+  </style>
+</head>
+<body class="bg-pmm-black text-pmm-white font-body">
+<div class="overflow-x-hidden">
+
+  <!-- GRAIN OVERLAY -->
+  <div class="grain-overlay" aria-hidden="true"></div>
+
+  <!-- NAV START -->
+  <!-- NAV -->
+  <nav id="navbar" class="fixed top-0 left-0 right-0 z-50">
+    <div class="max-w-7xl mx-auto px-6 lg:px-10 h-20 flex items-center justify-between">
+      <a href="/index.html" class="flex-shrink-0">
+        <img src="/brand_assets/PMM-Logo-white.png" alt="Perception Multimedia" class="h-11 w-auto">
+      </a>
+      <div class="hidden md:flex items-center gap-8">
+        <a href="/index.html" class="nav-link font-heading font-semibold text-xs tracking-[0.2em] uppercase text-white/60 hover:text-white transition-colors duration-200">Home</a>
+        <a href="/about.html" class="nav-link font-heading font-semibold text-xs tracking-[0.2em] uppercase text-white/60 hover:text-white transition-colors duration-200">About</a>
+        <div class="nav-dropdown-wrapper">
+          <a href="/services/index.html" class="nav-link nav-active font-heading font-semibold text-xs tracking-[0.2em] uppercase transition-colors duration-200 flex items-center gap-1.5">Services <svg class="nav-chevron-icon" width="8" height="5" viewBox="0 0 8 5" fill="none"><path d="M1 1l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+          <div class="nav-dropdown">
+            <a href="/services/video-production.html" class="nav-dropdown-item">Video Production</a>
+            <a href="/services/website-design.html" class="nav-dropdown-item">Website Design</a>
+            <a href="/services/social-media.html" class="nav-dropdown-item">Social Media</a>
+            <a href="/services/email-campaigns.html" class="nav-dropdown-item">Email Campaigns</a>
+            <a href="/services/photography.html" class="nav-dropdown-item active">Photography</a>
+            <a href="/services/search-marketing.html" class="nav-dropdown-item">Search Marketing</a>
+            <a href="/services/graphic-design.html" class="nav-dropdown-item">Branding &amp; Logo Design</a>
+            <a href="/services/traditional-media.html" class="nav-dropdown-item">Traditional Media</a>
+            <a href="/services/google-business-profile.html" class="nav-dropdown-item">Google Business Profile</a>
+            <a href="/services/reputation-management.html" class="nav-dropdown-item">Reputation Management</a>
+          </div>
+        </div>
+        <a href="/clients/index.html" class="nav-link font-heading font-semibold text-xs tracking-[0.2em] uppercase text-white/60 hover:text-white transition-colors duration-200">Work</a>
+        <a href="/philanthropy.html" class="nav-link font-heading font-semibold text-xs tracking-[0.2em] uppercase text-white/60 hover:text-white transition-colors duration-200">Philanthropy</a>
+        <a href="/contact.html" class="nav-cta-btn font-heading font-bold text-xs tracking-[0.2em] uppercase px-6 py-3 bg-pmm-red text-white hover:bg-red-700 transition-colors duration-200">Contact</a>
+      </div>
+      <button id="menu-toggle" class="md:hidden text-white p-2 focus:outline-none" aria-label="Open menu">
+        <svg width="22" height="16" viewBox="0 0 22 16" fill="none">
+          <line x1="0" y1="1"  x2="22" y2="1"  stroke="currentColor" stroke-width="2"/>
+          <line x1="0" y1="8"  x2="22" y2="8"  stroke="currentColor" stroke-width="2"/>
+          <line x1="0" y1="15" x2="22" y2="15" stroke="currentColor" stroke-width="2"/>
+        </svg>
+      </button>
+    </div>
+  </nav>
+
+  <!-- MOBILE MENU -->
+  <div id="mobile-menu" class="fixed inset-0 z-[60] bg-pmm-black hidden flex-col items-center justify-center">
+    <button id="menu-close" class="absolute top-6 right-6 text-white/40 hover:text-white" aria-label="Close menu">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+      </svg>
+    </button>
+    <nav class="flex flex-col items-center gap-5 text-center">
+      <a href="/index.html" onclick="closeMobileMenu()" class="font-display text-5xl text-white hover:text-pmm-red transition-colors duration-200">HOME</a>
+      <a href="/about.html" onclick="closeMobileMenu()" class="font-display text-5xl text-white hover:text-pmm-red transition-colors duration-200">ABOUT</a>
+      <div class="flex flex-col items-center gap-2">
+        <button onclick="toggleMobileServices()" class="font-display text-5xl text-white hover:text-pmm-red flex items-center gap-3 bg-transparent border-none cursor-pointer">SERVICES <span id="mobile-svc-arrow" style="font-size:1.4rem;line-height:1;display:inline-block;transition:transform 0.25s cubic-bezier(0.16,1,0.3,1);">↓</span></button>
+        <div id="mobile-services-list" class="hidden flex-col items-center gap-1 mt-3">
+          <a href="/services/video-production.html" onclick="closeMobileMenu()" class="font-heading font-semibold text-sm tracking-[0.18em] uppercase text-white/50 hover:text-pmm-red transition-colors duration-200 py-2.5 px-6">Video Production</a>
+          <a href="/services/website-design.html" onclick="closeMobileMenu()" class="font-heading font-semibold text-sm tracking-[0.18em] uppercase text-white/50 hover:text-pmm-red transition-colors duration-200 py-2.5 px-6">Website Design</a>
+          <a href="/services/social-media.html" onclick="closeMobileMenu()" class="font-heading font-semibold text-sm tracking-[0.18em] uppercase text-white/50 hover:text-pmm-red transition-colors duration-200 py-2.5 px-6">Social Media</a>
+          <a href="/services/email-campaigns.html" onclick="closeMobileMenu()" class="font-heading font-semibold text-sm tracking-[0.18em] uppercase text-white/50 hover:text-pmm-red transition-colors duration-200 py-2.5 px-6">Email Campaigns</a>
+          <a href="/services/photography.html" onclick="closeMobileMenu()" class="font-heading font-semibold text-sm tracking-[0.18em] uppercase text-white/50 hover:text-pmm-red transition-colors duration-200 py-2.5 px-6">Photography</a>
+          <a href="/services/search-marketing.html" onclick="closeMobileMenu()" class="font-heading font-semibold text-sm tracking-[0.18em] uppercase text-white/50 hover:text-pmm-red transition-colors duration-200 py-2.5 px-6">Search Marketing</a>
+          <a href="/services/graphic-design.html" onclick="closeMobileMenu()" class="font-heading font-semibold text-sm tracking-[0.18em] uppercase text-white/50 hover:text-pmm-red transition-colors duration-200 py-2.5 px-6">Branding &amp; Logo Design</a>
+          <a href="/services/traditional-media.html" onclick="closeMobileMenu()" class="font-heading font-semibold text-sm tracking-[0.18em] uppercase text-white/50 hover:text-pmm-red transition-colors duration-200 py-2.5 px-6">Traditional Media</a>
+          <a href="/services/google-business-profile.html" onclick="closeMobileMenu()" class="font-heading font-semibold text-sm tracking-[0.18em] uppercase text-white/50 hover:text-pmm-red transition-colors duration-200 py-2.5 px-6">Google Business Profile</a>
+          <a href="/services/reputation-management.html" onclick="closeMobileMenu()" class="font-heading font-semibold text-sm tracking-[0.18em] uppercase text-white/50 hover:text-pmm-red transition-colors duration-200 py-2.5 px-6">Reputation Management</a>
+        </div>
+      </div>
+      <a href="/clients/index.html" onclick="closeMobileMenu()" class="font-display text-5xl text-white hover:text-pmm-red transition-colors duration-200">WORK</a>
+      <a href="/philanthropy.html" onclick="closeMobileMenu()" class="font-display text-5xl text-white hover:text-pmm-red transition-colors duration-200">PHILANTHROPY</a>
+      <a href="/contact.html" onclick="closeMobileMenu()" class="font-display text-5xl text-pmm-red">CONTACT</a>
+    </nav>
+    <div class="absolute bottom-10 font-heading text-xs tracking-[0.25em] uppercase text-white/20">440.340.1115</div>
+  </div>
+<!-- NAV END -->
+
+  <!-- ===== HERO ===== -->
+  <section class="relative overflow-hidden" style="min-height: 100vh; display: flex; flex-direction: column; justify-content: flex-end;">
+
+    <!-- Portrait (full-width background) -->
+    <div class="hero-portrait" aria-hidden="true">
+      <img src="../brand_assets/clients/photography/events/Obama.jpg" alt="">
+    </div>
+
+    <!-- Dark gradient overlay -->
+    <div class="absolute inset-0 pointer-events-none" style="z-index: 1;
+         background: linear-gradient(to bottom,
+           rgba(10,10,10,0.55) 0%,
+           rgba(10,10,10,0.42) 35%,
+           rgba(10,10,10,0.82) 70%,
+           rgba(10,10,10,0.97) 100%);"></div>
+
+    <!-- Red atmosphere -->
+    <div class="absolute inset-0 pointer-events-none" style="z-index: 2;
+         background: radial-gradient(ellipse 55% 45% at 10% 20%, rgba(232,27,30,0.1) 0%, transparent 65%);"></div>
+
+    <!-- Text content -->
+    <div class="relative max-w-7xl mx-auto px-6 lg:px-10 w-full pb-20 pt-40" style="z-index: 4;">
+      <div class="hero-line eyebrow-rule">
+        <span class="font-heading font-semibold text-pmm-red text-xs tracking-[0.3em] uppercase">Services &middot; Perception Multimedia</span>
+      </div>
+      <h1 class="hero-line font-display text-pmm-white leading-[0.86] tracking-[0.02em] mb-8"
+          style="font-size: clamp(4.5rem, 11vw, 11rem); text-shadow: 0 4px 40px rgba(0,0,0,0.6);">
+        Photography
+      </h1>
+      <p class="hero-line font-body leading-[1.8] max-w-lg"
+         style="font-size: clamp(0.95rem, 1.35vw, 1.1rem); color: rgba(244,244,240,0.65);">
+        Images that stop the scroll. From architectural exteriors to executive portraits, product flats to event coverage — we capture every subject with intention, craft, and clarity. Serving clients across Cleveland and Northeast Ohio.
+      </p>
+    </div>
+
+    <!-- Bottom border -->
+    <div class="absolute bottom-0 left-0 right-0 h-px" style="z-index: 4; background: rgba(255,255,255,0.07);"></div>
+  </section>
+
+  <!-- RED MARQUEE STRIP -->
+  <div class="bg-pmm-red py-3 overflow-hidden" aria-hidden="true">
+    <div class="marquee-track">
+      <div class="marquee-inner font-heading font-bold text-[11px] tracking-[0.25em] uppercase text-white">
+        <span>Architecture</span><span class="marquee-dot">&middot;</span>
+        <span>Corporate</span><span class="marquee-dot">&middot;</span>
+        <span>Creative</span><span class="marquee-dot">&middot;</span>
+        <span>Events</span><span class="marquee-dot">&middot;</span>
+        <span>Life Style</span><span class="marquee-dot">&middot;</span>
+        <span>People</span><span class="marquee-dot">&middot;</span>
+        <span>Products</span><span class="marquee-dot">&middot;</span>
+        <span>Architecture</span><span class="marquee-dot">&middot;</span>
+        <span>Corporate</span><span class="marquee-dot">&middot;</span>
+        <span>Creative</span><span class="marquee-dot">&middot;</span>
+        <span>Events</span><span class="marquee-dot">&middot;</span>
+        <span>Life Style</span><span class="marquee-dot">&middot;</span>
+        <span>People</span><span class="marquee-dot">&middot;</span>
+        <span>Products</span><span class="marquee-dot">&middot;</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== CAPABILITIES ===== -->
+  <section class="py-20 lg:py-28 border-b border-pmm-border" style="background: #111111;">
+    <div class="max-w-7xl mx-auto px-6 lg:px-10">
+
+      <div class="mb-14 reveal-up">
+        <div class="eyebrow-rule">
+          <span class="font-heading font-semibold text-[10px] tracking-[0.3em] uppercase text-pmm-red">What We Shoot</span>
+        </div>
+        <h2 class="font-display text-pmm-white leading-[0.9] tracking-[0.01em]"
+            style="font-size: clamp(2.5rem, 5vw, 4.5rem);">
+          Every Subject.<br>Every Setting.
+        </h2>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 border border-pmm-border">
+
+        <div class="cap-card reveal-up">
+          <div class="mb-5">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#E81B1E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+              <polyline points="9 22 9 12 15 12 15 22"/>
+            </svg>
+          </div>
+          <h3 class="font-heading font-bold text-sm tracking-[0.06em] uppercase text-pmm-white mb-3">Architecture</h3>
+          <p class="font-body text-sm leading-[1.8] text-white/45">
+            Exteriors, interiors, and detail photography that showcases the design intent and scale of spaces — built for real estate, marketing, and editorial use.
+          </p>
+        </div>
+
+        <div class="cap-card reveal-up delay-1">
+          <div class="mb-5">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#E81B1E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="7" width="20" height="14" rx="2"/>
+              <path d="M16 2H8l-2 5h12z"/>
+            </svg>
+          </div>
+          <h3 class="font-heading font-bold text-sm tracking-[0.06em] uppercase text-pmm-white mb-3">Corporate</h3>
+          <p class="font-body text-sm leading-[1.8] text-white/45">
+            Executive headshots, team photos, on-site environmental portraits, and office documentation that builds trust and professional authority.
+          </p>
+        </div>
+
+        <div class="cap-card reveal-up delay-2">
+          <div class="mb-5">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#E81B1E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M8 14s1.5 2 4 2 4-2 4-2"/>
+              <line x1="9" y1="9" x2="9.01" y2="9"/>
+              <line x1="15" y1="9" x2="15.01" y2="9"/>
+            </svg>
+          </div>
+          <h3 class="font-heading font-bold text-sm tracking-[0.06em] uppercase text-pmm-white mb-3">Creative</h3>
+          <p class="font-body text-sm leading-[1.8] text-white/45">
+            Conceptual and branded imagery for campaigns, packaging, social content, and editorial storytelling that pushes beyond the ordinary.
+          </p>
+        </div>
+
+        <div class="cap-card reveal-up delay-3">
+          <div class="mb-5">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#E81B1E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+              <circle cx="9" cy="7" r="4"/>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+            </svg>
+          </div>
+          <h3 class="font-heading font-bold text-sm tracking-[0.06em] uppercase text-pmm-white mb-3">Events</h3>
+          <p class="font-body text-sm leading-[1.8] text-white/45">
+            Conferences, galas, sporting events, and community moments — candid and staged coverage that captures energy, atmosphere, and key moments.
+          </p>
+        </div>
+
+        <div class="cap-card reveal-up">
+          <div class="mb-5">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#E81B1E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            </svg>
+          </div>
+          <h3 class="font-heading font-bold text-sm tracking-[0.06em] uppercase text-pmm-white mb-3">Life Style</h3>
+          <p class="font-body text-sm leading-[1.8] text-white/45">
+            Authentic, scene-driven imagery showing real people living with your brand — shot in natural light with an editorial eye for warmth and relatability.
+          </p>
+        </div>
+
+        <div class="cap-card reveal-up delay-1">
+          <div class="mb-5">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#E81B1E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+              <circle cx="12" cy="7" r="4"/>
+            </svg>
+          </div>
+          <h3 class="font-heading font-bold text-sm tracking-[0.06em] uppercase text-pmm-white mb-3">People</h3>
+          <p class="font-body text-sm leading-[1.8] text-white/45">
+            Portraits that convey character — polished yet approachable, from individual executive headshots to full-team photography at any scale.
+          </p>
+        </div>
+
+        <div class="cap-card reveal-up delay-2">
+          <div class="mb-5">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#E81B1E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+              <line x1="3" y1="6" x2="21" y2="6"/>
+              <path d="M16 10a4 4 0 0 1-8 0"/>
+            </svg>
+          </div>
+          <h3 class="font-heading font-bold text-sm tracking-[0.06em] uppercase text-pmm-white mb-3">Products</h3>
+          <p class="font-body text-sm leading-[1.8] text-white/45">
+            Studio and on-location product photography — clean flats, dynamic angles, and contextual in-use shots optimized for e-commerce, print, and advertising.
+          </p>
+        </div>
+
+        <!-- Stat callout card -->
+        <div class="cap-card reveal-up delay-3 flex flex-col justify-between" style="background: #0A0A0A;">
+          <div>
+            <p class="font-display text-pmm-red leading-none mb-3" style="font-size: clamp(3rem, 5vw, 4rem);">20+</p>
+            <p class="font-heading font-semibold text-xs tracking-[0.15em] uppercase text-white/35 mb-6">Years of Experience</p>
+            <p class="font-body text-sm text-white/40 leading-[1.75]">Serving Northeast Ohio businesses and national brands with consistent, high-quality imagery since 2003.</p>
+          </div>
+          <a href="../index.html#contact"
+             class="inline-flex items-center gap-2 mt-8 font-heading font-bold text-[10px] tracking-[0.22em] uppercase text-pmm-red hover:text-white transition-colors duration-200">
+            Book a Shoot
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== PORTFOLIO GALLERY ===== -->
+  <section class="py-20 lg:py-28 bg-pmm-black">
+    <div class="max-w-7xl mx-auto px-6 lg:px-10">
+
+      <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-6 mb-12 reveal-up">
+        <div>
+          <div class="eyebrow-rule">
+            <span class="font-heading font-semibold text-[10px] tracking-[0.3em] uppercase text-pmm-red">Selected Work</span>
+          </div>
+          <h2 class="font-display text-pmm-white leading-[0.9] tracking-[0.01em]"
+              style="font-size: clamp(2.5rem, 5vw, 4.5rem);">
+            Shot for Brands<br>That Demand More
+          </h2>
+        </div>
+        <p class="font-body text-sm text-white/35 leading-[1.75] max-w-xs sm:text-right pb-1">
+          Click any image to enlarge. Filter by category below.
+        </p>
+      </div>
+
+      <!-- Category tabs -->
+      <div class="flex flex-wrap gap-1 mb-8 reveal-up" id="cat-tabs" role="tablist">
+        <button class="cat-tab active" data-cat="all"           role="tab" aria-selected="true">All</button>
+        <button class="cat-tab"        data-cat="architecture"  role="tab" aria-selected="false">Architecture</button>
+        <button class="cat-tab"        data-cat="corporate"     role="tab" aria-selected="false">Corporate</button>
+        <button class="cat-tab"        data-cat="creative"      role="tab" aria-selected="false">Creative</button>
+        <button class="cat-tab"        data-cat="events"        role="tab" aria-selected="false">Events</button>
+        <button class="cat-tab"        data-cat="lifestyle"     role="tab" aria-selected="false">Life Style</button>
+        <button class="cat-tab"        data-cat="people"        role="tab" aria-selected="false">People</button>
+        <button class="cat-tab"        data-cat="products"      role="tab" aria-selected="false">Products</button>
+      </div>
+
+      <!-- Photo grid -->
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-1" id="photo-grid">
+
+        <!-- ARCHITECTURE (7) -->
+        <div class="photo-item aspect-[4/3] reveal-up" data-cat="architecture" data-label="Southwest General" onclick="openLightbox(this)">
+          <img src="../brand_assets/clients/photography/architecture/Architecture-SWG.jpg" alt="Southwest General — Architecture" loading="lazy">
+          <div class="photo-overlay"></div><span class="photo-label">Southwest General</span>
+          <div class="photo-zoom-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg></div>
+        </div>
+        <div class="photo-item aspect-[4/3] reveal-up delay-1" data-cat="architecture" data-label="Architecture" onclick="openLightbox(this)">
+          <img src="../brand_assets/clients/photography/architecture/Architecture-Arizona.jpg" alt="Architecture" loading="lazy">
+          <div class="photo-overlay"></div><span class="photo-label">Architecture</span>
+          <div class="photo-zoom-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg></div>
+        </div>
+        <div class="photo-item aspect-[4/3] reveal-up delay-2" data-cat="architecture" data-label="Interior — Kitchen" onclick="openLightbox(this)">
+          <img src="../brand_assets/clients/photography/architecture/Architecture-Kitchen.jpg" alt="Interior Kitchen" loading="lazy">
+          <div class="photo-overlay"></div><span class="photo-label">Interior — Kitchen</span>
+          <div class="photo-zoom-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg></div>
+        </div>
+        <div class="photo-item aspect-[4/3] reveal-up delay-3" data-cat="architecture" data-label="Interior — Bedroom" onclick="openLightbox(this)">
+          <img src="../brand_assets/clients/photography/architecture/Architecture-Bedroom.jpg" alt="Interior Bedroom" loading="lazy">
+          <div class="photo-overlay"></div><span class="photo-label">Interior — Bedroom</span>
+          <div class="photo-zoom-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg></div>
+        </div>
+        <div class="photo-item aspect-[4/3] reveal-up" data-cat="architecture" data-label="Redwood Living" onclick="openLightbox(this)">
+          <img src="../brand_assets/clients/photography/architecture/Redwood-Living-Outside.jpg" alt="Redwood Living — Exterior" loading="lazy">
+          <div class="photo-overlay"></div><span class="photo-label">Redwood Living</span>
+          <div class="photo-zoom-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg></div>
+        </div>
+        <div class="photo-item aspect-[4/3] reveal-up delay-1" data-cat="architecture" data-label="Redwood Living" onclick="openLightbox(this)">
+          <img src="../brand_assets/clients/photography/architecture/Redwood-Living.jpg" alt="Redwood Living" loading="lazy">
+          <div class="photo-overlay"></div><span class="photo-label">Redwood Living</span>
+          <div class="photo-zoom-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg></div>
+        </div>
+        <div class="photo-item aspect-[4/3] reveal-up delay-2" data-cat="architecture" data-label="Bob Evans Farms" onclick="openLightbox(this)">
+          <img src="../brand_assets/clients/photography/architecture/Bob-Evans-Farms2.jpg" alt="Bob Evans Farms" loading="lazy">
+          <div class="photo-overlay"></div><span class="photo-label">Bob Evans Farms</span>
+          <div class="photo-zoom-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg></div>
+        </div>
+
+        <!-- CORPORATE (8) -->
+        <div class="photo-item aspect-[4/3] reveal-up delay-3" data-cat="corporate" data-label="NPA Coatings" onclick="openLightbox(this)">
+          <img src="../brand_assets/clients/photography/corporate/Corporate-NPA.jpg" alt="Corporate NPA" loading="lazy">
+          <div class="photo-overlay"></div><span class="photo-label">NPA Coatings</span>
+          <div class="photo-zoom-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg></div>
+        </div>
+        <div class="photo-item aspect-[4/3] reveal-up" data-cat="corporate" data-label="Redwood Living" onclick="openLightbox(this)">
+          <img src="../brand_assets/clients/photography/corporate/Corporate-Redwood.jpg" alt="Corporate Redwood" loading="lazy">
+          <div class="photo-overlay"></div><span class="photo-label">Redwood Living</span>
+          <div class="photo-zoom-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg></div>
+        </div>
+        <div class="photo-item aspect-[4/3] reveal-up delay-1" data-cat="corporate" data-label="NPA Coatings" onclick="openLightbox(this)">
+          <img src="../brand_assets/clients/photography/corporate/NPA-Coatings.jpg" alt="NPA Coatings" loading="lazy">
+          <div class="photo-overlay"></div><span class="photo-label">NPA Coatings</span>
+          <div class="photo-zoom-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg></div>
+        </div>
+        <div class="photo-item aspect-[4/3] reveal-up delay-2" data-cat="corporate" data-label="NPA Coatings" onclick="openLightbox(this)">
+          <img src="../brand_assets/clients/photography/corporate/NPA-Coatings2.jpg" alt="NPA Coatings" loading="lazy">
+          <div class="photo-overlay"></div><span class="photo-label">NPA Coatings</span>
+          <div class="photo-zoom-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg></div>
+        </div>
+        <div class="photo-item aspect-[4/3] reveal-up delay-3" data-cat="corporate" data-label="NPA Coatings" onclick="openLightbox(this)">
+          <img src="../brand_assets/clients/photography/corporate/NPA-Coatings3.jpg" alt="NPA Coatings" loading="lazy">
+          <div class="photo-overlay"></div><span class="photo-label">NPA Coatings</span>
+          <div class="photo-zoom-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg></div>
+        </div>
+        <div class="photo-item aspect-[4/3] reveal-up" data-cat="corporate" data-label="NPA Coatings" onclick="openLightbox(this)">
+          <img src="../brand_assets/clients/photography/corporate/NPA-Coatings4.jpg" alt="NPA Coatings" loading="lazy">
+          <div class="photo-overlay"></div><span class="photo-label">NPA Coatings</span>
+          <div class="photo-zoom-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg></div>
+        </div>
+        <div class="photo-item aspect-[4/3] reveal-up delay-1" data-cat="corporate" data-label="NPA Coatings" onclick="openLightbox(this)">
+          <img src="../brand_assets/clients/photography/corporate/NPA-Coatings5.jpg" alt="NPA Coatings" loading="lazy">
+          <div class="photo-overlay"></div><span class="photo-label">NPA Coatings</span>
+          <div class="photo-zoom-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg></div>
+        </div>
+        <div class="photo-item aspect-[4/3] reveal-up delay-2" data-cat="corporate" data-label="Group Photo" onclick="openLightbox(this)">
+          <img src="../brand_assets/clients/photography/corporate/Group_35-crop2.jpg" alt="Group Photo" loading="lazy">
+          <div class="photo-overlay"></div><span class="photo-label">Group Photo</span>
+          <div class="photo-zoom-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg></div>
+        </div>
+
+        <!-- CREATIVE (4) -->
+        <div class="photo-item aspect-[4/3] reveal-up delay-3" data-cat="creative" data-label="Creative" onclick="openLightbox(this)">
+          <img src="../brand_assets/clients/photography/creative/P1019355.jpg" alt="Creative" loading="lazy">
+          <div class="photo-overlay"></div><span class="photo-label">Creative</span>
+          <div class="photo-zoom-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg></div>
+        </div>
+        <div class="photo-item aspect-[4/3] reveal-up" data-cat="creative" data-label="Creative" onclick="openLightbox(this)">
+          <img src="../brand_assets/clients/photography/creative/P1020228.jpg" alt="Creative" loading="lazy">
+          <div class="photo-overlay"></div><span class="photo-label">Creative</span>
+          <div class="photo-zoom-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg></div>
+        </div>
+        <div class="photo-item aspect-[4/3] reveal-up delay-1" data-cat="creative" data-label="Creative" onclick="openLightbox(this)">
+          <img src="../brand_assets/clients/photography/creative/P1020233.jpg" alt="Creative" loading="lazy">
+          <div class="photo-overlay"></div><span class="photo-label">Creative</span>
+          <div class="photo-zoom-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg></div>
+        </div>
+        <div class="photo-item aspect-[4/3] reveal-up delay-2" data-cat="creative" data-label="Creative" onclick="openLightbox(this)">
+          <img src="../brand_assets/clients/photography/creative/P1020287.jpg" alt="Creative" loading="lazy">
+          <div class="photo-overlay"></div><span class="photo-label">Creative</span>
+          <div class="photo-zoom-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg></div>
+        </div>
+
+        <!-- EVENTS (3) -->
+        <div class="photo-item aspect-[4/3] reveal-up delay-2" data-cat="events" data-label="Cleveland Indians" onclick="openLightbox(this)">
+          <img src="../brand_assets/clients/photography/events/Cleveland-Indians.jpg" alt="Cleveland Indians" loading="lazy">
+          <div class="photo-overlay"></div><span class="photo-label">Cleveland Indians</span>
+          <div class="photo-zoom-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg></div>
+        </div>
+        <div class="photo-item aspect-[4/3] reveal-up delay-3" data-cat="events" data-label="Portrait" onclick="openLightbox(this)">
+          <img src="../brand_assets/clients/photography/events/Obama.jpg" alt="Portrait" loading="lazy">
+          <div class="photo-overlay"></div><span class="photo-label">Portrait</span>
+          <div class="photo-zoom-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg></div>
+        </div>
+        <div class="photo-item aspect-[4/3] reveal-up" data-cat="events" data-label="Redwood Living" onclick="openLightbox(this)">
+          <img src="../brand_assets/clients/photography/events/Redwood-Living-Event.jpg" alt="Redwood Living Event" loading="lazy">
+          <div class="photo-overlay"></div><span class="photo-label">Redwood Living</span>
+          <div class="photo-zoom-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg></div>
+        </div>
+
+        <!-- LIFESTYLE (2) -->
+        <div class="photo-item aspect-[4/3] reveal-up delay-3" data-cat="lifestyle" data-label="Life Style" onclick="openLightbox(this)">
+          <img src="../brand_assets/clients/photography/lifestyle/HD-750.jpg" alt="Life Style" loading="lazy">
+          <div class="photo-overlay"></div><span class="photo-label">Life Style</span>
+          <div class="photo-zoom-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg></div>
+        </div>
+        <div class="photo-item aspect-[4/3] reveal-up" data-cat="lifestyle" data-label="Life Style" onclick="openLightbox(this)">
+          <img src="../brand_assets/clients/photography/lifestyle/HD-758.jpg" alt="Life Style" loading="lazy">
+          <div class="photo-overlay"></div><span class="photo-label">Life Style</span>
+          <div class="photo-zoom-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg></div>
+        </div>
+
+        <!-- PEOPLE (9) -->
+        <div class="photo-item aspect-[4/3] reveal-up delay-1" data-cat="people" data-label="Celloram" onclick="openLightbox(this)">
+          <img src="../brand_assets/clients/photography/people/Celloram_01.jpg" alt="Celloram" loading="lazy">
+          <div class="photo-overlay"></div><span class="photo-label">Celloram</span>
+          <div class="photo-zoom-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg></div>
+        </div>
+        <div class="photo-item aspect-[4/3] reveal-up delay-2" data-cat="people" data-label="Celloram" onclick="openLightbox(this)">
+          <img src="../brand_assets/clients/photography/people/Celloram_03.jpg" alt="Celloram" loading="lazy">
+          <div class="photo-overlay"></div><span class="photo-label">Celloram</span>
+          <div class="photo-zoom-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg></div>
+        </div>
+        <div class="photo-item aspect-[4/3] reveal-up delay-3" data-cat="people" data-label="Corporate Portrait" onclick="openLightbox(this)">
+          <img src="../brand_assets/clients/photography/people/Corporate-Jerry.jpg" alt="Corporate Portrait" loading="lazy">
+          <div class="photo-overlay"></div><span class="photo-label">Corporate Portrait</span>
+          <div class="photo-zoom-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg></div>
+        </div>
+        <div class="photo-item aspect-[4/3] reveal-up" data-cat="people" data-label="Portrait" onclick="openLightbox(this)">
+          <img src="../brand_assets/clients/photography/people/HD-717.jpg" alt="Portrait" loading="lazy">
+          <div class="photo-overlay"></div><span class="photo-label">Portrait</span>
+          <div class="photo-zoom-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg></div>
+        </div>
+        <div class="photo-item aspect-[4/3] reveal-up delay-1" data-cat="people" data-label="Portrait" onclick="openLightbox(this)">
+          <img src="../brand_assets/clients/photography/people/HD-722.jpg" alt="Portrait" loading="lazy">
+          <div class="photo-overlay"></div><span class="photo-label">Portrait</span>
+          <div class="photo-zoom-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg></div>
+        </div>
+        <div class="photo-item aspect-[4/3] reveal-up delay-2" data-cat="people" data-label="Portrait" onclick="openLightbox(this)">
+          <img src="../brand_assets/clients/photography/people/HD-740.jpg" alt="Portrait" loading="lazy">
+          <div class="photo-overlay"></div><span class="photo-label">Portrait</span>
+          <div class="photo-zoom-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg></div>
+        </div>
+        <div class="photo-item aspect-[4/3] reveal-up delay-3" data-cat="people" data-label="Southwest General — Dr. Punjabi" onclick="openLightbox(this)">
+          <img src="../brand_assets/clients/SWG/Dr-Punjabi.jpg" alt="Dr. Punjabi — Southwest General" loading="lazy">
+          <div class="photo-overlay"></div><span class="photo-label">Dr. Punjabi</span>
+          <div class="photo-zoom-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg></div>
+        </div>
+        <div class="photo-item aspect-[4/3] reveal-up" data-cat="people" data-label="Southwest General — Dr. Alton" onclick="openLightbox(this)">
+          <img src="../brand_assets/clients/SWG/John-Alton-MD-68.jpg" alt="Dr. John Alton — Southwest General" loading="lazy">
+          <div class="photo-overlay"></div><span class="photo-label">Dr. John Alton</span>
+          <div class="photo-zoom-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg></div>
+        </div>
+        <div class="photo-item aspect-[4/3] reveal-up delay-2" data-cat="people" data-label="Southwest General — Staff" onclick="openLightbox(this)">
+          <img src="../brand_assets/clients/SWG/Eddie_Saliba_CNP_3414-.jpg" alt="Southwest General Staff" loading="lazy">
+          <div class="photo-overlay"></div><span class="photo-label">Southwest General</span>
+          <div class="photo-zoom-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg></div>
+        </div>
+        <div class="photo-item aspect-[4/3] reveal-up delay-3" data-cat="people" data-label="Southwest General — Staff" onclick="openLightbox(this)">
+          <img src="../brand_assets/clients/SWG/Jacqui_Stachowiak_CNP_3418-.jpg" alt="Southwest General Staff" loading="lazy">
+          <div class="photo-overlay"></div><span class="photo-label">Southwest General</span>
+          <div class="photo-zoom-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg></div>
+        </div>
+        <!-- PRODUCTS (8) -->
+        <div class="photo-item aspect-[4/3] reveal-up" data-cat="products" data-label="Product Photography" onclick="openLightbox(this)">
+          <img src="../brand_assets/clients/photography/products/Product-Hair.jpg" alt="Product — Hair" loading="lazy">
+          <div class="photo-overlay"></div><span class="photo-label">Product Photography</span>
+          <div class="photo-zoom-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg></div>
+        </div>
+        <div class="photo-item aspect-[4/3] reveal-up delay-1" data-cat="products" data-label="Product Photography" onclick="openLightbox(this)">
+          <img src="../brand_assets/clients/photography/products/Product-Hair2.jpg" alt="Product — Hair 2" loading="lazy">
+          <div class="photo-overlay"></div><span class="photo-label">Product Photography</span>
+          <div class="photo-zoom-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg></div>
+        </div>
+        <div class="photo-item aspect-[4/3] reveal-up delay-2" data-cat="products" data-label="Product — Pottery" onclick="openLightbox(this)">
+          <img src="../brand_assets/clients/photography/products/Product-pottery.jpg" alt="Product — Pottery" loading="lazy">
+          <div class="photo-overlay"></div><span class="photo-label">Product — Pottery</span>
+          <div class="photo-zoom-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg></div>
+        </div>
+        <div class="photo-item aspect-[4/3] reveal-up delay-3" data-cat="products" data-label="Product — Spray" onclick="openLightbox(this)">
+          <img src="../brand_assets/clients/photography/products/Product-spray.jpg" alt="Product — Spray" loading="lazy">
+          <div class="photo-overlay"></div><span class="photo-label">Product — Spray</span>
+          <div class="photo-zoom-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg></div>
+        </div>
+        <div class="photo-item aspect-[4/3] reveal-up" data-cat="products" data-label="Boxing Gloves" onclick="openLightbox(this)">
+          <img src="../brand_assets/clients/photography/products/Product-boxing-gloves.jpg" alt="Product — Boxing Gloves" loading="lazy">
+          <div class="photo-overlay"></div><span class="photo-label">Boxing Gloves</span>
+          <div class="photo-zoom-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg></div>
+        </div>
+        <div class="photo-item aspect-[4/3] reveal-up delay-1" data-cat="products" data-label="Lyman Hat" onclick="openLightbox(this)">
+          <img src="../brand_assets/clients/photography/products/Product-lyman-hat.jpg" alt="Product — Lyman Hat" loading="lazy">
+          <div class="photo-overlay"></div><span class="photo-label">Lyman Hat</span>
+          <div class="photo-zoom-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg></div>
+        </div>
+        <div class="photo-item aspect-[4/3] reveal-up delay-2" data-cat="products" data-label="Product Photography" onclick="openLightbox(this)">
+          <img src="../brand_assets/clients/photography/products/Product-HND.jpg" alt="Product — HND" loading="lazy">
+          <div class="photo-overlay"></div><span class="photo-label">Product Photography</span>
+          <div class="photo-zoom-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg></div>
+        </div>
+        <div class="photo-item aspect-[4/3] reveal-up delay-3" data-cat="products" data-label="Fat Head's" onclick="openLightbox(this)">
+          <img src="../brand_assets/clients/photography/products/fat-heads-homepage.png" alt="Fat Head's" loading="lazy">
+          <div class="photo-overlay"></div><span class="photo-label">Fat Head's</span>
+          <div class="photo-zoom-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg></div>
+        </div>
+        <div class="photo-item aspect-[4/3] reveal-up" data-cat="products" data-label="Body Butter" onclick="openLightbox(this)">
+          <img src="../brand_assets/clients/photography/products/Body-Butter-Citrus-Grove.jpg" alt="Body Butter Citrus Grove" loading="lazy">
+          <div class="photo-overlay"></div><span class="photo-label">Body Butter</span>
+          <div class="photo-zoom-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg></div>
+        </div>
+        <div class="photo-item aspect-[4/3] reveal-up delay-1" data-cat="products" data-label="Body Butter" onclick="openLightbox(this)">
+          <img src="../brand_assets/clients/photography/products/Body-Butter-Citrus-Grove-2oz.jpg" alt="Body Butter Citrus Grove 2oz" loading="lazy">
+          <div class="photo-overlay"></div><span class="photo-label">Body Butter</span>
+          <div class="photo-zoom-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg></div>
+        </div>
+
+      </div><!-- /photo-grid -->
+    </div>
+  </section>
+
+  <!-- ===== CTA ===== -->
+  <section class="relative overflow-hidden py-24 lg:py-32" style="background: #111111; border-top: 1px solid #222;">
+    <img class="cta-symbol" src="../brand_assets/PMM-Logo-Symbol.jpg" alt="" aria-hidden="true">
+    <div class="relative max-w-7xl mx-auto px-6 lg:px-10 text-center" style="z-index: 2;">
+      <div class="reveal-up">
+        <div class="eyebrow-rule justify-center">
+          <span class="font-heading font-semibold text-[10px] tracking-[0.3em] uppercase text-pmm-red">Let's Work Together</span>
+        </div>
+        <h2 class="font-display text-pmm-white leading-[0.88] tracking-[0.01em] mb-6"
+            style="font-size: clamp(3rem, 7vw, 7rem);">
+          Need Photography<br>That Performs?
+        </h2>
+        <p class="font-body text-sm text-white/45 leading-[1.8] max-w-md mx-auto mb-10">
+          Let's discuss your project. From a single product shoot to a full brand imagery library — we make it happen.
+        </p>
+        <a href="../index.html#contact"
+           class="inline-flex items-center gap-3 font-heading font-bold text-xs tracking-[0.22em] uppercase px-8 py-4 bg-pmm-red text-white hover:bg-red-700 transition-colors duration-200">
+          Start a Project
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER START -->
+  <!-- ===== FOOTER ===== -->
+  <footer class="bg-pmm-surface border-t border-pmm-border pt-16 pb-10">
+    <div class="max-w-7xl mx-auto px-6 lg:px-10">
+      <div class="grid md:grid-cols-4 gap-12 mb-14">
+        <div class="md:col-span-2">
+          <img src="/brand_assets/PMM-Logo-white.png" alt="Perception Multimedia" class="h-14 w-auto mb-5">
+          <p class="font-body text-white/35 text-sm leading-relaxed max-w-xs">
+            Collaborative digital agency in Middleburg Heights, Ohio. Award-winning marketing with no long-term contracts — we earn your business every month.
+          </p>
+          <div class="flex flex-wrap gap-x-4 gap-y-2 mt-6">
+            <a href="tel:4403401115" class="font-heading font-semibold text-[10px] tracking-[0.2em] uppercase text-pmm-red hover:text-white transition-colors duration-200">(440) 340-1115</a>
+            <span class="text-pmm-border">·</span>
+            <a href="tel:4406552032" class="font-heading font-semibold text-[10px] tracking-[0.2em] uppercase text-white/30 hover:text-white transition-colors duration-200">(440) 655-2032</a>
+            <span class="text-pmm-border">·</span>
+            <a href="mailto:info@perceptionmm.com" class="font-heading font-semibold text-[10px] tracking-[0.2em] uppercase text-white/30 hover:text-white transition-colors duration-200">info@perceptionmm.com</a>
+          </div>
+          <div class="flex items-center gap-3 mt-5">
+            <a href="https://www.facebook.com/PerceptionMultimedia/" target="_blank" rel="noopener noreferrer" aria-label="Facebook" class="w-8 h-8 flex items-center justify-center rounded-full border border-pmm-border text-white/30 hover:text-white hover:border-white/40 transition-colors duration-200">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+            </a>
+            <a href="https://www.linkedin.com/company/perception-multimedia-inc-/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" class="w-8 h-8 flex items-center justify-center rounded-full border border-pmm-border text-white/30 hover:text-white hover:border-white/40 transition-colors duration-200">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
+            </a>
+            <a href="https://www.instagram.com/perception_multimedia/" target="_blank" rel="noopener noreferrer" aria-label="Instagram" class="w-8 h-8 flex items-center justify-center rounded-full border border-pmm-border text-white/30 hover:text-white hover:border-white/40 transition-colors duration-200">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+            </a>
+            <a href="https://www.youtube.com/c/Perceptionmm" target="_blank" rel="noopener noreferrer" aria-label="YouTube" class="w-8 h-8 flex items-center justify-center rounded-full border border-pmm-border text-white/30 hover:text-white hover:border-white/40 transition-colors duration-200">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.95 1.96C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.96A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="#161616"/></svg>
+            </a>
+          </div>
+        </div>
+        <div>
+          <h4 class="font-heading font-semibold text-[10px] tracking-[0.25em] uppercase text-white/30 mb-5">Services</h4>
+          <ul class="space-y-2.5">
+            <li><a href="/services/video-production.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Video Production</a></li>
+            <li><a href="/services/website-design.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Website Design</a></li>
+            <li><a href="/services/social-media.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Social Media</a></li>
+            <li><a href="/services/email-campaigns.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Email Campaigns</a></li>
+            <li><a href="/services/search-marketing.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Search Marketing</a></li>
+            <li><a href="/services/graphic-design.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Branding &amp; Logo Design</a></li>
+            <li><a href="/services/photography.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Photography</a></li>
+            <li><a href="/services/traditional-media.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Traditional Media</a></li>
+            <li><a href="/services/google-business-profile.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Google Business Profile</a></li>
+            <li><a href="/services/reputation-management.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Reputation Management</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="font-heading font-semibold text-[10px] tracking-[0.25em] uppercase text-white/30 mb-5">Company</h4>
+          <ul class="space-y-2.5">
+            <li><a href="/about.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">About Us</a></li>
+            <li><a href="/clients/index.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Portfolio</a></li>
+            <li><a href="/services/index.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Services</a></li>
+            <li><a href="/contact.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Contact</a></li>
+            <li><a href="/philanthropy.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Philanthropy</a></li>
+            <li><a href="/blog/index.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Blog</a></li>
+            <li><a href="mailto:careers@perceptionmm.com" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Careers</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="border-t border-pmm-border pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <p class="font-body text-xs text-white/20">© 2026 Perception Multimedia Inc. All rights reserved.</p>
+        <p class="font-heading font-semibold text-[10px] tracking-[0.25em] uppercase text-white/15">Middleburg Heights, OH · perceptionmm.com</p>
+      </div>
+    </div>
+  </footer>
+<!-- FOOTER END -->
+
+  <!-- ===== LIGHTBOX ===== -->
+  <div id="lightbox" role="dialog" aria-modal="true" aria-label="Photo viewer">
+    <div id="lightbox-inner">
+      <button id="lightbox-close" onclick="closeLightbox()" aria-label="Close photo">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+        Close
+      </button>
+      <img id="lightbox-img" src="" alt="">
+      <p id="lightbox-caption"></p>
+    </div>
+  </div>
+
+  <script>
+    // Navbar scroll
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('nav-scrolled', window.scrollY > 40);
+    }, { passive: true });
+
+    // Mobile menu
+    const menuToggle = document.getElementById('menu-toggle');
+    const menuClose  = document.getElementById('menu-close');
+    const mobileMenu = document.getElementById('mobile-menu');
+    menuToggle.addEventListener('click', () => {
+      mobileMenu.classList.remove('hidden');
+      mobileMenu.classList.add('flex');
+    });
+    menuClose.addEventListener('click', closeMobileMenu);
+    function closeMobileMenu() {
+      mobileMenu.classList.add('hidden');
+      mobileMenu.classList.remove('flex');
+    }
+    function toggleMobileServices() {
+      const list  = document.getElementById('mobile-services-list');
+      const arrow = document.getElementById('mobile-svc-arrow');
+      const isOpen = list.classList.contains('flex');
+      list.classList.toggle('hidden', isOpen);
+      list.classList.toggle('flex', !isOpen);
+      arrow.style.transform = isOpen ? '' : 'rotate(180deg)';
+    }
+
+    // Scroll reveal
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('in-view');
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.07, rootMargin: '0px 0px -30px 0px' });
+    document.querySelectorAll('.reveal-up').forEach(el => observer.observe(el));
+
+    // Category filter
+    const tabs  = document.querySelectorAll('.cat-tab');
+    const items = document.querySelectorAll('.photo-item');
+
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        tabs.forEach(t => { t.classList.remove('active'); t.setAttribute('aria-selected', 'false'); });
+        tab.classList.add('active');
+        tab.setAttribute('aria-selected', 'true');
+
+        const cat = tab.dataset.cat;
+        items.forEach(item => {
+          const match = cat === 'all' || item.dataset.cat === cat;
+          item.setAttribute('data-hidden', match ? 'false' : 'true');
+        });
+      });
+    });
+
+    // Lightbox
+    const lightbox     = document.getElementById('lightbox');
+    const lightboxImg  = document.getElementById('lightbox-img');
+    const lightboxCap  = document.getElementById('lightbox-caption');
+
+    function openLightbox(el) {
+      const img   = el.querySelector('img');
+      const label = el.dataset.label || '';
+      lightboxImg.src = img.src;
+      lightboxImg.alt = img.alt;
+      lightboxCap.textContent = label;
+      lightbox.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox() {
+      lightbox.classList.remove('open');
+      setTimeout(() => { lightboxImg.src = ''; }, 300);
+      document.body.style.overflow = '';
+    }
+
+    lightbox.addEventListener('click', (e) => {
+      if (e.target === lightbox) closeLightbox();
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeLightbox();
+    });
+
+    // Keyboard activation for photo items
+    document.querySelectorAll('.photo-item').forEach(item => {
+      item.setAttribute('tabindex', '0');
+      item.setAttribute('role', 'button');
+      item.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          openLightbox(item);
+        }
+      });
+    });
+  </script>
+
+</div><!-- /overflow-x-hidden -->
+</body>
+</html>

@@ -1,0 +1,1554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tovolo — Perception Multimedia</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Josefin+Sans:ital,wght@0,300;0,400;0,600;0,700;1,300&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../styles.css">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'pmm-red':       '#E81B1E',
+            'pmm-black':     '#0A0A0A',
+            'pmm-dark':      '#111111',
+            'pmm-surface':   '#161616',
+            'pmm-border':    '#222222',
+            'pmm-muted':     '#3A3A3A',
+            'pmm-white':     '#F4F4F0',
+            'pmm-cream':     '#EDECEA',
+            'pmm-gray':      '#5C5C5C',
+            'tov-green':     '#6ea452',
+            'tov-forest':    '#4d7a39',
+            'tov-sage':      '#9fc47f',
+          },
+          fontFamily: {
+            'display': ['"Bebas Neue"', 'cursive'],
+            'heading': ['"Josefin Sans"', 'sans-serif'],
+            'body':    ['"DM Sans"', 'sans-serif'],
+          },
+        }
+      }
+    }
+  </script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: #0A0A0A;
+      color: #F4F4F0;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+    ::selection { background: #6ea452; color: #0a1a05; }
+
+    /* ── Grain ── */
+    .grain-overlay {
+      position: fixed; inset: 0; z-index: 200;
+      pointer-events: none; opacity: 0.03;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size: 180px 180px;
+    }
+
+    /* ── Expansion Hero ── */
+    #expansion-hero {
+      position: relative;
+      min-height: 100dvh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    #expansion-bg {
+      position: absolute; inset: 0; z-index: 0;
+    }
+    #expansion-bg img {
+      width: 100%; height: 100%;
+      object-fit: cover; object-position: center;
+      display: block;
+    }
+    #expansion-bg .bg-vignette {
+      position: absolute; inset: 0;
+      background: linear-gradient(
+        to bottom,
+        rgba(10,10,10,0.55) 0%,
+        rgba(10,10,10,0.35) 50%,
+        rgba(10,10,10,0.82) 100%
+      );
+    }
+
+    /* Media box */
+    #media-box {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 10;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow:
+        0 0 0 1px rgba(110,164,82,0.2),
+        0 8px 60px rgba(0,0,0,0.6),
+        0 0 120px rgba(110,164,82,0.07);
+      will-change: width, height;
+    }
+    #media-box video {
+      width: 100%; height: 100%;
+      object-fit: cover; display: block;
+      pointer-events: none;
+    }
+    #media-overlay {
+      position: absolute; inset: 0;
+      background: rgba(0,0,0,0.26);
+      border-radius: 16px;
+      pointer-events: none;
+    }
+
+    /* Scroll hint */
+    #scroll-hint {
+      position: absolute; z-index: 20;
+      bottom: 10%;
+      left: 50%; transform: translateX(-50%);
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 10px; font-weight: 600;
+      letter-spacing: 0.28em; text-transform: uppercase;
+      color: rgba(244,244,240,0.7);
+      display: flex; align-items: center; gap: 10px;
+      transition: opacity 0.3s ease;
+    }
+    #scroll-hint .hint-bar {
+      width: 28px; height: 1px;
+      background: rgba(110,164,82,0.7);
+      animation: barPulse 1.8s ease-in-out infinite;
+    }
+    @keyframes barPulse {
+      0%, 100% { opacity: 0.4; transform: scaleX(1); }
+      50%       { opacity: 1;   transform: scaleX(1.3); }
+    }
+
+    /* ── Case Content ── */
+    #case-content {
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.7s cubic-bezier(0.16,1,0.3,1);
+      background: #0A0A0A;
+      position: relative;
+      z-index: 10;
+    }
+    #case-content.visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    /* ── Green accent rule ── */
+    .tov-rule {
+      width: 48px; height: 2px;
+      background: linear-gradient(90deg, #6ea452, #9fc47f);
+      flex-shrink: 0;
+    }
+
+    /* ── Service tags ── */
+    .tov-tag {
+      display: inline-block;
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 9px; font-weight: 600;
+      letter-spacing: 0.18em; text-transform: uppercase;
+      padding: 3px 10px;
+      border: 1px solid rgba(110,164,82,0.35);
+      color: #6ea452;
+    }
+
+    /* ── Deliverables grid ── */
+    .deliv-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1px;
+      background: #1a1a1a;
+    }
+    @media (min-width: 768px) {
+      .deliv-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    .deliv-item {
+      background: #0e0e0e;
+      padding: 28px 24px;
+      display: flex; flex-direction: column;
+      gap: 12px;
+      opacity: 0; transform: translateY(14px);
+      transition: opacity 0.5s cubic-bezier(0.16,1,0.3,1),
+                  transform 0.5s cubic-bezier(0.16,1,0.3,1),
+                  background 0.25s ease;
+    }
+    .deliv-item.in-view { opacity: 1; transform: translateY(0); }
+    .deliv-item:hover { background: #121212; }
+    .deliv-item:nth-child(1) { transition-delay: 0s; }
+    .deliv-item:nth-child(2) { transition-delay: 0.08s; }
+    .deliv-icon {
+      width: 36px; height: 36px;
+      border: 1px solid rgba(110,164,82,0.25);
+      display: flex; align-items: center; justify-content: center;
+      color: #6ea452;
+    }
+
+    /* ── Video cards ── */
+    .video-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 2px;
+    }
+    @media (min-width: 768px) {
+      .video-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+    .video-grid-2 {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 2px;
+    }
+    @media (min-width: 768px) {
+      .video-grid-2 { grid-template-columns: repeat(2, 1fr); }
+    }
+    .video-card {
+      position: relative; overflow: hidden;
+      height: 280px;
+      cursor: pointer;
+      background: #111;
+    }
+    .video-card video {
+      width: 100%; height: 100%;
+      object-fit: cover; display: block;
+      filter: brightness(0.65);
+      transition: filter 0.5s ease, transform 0.7s cubic-bezier(0.16,1,0.3,1);
+    }
+    .video-card:hover video {
+      filter: brightness(0.45);
+      transform: scale(1.04);
+    }
+    .video-card-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(77,122,57,0.45) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .video-card-label {
+      position: absolute; bottom: 20px; left: 20px; right: 20px;
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 10px; font-weight: 600;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      color: rgba(244,244,240,0.9);
+    }
+    .video-card-play {
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 52px; height: 52px;
+      border: 1.5px solid rgba(255,255,255,0.45);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      color: white;
+      transition: border-color 0.25s ease, background 0.25s ease, transform 0.25s ease;
+    }
+    .video-card:hover .video-card-play {
+      border-color: rgba(110,164,82,0.9);
+      background: rgba(110,164,82,0.2);
+      transform: translate(-50%, -50%) scale(1.1);
+    }
+
+    /* ── Photography grid — masonry ── */
+    .photo-masonry {
+      columns: 1;
+      gap: 2px;
+    }
+    @media (min-width: 640px) {
+      .photo-masonry { columns: 2; }
+    }
+    @media (min-width: 1024px) {
+      .photo-masonry { columns: 3; }
+    }
+    .photo-item {
+      break-inside: avoid;
+      position: relative; overflow: hidden;
+      background: #111;
+      margin-bottom: 2px;
+      cursor: pointer;
+    }
+    .photo-item img {
+      width: 100%; height: auto;
+      display: block;
+      filter: brightness(0.82);
+      transition: filter 0.5s ease, transform 0.7s cubic-bezier(0.16,1,0.3,1);
+    }
+    .photo-item:hover img {
+      filter: brightness(0.65);
+      transform: scale(1.03);
+    }
+    .photo-item-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.6) 0%, transparent 55%);
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.35s ease;
+    }
+    .photo-item:hover .photo-item-overlay { opacity: 1; }
+    .photo-item-label {
+      position: absolute; bottom: 16px; left: 18px;
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 9px; font-weight: 600;
+      letter-spacing: 0.22em; text-transform: uppercase;
+      color: rgba(244,244,240,0.8);
+      opacity: 0;
+      transform: translateY(4px);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+    .photo-item:hover .photo-item-label {
+      opacity: 1; transform: translateY(0);
+    }
+
+    /* ── CTA form ── */
+    .tov-cta-form {
+      display: flex; flex-direction: column; gap: 12px;
+      width: 100%; max-width: 420px;
+    }
+    .tov-cta-form-row {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+    }
+    .tov-cta-input {
+      width: 100%;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: #F4F4F0;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      padding: 12px 16px;
+      outline: none;
+      transition: border-color 0.2s ease, background 0.2s ease;
+    }
+    .tov-cta-input::placeholder { color: rgba(244,244,240,0.3); }
+    .tov-cta-input:focus {
+      border-color: rgba(110,164,82,0.5);
+      background: rgba(110,164,82,0.04);
+    }
+    .tov-cta-textarea { resize: none; }
+
+    /* ── CTA button ── */
+    .cta-btn-green {
+      display: inline-flex; align-items: center; gap: 10px;
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 11px; font-weight: 700;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      padding: 16px 32px;
+      background: linear-gradient(135deg, #4d7a39 0%, #6ea452 100%);
+      color: #F4F4F0;
+      text-decoration: none; border: none; cursor: pointer;
+      box-shadow: 0 4px 24px rgba(110,164,82,0.3);
+      transition: box-shadow 0.25s ease, transform 0.2s ease, opacity 0.2s ease;
+      width: 100%; justify-content: center;
+    }
+    .cta-btn-green:hover {
+      box-shadow: 0 6px 32px rgba(110,164,82,0.5);
+      transform: translateY(-1px);
+    }
+    .cta-btn-green:active { transform: translateY(0); opacity: 0.9; }
+
+    /* ── Animations ── */
+    .reveal-up {
+      opacity: 0; transform: translateY(20px);
+      transition: opacity 0.65s cubic-bezier(0.16,1,0.3,1),
+                  transform 0.65s cubic-bezier(0.16,1,0.3,1);
+    }
+    .reveal-up.in-view { opacity: 1; transform: translateY(0); }
+    .reveal-up.delay-1 { transition-delay: 0.1s; }
+    .reveal-up.delay-2 { transition-delay: 0.2s; }
+    .reveal-up.delay-3 { transition-delay: 0.3s; }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar          { width: 3px; }
+    ::-webkit-scrollbar-track    { background: #0A0A0A; }
+    ::-webkit-scrollbar-thumb    { background: #6ea452; }
+
+    a:focus-visible, button:focus-visible {
+      outline: 2px solid #6ea452;
+      outline-offset: 3px;
+    }
+
+    /* ── Social Spotlight Section ── */
+    .tov-social-spotlight {
+      background: #656565;
+
+      overflow: visible;
+    }
+    .tov-spotlight-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 64px;
+      align-items: center;
+    }
+    @media (min-width: 1024px) {
+      .tov-spotlight-grid {
+        grid-template-columns: 380px 1fr;
+        gap: 80px;
+      }
+    }
+
+    /* Phone wrap */
+    .tov-phone-wrap {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      padding: 24px 0 40px;
+    }
+    .tov-phone-glow {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 280px; height: 560px;
+      background: radial-gradient(ellipse at center, rgba(110,164,82,0.18) 0%, transparent 70%);
+      pointer-events: none;
+      border-radius: 50%;
+      filter: blur(30px);
+    }
+
+    /* Phone shell */
+    .tov-phone {
+      position: relative;
+      width: 240px;
+      background: #0d0d0d;
+      border-radius: 38px;
+      border: 1.5px solid rgba(110,164,82,0.3);
+      box-shadow:
+        0 0 0 5px #0a0a0a,
+        0 0 0 6px rgba(110,164,82,0.12),
+        0 32px 80px rgba(0,0,0,0.8),
+        inset 0 1px 0 rgba(255,255,255,0.06);
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    .tov-phone-notch {
+      position: relative;
+      height: 28px;
+      background: #0d0d0d;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2;
+    }
+    .tov-phone-notch::after {
+      content: '';
+      width: 70px; height: 14px;
+      background: #111;
+      border-radius: 0 0 14px 14px;
+      border: 1px solid rgba(110,164,82,0.15);
+      border-top: none;
+    }
+    .tov-phone-screen {
+      background: #0d0d0d;
+      overflow: hidden;
+    }
+    .tov-phone-chin {
+      height: 24px;
+      background: #0d0d0d;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .tov-phone-chin::after {
+      content: '';
+      width: 80px; height: 4px;
+      background: rgba(255,255,255,0.12);
+      border-radius: 2px;
+    }
+
+    /* Fake IG UI */
+    .tov-ig-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 10px;
+      background: #0d0d0d;
+    }
+    .tov-ig-avatar {
+      width: 30px; height: 30px;
+      border-radius: 50%;
+      background: #181818;
+      border: 1.5px solid rgba(110,164,82,0.5);
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    .tov-ig-avatar img {
+      width: 80%; height: auto;
+      object-fit: contain;
+    }
+    .tov-ig-meta {
+      display: flex; flex-direction: column;
+      flex: 1; min-width: 0;
+    }
+    .tov-ig-handle {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 10px; font-weight: 600;
+      color: #F4F4F0;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .tov-ig-sub {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 8px; color: rgba(244,244,240,0.35);
+    }
+    .tov-ig-dots {
+      color: rgba(244,244,240,0.4);
+      flex-shrink: 0;
+    }
+    .tov-phone-video-wrap {
+      width: 100%;
+      aspect-ratio: 9/14;
+      overflow: hidden;
+      background: #0d0d0d;
+    }
+    .tov-phone-video-wrap video {
+      width: 100%; height: 100%;
+      object-fit: cover; display: block;
+    }
+    .tov-ig-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 10px 4px;
+      color: rgba(244,244,240,0.8);
+    }
+    .tov-ig-left { display: flex; gap: 12px; align-items: center; }
+    .tov-ig-likes {
+      padding: 0 10px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 9.5px; font-weight: 600;
+      color: #F4F4F0;
+    }
+    .tov-ig-caption {
+      padding: 2px 10px 10px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 8.5px; line-height: 1.5;
+      color: rgba(244,244,240,0.65);
+    }
+    .tov-ig-caption strong { color: #F4F4F0; }
+
+    /* Stat pills */
+    .tov-stat-pill {
+      position: absolute;
+      display: flex; flex-direction: column;
+      gap: 2px;
+      background: rgba(10,10,10,0.92);
+      border: 1px solid rgba(110,164,82,0.3);
+      padding: 8px 14px;
+      backdrop-filter: blur(8px);
+    }
+    .tov-stat-1 { bottom: 10px; right: -10px; }
+    .tov-stat-2 { top: 30px;   right: -20px; }
+    @media (min-width: 1024px) {
+      .tov-stat-1 { bottom: 20px; right: -40px; }
+      .tov-stat-2 { top: 50px;   right: -55px; }
+    }
+    .tov-stat-num {
+      font-family: 'Bebas Neue', cursive;
+      font-size: 22px; line-height: 1;
+      color: #6ea452;
+    }
+    .tov-stat-label {
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 7.5px; font-weight: 600;
+      letter-spacing: 0.18em; text-transform: uppercase;
+      color: rgba(244,244,240,0.4);
+    }
+
+    /* Reversed grid */
+    @media (min-width: 1024px) {
+      .tov-spotlight-grid--reverse {
+        grid-template-columns: 1fr 380px;
+      }
+    }
+
+    /* Left-side stat pills */
+    .tov-stat-pill--left { right: auto; }
+    .tov-stat-1l { bottom: 10px; left: -10px; }
+    .tov-stat-2l { top: 30px;   left: -20px; }
+    @media (min-width: 1024px) {
+      .tov-stat-1l { bottom: 20px; left: -40px; }
+      .tov-stat-2l { top: 50px;   left: -55px; }
+    }
+
+    /* Text column */
+    .tov-spotlight-text { padding-top: 0; }
+    @media (min-width: 1024px) { .tov-spotlight-text { padding-top: 8px; } }
+
+    /* Platform list */
+    .tov-platform-list {
+      display: flex; flex-direction: column;
+      gap: 0;
+      margin-top: 32px;
+    }
+    .tov-platform-item {
+      display: flex; align-items: center;
+      gap: 14px;
+      padding: 13px 0;
+      /*border-bottom: 1px solid #1a1a1a;*/
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 11px; font-weight: 600;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: rgba(244,244,240,0.5);
+      transition: color 0.2s ease;
+    }
+    /*.tov-platform-item:first-child { border-top: 1px solid #1a1a1a; }*/
+    .tov-platform-item svg { color: #6ea452; flex-shrink: 0; }
+
+    /* Quote block */
+    .tov-quote-block {
+      display: flex; gap: 16px;
+      margin-top: 36px;
+      padding-left: 2px;
+    }
+    .tov-quote-bar {
+      width: 2px; flex-shrink: 0;
+      background: linear-gradient(to bottom, #6ea452, transparent);
+      align-self: stretch;
+    }
+
+    /* ── TikTok phone variant ── */
+    .tov-phone--tiktok {
+      border-color: rgba(105,201,228,0.25);
+      box-shadow:
+        0 0 0 5px #0a0a0a,
+        0 0 0 6px rgba(105,201,228,0.1),
+        0 32px 80px rgba(0,0,0,0.8),
+        inset 0 1px 0 rgba(255,255,255,0.06);
+    }
+
+    /* Full-bleed video layer */
+    .tov-tt-video-wrap {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+    }
+    .tov-tt-video-wrap video {
+      width: 100%; height: 100%;
+      object-fit: cover; display: block;
+    }
+    .tov-tt-vignette {
+      position: absolute; inset: 0;
+      background:
+        linear-gradient(to bottom, rgba(0,0,0,0.45) 0%, transparent 22%),
+        linear-gradient(to top,    rgba(0,0,0,0.72) 0%, transparent 45%);
+      pointer-events: none;
+    }
+
+    /* Fix screen height for TikTok full-bleed layout */
+    .tov-phone--tiktok .tov-phone-screen {
+      height: 440px;
+    }
+
+    /* Top bar */
+    .tov-tt-topbar {
+      position: absolute; top: 10px; left: 0; right: 0;
+      z-index: 10;
+      display: flex;
+      justify-content: center;
+      gap: 14px;
+      align-items: center;
+    }
+    .tov-tt-tab {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 9.5px; font-weight: 500;
+      color: rgba(255,255,255,0.5);
+      letter-spacing: 0.03em;
+    }
+    .tov-tt-tab--active {
+      color: #fff;
+      font-weight: 700;
+      position: relative;
+    }
+    .tov-tt-tab--active::after {
+      content: '';
+      position: absolute;
+      bottom: -3px; left: 50%;
+      transform: translateX(-50%);
+      width: 16px; height: 2px;
+      background: #fff;
+      border-radius: 1px;
+    }
+
+    /* Right action column */
+    .tov-tt-actions {
+      position: absolute;
+      right: 8px; bottom: 60px;
+      z-index: 10;
+      display: flex; flex-direction: column;
+      align-items: center;
+      gap: 14px;
+    }
+    .tov-tt-avatar-wrap {
+      position: relative;
+      margin-bottom: 4px;
+    }
+    .tov-tt-avatar {
+      width: 34px; height: 34px;
+      border-radius: 50%;
+      background: #222;
+      border: 1.5px solid #fff;
+      overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .tov-tt-avatar img {
+      width: 75%; height: auto; object-fit: contain;
+    }
+    .tov-tt-follow {
+      position: absolute;
+      bottom: -7px; left: 50%;
+      transform: translateX(-50%);
+      width: 14px; height: 14px;
+      background: #fe2c55;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 10px; font-weight: 700; color: #fff;
+      line-height: 1;
+    }
+    .tov-tt-action-btn {
+      display: flex; flex-direction: column;
+      align-items: center; gap: 2px;
+      color: #fff;
+    }
+    .tov-tt-action-btn span {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 7.5px; font-weight: 600;
+      color: rgba(255,255,255,0.9);
+    }
+    .tov-tt-disc {
+      width: 30px; height: 30px;
+      border-radius: 50%;
+      background: #1a1a1a;
+      border: 3px solid #333;
+      overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+      animation: discSpin 4s linear infinite;
+    }
+    .tov-tt-disc img {
+      width: 60%; height: auto; object-fit: contain;
+    }
+    @keyframes discSpin {
+      from { transform: rotate(0deg); }
+      to   { transform: rotate(360deg); }
+    }
+
+    /* Bottom caption */
+    .tov-tt-caption {
+      position: absolute;
+      left: 10px; right: 48px;
+      bottom: 18px;
+      z-index: 10;
+      display: flex; flex-direction: column; gap: 4px;
+    }
+    .tov-tt-username {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 10.5px; font-weight: 700;
+      color: #fff;
+    }
+    .tov-tt-desc {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 8px; line-height: 1.45;
+      color: rgba(255,255,255,0.88);
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      line-clamp: 2;
+      overflow: hidden;
+    }
+    .tov-tt-sound {
+      display: flex; align-items: center; gap: 5px;
+      margin-top: 2px;
+    }
+    .tov-tt-sound-text {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 7.5px; color: rgba(255,255,255,0.7);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+
+    /* Progress bar */
+    .tov-tt-progress {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      height: 2px;
+      background: rgba(255,255,255,0.2);
+      z-index: 10;
+    }
+    .tov-tt-progress-fill {
+      height: 100%;
+      width: 38%;
+      background: #fff;
+      border-radius: 1px;
+    }
+
+    /* ── Video modal ── */
+    #vid-modal {
+      position: fixed; inset: 0; z-index: 500;
+      background: rgba(0,0,0,0.92);
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    #vid-modal.open { opacity: 1; pointer-events: auto; }
+    #vid-modal video {
+      max-width: 90vw; max-height: 82vh;
+      border-radius: 4px;
+      box-shadow: 0 0 0 1px rgba(110,164,82,0.25), 0 32px 80px rgba(0,0,0,0.8);
+    }
+    #vid-modal-close {
+      position: absolute; top: 24px; right: 28px;
+      color: rgba(255,255,255,0.5); cursor: pointer; background: none; border: none;
+      font-size: 28px; line-height: 1;
+      transition: color 0.2s ease;
+    }
+    #vid-modal-close:hover { color: #fff; }
+  </style>
+</head>
+<body>
+<div class="grain-overlay" aria-hidden="true"></div>
+
+<!-- NAV START -->
+  <!-- NAV -->
+  <nav id="navbar" class="fixed top-0 left-0 right-0 z-50">
+    <div class="max-w-7xl mx-auto px-6 lg:px-10 h-20 flex items-center justify-between">
+      <a href="/index.html" class="flex-shrink-0">
+        <img src="/brand_assets/PMM-Logo-white.png" alt="Perception Multimedia" class="h-11 w-auto">
+      </a>
+      <div class="hidden md:flex items-center gap-8">
+        <a href="/index.html" class="nav-link font-heading font-semibold text-xs tracking-[0.2em] uppercase text-white/60 hover:text-white transition-colors duration-200">Home</a>
+        <a href="/about.html" class="nav-link font-heading font-semibold text-xs tracking-[0.2em] uppercase text-white/60 hover:text-white transition-colors duration-200">About</a>
+        <div class="nav-dropdown-wrapper">
+          <a href="/services/index.html" class="nav-link font-heading font-semibold text-xs tracking-[0.2em] uppercase text-white/60 hover:text-white transition-colors duration-200 flex items-center gap-1.5">Services <svg class="nav-chevron-icon" width="8" height="5" viewBox="0 0 8 5" fill="none"><path d="M1 1l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+          <div class="nav-dropdown">
+            <a href="/services/video-production.html" class="nav-dropdown-item">Video Production</a>
+            <a href="/services/website-design.html" class="nav-dropdown-item">Website Design</a>
+            <a href="/services/social-media.html" class="nav-dropdown-item">Social Media</a>
+            <a href="/services/email-campaigns.html" class="nav-dropdown-item">Email Campaigns</a>
+            <a href="/services/photography.html" class="nav-dropdown-item">Photography</a>
+            <a href="/services/search-marketing.html" class="nav-dropdown-item">Search Marketing</a>
+            <a href="/services/graphic-design.html" class="nav-dropdown-item">Branding &amp; Logo Design</a>
+            <a href="/services/traditional-media.html" class="nav-dropdown-item">Traditional Media</a>
+            <a href="/services/google-business-profile.html" class="nav-dropdown-item">Google Business Profile</a>
+            <a href="/services/reputation-management.html" class="nav-dropdown-item">Reputation Management</a>
+          </div>
+        </div>
+        <a href="/clients/index.html" class="nav-link nav-active font-heading font-semibold text-xs tracking-[0.2em] uppercase text-white/60 hover:text-white transition-colors duration-200">Work</a>
+        <a href="/philanthropy.html" class="nav-link font-heading font-semibold text-xs tracking-[0.2em] uppercase text-white/60 hover:text-white transition-colors duration-200">Philanthropy</a>
+        <a href="/contact.html" class="nav-cta-btn font-heading font-bold text-xs tracking-[0.2em] uppercase px-6 py-3 bg-pmm-red text-white hover:bg-red-700 transition-colors duration-200">Contact</a>
+      </div>
+      <button id="menu-toggle" class="md:hidden text-white p-2 focus:outline-none" aria-label="Open menu">
+        <svg width="22" height="16" viewBox="0 0 22 16" fill="none">
+          <line x1="0" y1="1"  x2="22" y2="1"  stroke="currentColor" stroke-width="2"/>
+          <line x1="0" y1="8"  x2="22" y2="8"  stroke="currentColor" stroke-width="2"/>
+          <line x1="0" y1="15" x2="22" y2="15" stroke="currentColor" stroke-width="2"/>
+        </svg>
+      </button>
+    </div>
+  </nav>
+
+  <!-- MOBILE MENU -->
+  <div id="mobile-menu" class="fixed inset-0 z-[60] bg-pmm-black hidden flex-col items-center justify-center">
+    <button id="menu-close" class="absolute top-6 right-6 text-white/40 hover:text-white" aria-label="Close menu">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+      </svg>
+    </button>
+    <nav class="flex flex-col items-center gap-5 text-center">
+      <a href="/index.html" onclick="closeMobileMenu()" class="font-display text-5xl text-white hover:text-pmm-red transition-colors duration-200">HOME</a>
+      <a href="/about.html" onclick="closeMobileMenu()" class="font-display text-5xl text-white hover:text-pmm-red transition-colors duration-200">ABOUT</a>
+      <div class="flex flex-col items-center gap-2">
+        <button onclick="toggleMobileServices()" class="font-display text-5xl text-white hover:text-pmm-red flex items-center gap-3 bg-transparent border-none cursor-pointer">SERVICES <span id="mobile-svc-arrow" style="font-size:1.4rem;line-height:1;display:inline-block;transition:transform 0.25s cubic-bezier(0.16,1,0.3,1);">↓</span></button>
+        <div id="mobile-services-list" class="hidden flex-col items-center gap-1 mt-3">
+          <a href="/services/video-production.html" onclick="closeMobileMenu()" class="font-heading font-semibold text-sm tracking-[0.18em] uppercase text-white/50 hover:text-pmm-red transition-colors duration-200 py-2.5 px-6">Video Production</a>
+          <a href="/services/website-design.html" onclick="closeMobileMenu()" class="font-heading font-semibold text-sm tracking-[0.18em] uppercase text-white/50 hover:text-pmm-red transition-colors duration-200 py-2.5 px-6">Website Design</a>
+          <a href="/services/social-media.html" onclick="closeMobileMenu()" class="font-heading font-semibold text-sm tracking-[0.18em] uppercase text-white/50 hover:text-pmm-red transition-colors duration-200 py-2.5 px-6">Social Media</a>
+          <a href="/services/email-campaigns.html" onclick="closeMobileMenu()" class="font-heading font-semibold text-sm tracking-[0.18em] uppercase text-white/50 hover:text-pmm-red transition-colors duration-200 py-2.5 px-6">Email Campaigns</a>
+          <a href="/services/photography.html" onclick="closeMobileMenu()" class="font-heading font-semibold text-sm tracking-[0.18em] uppercase text-white/50 hover:text-pmm-red transition-colors duration-200 py-2.5 px-6">Photography</a>
+          <a href="/services/search-marketing.html" onclick="closeMobileMenu()" class="font-heading font-semibold text-sm tracking-[0.18em] uppercase text-white/50 hover:text-pmm-red transition-colors duration-200 py-2.5 px-6">Search Marketing</a>
+          <a href="/services/graphic-design.html" onclick="closeMobileMenu()" class="font-heading font-semibold text-sm tracking-[0.18em] uppercase text-white/50 hover:text-pmm-red transition-colors duration-200 py-2.5 px-6">Branding &amp; Logo Design</a>
+          <a href="/services/traditional-media.html" onclick="closeMobileMenu()" class="font-heading font-semibold text-sm tracking-[0.18em] uppercase text-white/50 hover:text-pmm-red transition-colors duration-200 py-2.5 px-6">Traditional Media</a>
+          <a href="/services/google-business-profile.html" onclick="closeMobileMenu()" class="font-heading font-semibold text-sm tracking-[0.18em] uppercase text-white/50 hover:text-pmm-red transition-colors duration-200 py-2.5 px-6">Google Business Profile</a>
+          <a href="/services/reputation-management.html" onclick="closeMobileMenu()" class="font-heading font-semibold text-sm tracking-[0.18em] uppercase text-white/50 hover:text-pmm-red transition-colors duration-200 py-2.5 px-6">Reputation Management</a>
+        </div>
+      </div>
+      <a href="/clients/index.html" onclick="closeMobileMenu()" class="font-display text-5xl text-white hover:text-pmm-red transition-colors duration-200">WORK</a>
+      <a href="/philanthropy.html" onclick="closeMobileMenu()" class="font-display text-5xl text-white hover:text-pmm-red transition-colors duration-200">PHILANTHROPY</a>
+      <a href="/contact.html" onclick="closeMobileMenu()" class="font-display text-5xl text-pmm-red">CONTACT</a>
+    </nav>
+    <div class="absolute bottom-10 font-heading text-xs tracking-[0.25em] uppercase text-white/20">440.340.1115</div>
+  </div>
+<!-- NAV END -->
+
+
+<!-- ===== SCROLL-EXPANSION HERO ===== -->
+<section id="expansion-hero">
+
+  <!-- Background: kitchen lifestyle -->
+  <div id="expansion-bg">
+    <img src="../brand_assets/clients/tovolo/kitchen-set.jpg" alt="Tovolo kitchen products">
+    <div class="bg-vignette"></div>
+  </div>
+
+  <!-- Expanding video box -->
+  <div id="media-box">
+    <video
+      src="../brand_assets/clients/tovolo/TovoloMiniIce_1.mp4"
+      autoplay muted loop playsinline preload="auto"
+    ></video>
+    <div id="media-overlay"></div>
+  </div>
+
+  <!-- Scroll hint -->
+  <div id="scroll-hint" style="flex-direction:column; align-items:center; gap:10px;">
+    <span class="font-display" style="font-size:clamp(1rem,2vw,1.5rem); letter-spacing:0.12em; color:rgba(244,244,240,0.85); line-height:1;">TOVOLO</span>
+    <div style="display:flex; align-items:center; gap:10px;">
+      <span class="hint-bar"></span>
+      Scroll to expand
+      <span class="hint-bar"></span>
+    </div>
+  </div>
+
+</section>
+
+
+<!-- ===== CASE STUDY CONTENT ===== -->
+<div id="case-content">
+
+  <!-- ── Project Overview ── -->
+  <section class="max-w-7xl mx-auto px-6 lg:px-16 py-24 lg:py-32">
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-start mb-12">
+
+      <!-- Left: eyebrow + heading -->
+      <div>
+        <div class="flex items-center gap-4 mb-8 reveal-up">
+          <div class="tov-rule"></div>
+          <span class="font-heading text-[10px] font-semibold tracking-[0.28em] uppercase" style="color:#6ea452;">Client Overview</span>
+        </div>
+        <h2 class="font-display text-[clamp(3.5rem,8vw,7rem)] leading-[0.9] tracking-wide reveal-up delay-1"
+            style="color:#F4F4F0;">
+          MADE TO<br>BE<br>SHARED
+        </h2>
+      </div>
+
+      <!-- Right: Meta info -->
+      <div class="space-y-8 pt-2 lg:pt-16">
+        <div class="reveal-up">
+          <div class="font-heading text-[10px] font-semibold tracking-[0.24em] uppercase mb-3" style="color:#6ea452;">Client</div>
+          <img src="../brand_assets/clients/tovolo/Tovolo_logo_white.webp" alt="Tovolo" style="height:56px; width:auto; margin-bottom:10px;">
+          <div class="font-heading text-sm font-semibold tracking-wide uppercase" style="color:rgba(244,244,240,0.4);">Tovolo</div>
+        </div>
+        <div style="height:1px; background:#1a1a1a;"></div>
+        <div class="reveal-up delay-1">
+          <div class="font-heading text-[10px] font-semibold tracking-[0.24em] uppercase mb-3" style="color:#6ea452;">Services Provided</div>
+          <div class="flex flex-wrap gap-2">
+            <span class="tov-tag">Social Media</span>
+            <span class="tov-tag">Photography</span>
+            <span class="tov-tag">Video Production</span>
+          </div>
+        </div>
+        <div style="height:1px; background:#1a1a1a;"></div>
+        <div class="reveal-up delay-2">
+          <div class="font-heading text-[10px] font-semibold tracking-[0.24em] uppercase mb-3" style="color:#6ea452;">Industry</div>
+          <div class="font-body text-sm" style="color:rgba(244,244,240,0.55);">Kitchenware &amp; Housewares</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Overview paragraph -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 pt-4">
+      <p class="font-body text-sm leading-[1.9] reveal-up" style="color:rgba(244,244,240,0.58);">
+        Tovolo has been engineering clever, high-quality kitchen tools, bakeware, and ice molds since 2003 — turning everyday cooking into a joy. Their products are built with purpose and a sense of fun that translates effortlessly to social media. Perception Multimedia was brought in to create scroll-stopping social content that showcases Tovolo's products in action: product photography, lifestyle shoots, and short-form video production designed for engagement.
+      </p>
+      <p class="font-body text-sm leading-[1.9] reveal-up delay-1" style="color:rgba(244,244,240,0.58);">
+        From holiday-themed ice sphere videos to kitchen close-ups, every piece of content was crafted to feel authentic, aspirational, and shareable — reflecting Tovolo's commitment to products that elevate the everyday.
+      </p>
+    </div>
+
+  </section>
+
+
+
+  <!-- ── Social Media Video Section ── -->
+  <section style="background:#090909; border-top:1px solid #1a1a1a; border-bottom:1px solid #1a1a1a;">
+    <div class="max-w-7xl mx-auto px-6 lg:px-16 py-24">
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-start mb-16">
+        <div>
+          <div class="flex items-center gap-4 mb-8 reveal-up">
+            <div class="tov-rule"></div>
+            <span class="font-heading text-[10px] font-semibold tracking-[0.28em] uppercase" style="color:#6ea452;">Social Media Videos</span>
+          </div>
+          <h3 class="font-display text-[clamp(2.5rem,5vw,4.5rem)] leading-[0.95] tracking-wide reveal-up" style="color:#F4F4F0;">
+            CONTENT<br>THAT<br>CONVERTS
+          </h3>
+        </div>
+        <div class="lg:pt-16">
+          <p class="font-body text-sm leading-[1.9] reveal-up" style="color:rgba(244,244,240,0.6);">
+            Every Tovolo product has a story worth telling. We produced short-form video content built for social platforms — dynamic, on-brand, and optimized for engagement. From holiday ice mold reveals to cocktail glamour shots, each video positions Tovolo's tools as the must-have addition to any kitchen or bar setup.
+          </p>
+        </div>
+      </div>
+
+      <!-- 2-col additional video row -->
+      <div class="video-grid-2" style="margin-top:2px;">
+        <div class="video-card" onclick="openVidModal('../brand_assets/clients/tovolo/IceCreamScooper.mp4')" role="button" tabindex="0">
+          <video src="../brand_assets/clients/tovolo/IceCreamScooper.mp4" autoplay muted loop playsinline preload="auto"></video>
+          <div class="video-card-overlay"></div>
+          <div class="video-card-play">
+            <svg width="14" height="16" viewBox="0 0 14 16" fill="currentColor"><path d="M1 1l12 7L1 15V1z"/></svg>
+          </div>
+          <div class="video-card-label">Holiday Spatula</div>
+        </div>
+        <div class="video-card" onclick="openVidModal('../brand_assets/clients/tovolo/TovoloMiniIce_1.mp4')" role="button" tabindex="0">
+          <video src="../brand_assets/clients/tovolo/TovoloMiniIce_1.mp4" autoplay muted loop playsinline preload="auto"></video>
+          <div class="video-card-overlay"></div>
+          <div class="video-card-play">
+            <svg width="14" height="16" viewBox="0 0 14 16" fill="currentColor"><path d="M1 1l12 7L1 15V1z"/></svg>
+          </div>
+          <div class="video-card-label">Mini Ice Molds</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── Social Sharing Spotlight ── -->
+  <section class="tov-social-spotlight">
+    <div class="max-w-7xl mx-auto px-6 lg:px-16 py-24 lg:py-32">
+      <div class="tov-spotlight-grid">
+
+        <!-- Phone mockup -->
+        <div class="tov-phone-wrap reveal-up">
+          <div class="tov-phone-glow"></div>
+          <div class="tov-phone">
+            <div class="tov-phone-notch"></div>
+            <div class="tov-phone-screen">
+              <!-- Fake IG header -->
+              <div class="tov-ig-header">
+                <div class="tov-ig-avatar">
+                  <img src="../brand_assets/clients/tovolo/Tovolo_logo_white.webp" alt="Tovolo">
+                </div>
+                <div class="tov-ig-meta">
+                  <span class="tov-ig-handle">Tovolo</span>
+                </div>
+                <svg class="tov-ig-dots" width="16" height="4" viewBox="0 0 16 4" fill="currentColor"><circle cx="2" cy="2" r="1.5"/><circle cx="8" cy="2" r="1.5"/><circle cx="14" cy="2" r="1.5"/></svg>
+              </div>
+              <!-- Video -->
+              <div class="tov-phone-video-wrap">
+                <video src="../brand_assets/clients/tovolo/Christmas-Ice.mp4" autoplay muted loop playsinline preload="auto"></video>
+              </div>
+              <!-- Fake IG actions -->
+              <div class="tov-ig-actions">
+                <div class="tov-ig-left">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                </div>
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+              </div>
+              <div class="tov-ig-likes">24.7k likes</div>
+              <div class="tov-ig-caption"><strong>Tovolo</strong> The holiday season just got an upgrade. ❄️ Our Christmas Ice Molds are here — built for the moments worth sharing.</div>
+            </div>
+            <div class="tov-phone-chin"></div>
+          </div>
+
+        </div>
+
+        <!-- Text column -->
+        <div class="tov-spotlight-text">
+          <div class="flex items-center gap-4 mb-8 reveal-up">
+            <div class="tov-rule"></div>
+            <span class="font-heading text-[10px] font-semibold tracking-[0.28em] uppercase" style="color:#6ea452;">Social Strategy</span>
+          </div>
+          <h3 class="font-display leading-[0.92] tracking-wide reveal-up delay-1"
+              style="font-size:clamp(2.8rem,5.5vw,5rem); color:#F4F4F0;">
+            SCROLL-<br>STOPPING<br><span style="color:#6ea452;">MOMENTS</span>
+          </h3>
+
+          <p class="font-body text-sm leading-[1.9] mt-8 reveal-up delay-2" style="color:rgba(244,244,240,0.58);">
+            Great products deserve content that earns the share. We crafted platform-native video for Tovolo's social channels — designed for the thumb-stop, the double-tap, and the "send to a friend" moment. Seasonal drops like the Holiday Ice Mold series were timed and packaged for maximum organic reach, turning a kitchen product into a conversation starter.
+          </p>
+
+          <div class="tov-platform-list reveal-up delay-3">
+            <div class="tov-platform-item">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+              <span>Instagram Reels &amp; Feed Posts</span>
+            </div>
+            <div class="tov-platform-item">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34l-.01-8.66a8.17 8.17 0 0 0 4.78 1.52V4.71a4.84 4.84 0 0 1-1-.02z"/></svg>
+              <span>TikTok Short-Form Video</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Social Sharing Spotlight 2 (reversed) ── -->
+  <section class="tov-social-spotlight" style="background:#656565;">
+    <div class="max-w-7xl mx-auto px-6 lg:px-16 py-24 lg:py-32">
+      <div class="tov-spotlight-grid tov-spotlight-grid--reverse">
+
+        <!-- Text column -->
+        <div class="tov-spotlight-text">
+          <div class="flex items-center gap-4 mb-8 reveal-up">
+            <div class="tov-rule"></div>
+            <span class="font-heading text-[10px] font-semibold tracking-[0.28em] uppercase" style="color:#6ea452;">Holiday Campaign</span>
+          </div>
+          <h3 class="font-display leading-[0.92] tracking-wide reveal-up delay-1"
+              style="font-size:clamp(2.8rem,5.5vw,5rem); color:#F4F4F0;">
+            GIFTED,<br>STYLED &amp;<br><span style="color:#6ea452;">SHARED</span>
+          </h3>
+
+          <p class="font-body text-sm leading-[1.9] mt-8 reveal-up delay-2" style="color:rgba(244,244,240,0.58);">
+            The Tovolo Holiday Spatula series was built to gift and to show off. We produced short-form content that leaned into the season — warm tones, festive styling, and product-forward framing that made the spatula the hero of the kitchen. Content packaged for gifting season drove organic shares and repeat saves across platforms.
+          </p>
+
+          <div class="tov-platform-list reveal-up delay-3">
+            <div class="tov-platform-item">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+              <span>Instagram Reels &amp; Stories</span>
+            </div>
+            <div class="tov-platform-item">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34l-.01-8.66a8.17 8.17 0 0 0 4.78 1.52V4.71a4.84 4.84 0 0 1-1-.02z"/></svg>
+              <span>TikTok Gift Guide Content</span>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Phone mockup — TikTok style -->
+        <div class="tov-phone-wrap reveal-up">
+          <div class="tov-phone-glow" style="background:radial-gradient(ellipse at center,rgba(105,201,228,0.15) 0%,transparent 70%);"></div>
+          <div class="tov-phone tov-phone--tiktok">
+            <div class="tov-phone-notch"></div>
+            <div class="tov-phone-screen" style="position:relative; background:#000; overflow:hidden;">
+
+              <!-- Full-bleed video -->
+              <div class="tov-tt-video-wrap">
+                <video src="../brand_assets/clients/tovolo/Christmas-Spatula.mp4" autoplay muted loop playsinline preload="auto"></video>
+                <div class="tov-tt-vignette"></div>
+              </div>
+
+              <!-- TikTok top bar -->
+              <div class="tov-tt-topbar">
+                <span class="tov-tt-tab">Following</span>
+                <span class="tov-tt-tab tov-tt-tab--active">For You</span>
+                <span class="tov-tt-tab">LIVE</span>
+              </div>
+
+              <!-- Right-side action column -->
+              <div class="tov-tt-actions">
+                <div class="tov-tt-avatar-wrap">
+                  <div class="tov-tt-avatar">
+                    <img src="../brand_assets/clients/tovolo/Tovolo_logo_white.webp" alt="Tovolo">
+                  </div>
+                  <div class="tov-tt-follow">+</div>
+                </div>
+                <div class="tov-tt-action-btn">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                  <span>18.2K</span>
+                </div>
+                <div class="tov-tt-action-btn">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                  <span>843</span>
+                </div>
+                <div class="tov-tt-action-btn">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+                  <span>2.1K</span>
+                </div>
+                <div class="tov-tt-action-btn">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                  <span>Share</span>
+                </div>
+                <div class="tov-tt-disc">
+                  <img src="../brand_assets/clients/tovolo/Tovolo_logo_white.webp" alt="">
+                </div>
+              </div>
+
+              <!-- Bottom-left caption -->
+              <div class="tov-tt-caption">
+                <div class="tov-tt-username">@Tovolo</div>
+                <div class="tov-tt-desc">Give the gift of a great kitchen 🎄 Holiday Spatula collection is HERE #tovolo #giftideas #kitchentools</div>
+                <div class="tov-tt-sound">
+                  <svg width="10" height="10" viewBox="0 0 24 24" fill="white"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+                  <span class="tov-tt-sound-text">Original sound — Tovolo</span>
+                </div>
+              </div>
+
+              <!-- Progress bar -->
+              <div class="tov-tt-progress">
+                <div class="tov-tt-progress-fill"></div>
+              </div>
+
+            </div>
+            <div class="tov-phone-chin"></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Photography Section ── -->
+  <section style="border-top:1px solid #1a1a1a; border-bottom:1px solid #1a1a1a;">
+    <div class="max-w-7xl mx-auto px-6 lg:px-16 py-24">
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-start mb-16">
+        <div>
+          <div class="flex items-center gap-4 mb-8 reveal-up">
+            <div class="tov-rule"></div>
+            <span class="font-heading text-[10px] font-semibold tracking-[0.28em] uppercase" style="color:#6ea452;">Photography</span>
+          </div>
+          <h3 class="font-display text-[clamp(2.5rem,5vw,4.5rem)] leading-[0.95] tracking-wide reveal-up" style="color:#F4F4F0;">
+            BEAUTIFUL<br>BY<br>DESIGN
+          </h3>
+        </div>
+        <div class="lg:pt-16">
+          <p class="font-body text-sm leading-[1.9] reveal-up" style="color:rgba(244,244,240,0.6);">
+            Tovolo's products are as visually striking as they are functional — and our photography makes sure that shows. We captured product and lifestyle images that highlight the craftsmanship, color, and personality behind each piece: sharp compositions, intentional lighting, and a clean aesthetic built to perform across social platforms, e-commerce, and beyond.
+          </p>
+        </div>
+      </div>
+
+      <!-- Masonry photo grid -->
+      <div class="photo-masonry">
+
+        <div class="photo-item">
+          <img src="../brand_assets/clients/tovolo/Orange_Spatula_0924-V3.jpg" alt="Tovolo Orange Spatula">
+          <div class="photo-item-overlay"></div>
+          <div class="photo-item-label">Spatula Collection</div>
+        </div>
+
+        <div class="photo-item">
+          <img src="../brand_assets/clients/tovolo/P1019350.jpg" alt="Tovolo product shot">
+          <div class="photo-item-overlay"></div>
+          <div class="photo-item-label">Product Photography</div>
+        </div>
+
+        <div class="photo-item">
+          <img src="../brand_assets/clients/tovolo/P1020228.jpg" alt="Tovolo product detail">
+          <div class="photo-item-overlay"></div>
+          <div class="photo-item-label">Product Detail</div>
+        </div>
+
+        <div class="photo-item">
+          <img src="../brand_assets/clients/tovolo/P1020233.jpg" alt="Tovolo product lifestyle">
+          <div class="photo-item-overlay"></div>
+          <div class="photo-item-label">Lifestyle</div>
+        </div>
+
+        <div class="photo-item">
+          <img src="../brand_assets/clients/tovolo/P1020280-Enhanced-NR.jpg" alt="Tovolo kitchen tools">
+          <div class="photo-item-overlay"></div>
+          <div class="photo-item-label">Kitchen Tools</div>
+        </div>
+
+        <div class="photo-item">
+          <img src="../brand_assets/clients/tovolo/P1020287.jpg" alt="Tovolo product arrangement">
+          <div class="photo-item-overlay"></div>
+          <div class="photo-item-label">Product Arrangement</div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CTA ── -->
+  <section class="max-w-7xl mx-auto px-6 lg:px-16 py-24 lg:py-32">
+    <div class="flex flex-col lg:flex-row items-start lg:items-end justify-between gap-12">
+      <div>
+        <div class="flex items-center gap-4 mb-6">
+          <div class="tov-rule"></div>
+          <span class="font-heading text-[10px] font-semibold tracking-[0.28em] uppercase" style="color:#6ea452;">Start a Project</span>
+        </div>
+        <h3 class="font-display text-[clamp(3rem,7vw,6.5rem)] leading-[0.9] tracking-wide reveal-up" style="color:#F4F4F0;">
+          READY TO<br>GROW YOUR<br>
+          <span style="color:#6ea452;">BRAND?</span>
+        </h3>
+      </div>
+      <form class="tov-cta-form" onsubmit="return false;">
+        <div class="tov-cta-form-row">
+          <input type="text" placeholder="Your Name" class="tov-cta-input">
+          <input type="email" placeholder="Email Address" class="tov-cta-input">
+        </div>
+        <textarea placeholder="Tell us about your project…" class="tov-cta-input tov-cta-textarea" rows="3"></textarea>
+        <button type="submit" class="cta-btn-green">
+          Send Message
+          <svg width="14" height="10" viewBox="0 0 14 10" fill="none">
+            <path d="M1 5h12M8 1l5 4-5 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </form>
+    </div>
+  </section>
+
+</div><!-- /#case-content -->
+
+
+<!-- ===== SCROLL-EXPANSION LOGIC ===== -->
+<script>
+(function () {
+  const hero        = document.getElementById('expansion-hero');
+  const mediaBox    = document.getElementById('media-box');
+  const mediaOvl    = document.getElementById('media-overlay');
+  const bgLayer     = document.getElementById('expansion-bg');
+  const scrollHint  = document.getElementById('scroll-hint');
+  const caseContent = document.getElementById('case-content');
+  const navbar      = document.getElementById('navbar');
+
+  let progress      = 0;
+  let fullyExpanded = false;
+  let showContent   = false;
+  let touchStartY   = 0;
+  let rafPending    = false;
+
+  const INIT_W  = 320;
+  const INIT_H  = 420;
+  const GROW_W_DESKTOP = 1220;
+  const GROW_H_DESKTOP = 380;
+  const GROW_W_MOBILE  = 640;
+  const GROW_H_MOBILE  = 200;
+
+  function isMob() { return window.innerWidth < 768; }
+
+  function applyProgress(p) {
+    const mob  = isMob();
+    const newW = INIT_W + p * (mob ? GROW_W_MOBILE : GROW_W_DESKTOP);
+    const newH = INIT_H + p * (mob ? GROW_H_MOBILE : GROW_H_DESKTOP);
+    const maxW = window.innerWidth  * 0.96;
+    const maxH = window.innerHeight * 0.88;
+
+    mediaBox.style.width  = Math.min(newW, maxW) + 'px';
+    mediaBox.style.height = Math.min(newH, maxH) + 'px';
+
+    bgLayer.style.opacity  = (1 - p).toString();
+    mediaOvl.style.opacity = (0.5 - p * 0.3).toString();
+    scrollHint.style.opacity = (1 - p * 2.5).toString();
+
+    if (showContent && !caseContent.classList.contains('visible')) {
+      caseContent.classList.add('visible');
+    } else if (!showContent && caseContent.classList.contains('visible')) {
+      caseContent.classList.remove('visible');
+    }
+  }
+
+  function scheduleRender(p) {
+    if (rafPending) return;
+    rafPending = true;
+    requestAnimationFrame(() => { applyProgress(p); rafPending = false; });
+  }
+
+  function onWheel(e) {
+    if (fullyExpanded) {
+      if (e.deltaY < 0 && window.scrollY <= 2) {
+        fullyExpanded = false;
+        showContent   = false;
+        e.preventDefault();
+      }
+      return;
+    }
+    e.preventDefault();
+    const delta = e.deltaY * 0.00095;
+    progress = Math.min(Math.max(progress + delta, 0), 1);
+    if (progress >= 1) { fullyExpanded = true; showContent = true; }
+    else if (progress < 0.75) { showContent = false; }
+    scheduleRender(progress);
+  }
+
+  function onTouchStart(e) { touchStartY = e.touches[0].clientY; }
+
+  function onTouchMove(e) {
+    if (!touchStartY) return;
+    const touchY = e.touches[0].clientY;
+    const deltaY = touchStartY - touchY;
+    if (fullyExpanded) {
+      if (deltaY < -20 && window.scrollY <= 2) {
+        fullyExpanded = false; showContent = false; e.preventDefault();
+      }
+      return;
+    }
+    e.preventDefault();
+    const sensitivity = deltaY < 0 ? 0.009 : 0.006;
+    progress = Math.min(Math.max(progress + deltaY * sensitivity, 0), 1);
+    if (progress >= 1) { fullyExpanded = true; showContent = true; }
+    else if (progress < 0.75) { showContent = false; }
+    scheduleRender(progress);
+    touchStartY = touchY;
+  }
+
+  function onTouchEnd() { touchStartY = 0; }
+
+  function onScroll() {
+    if (!fullyExpanded && window.scrollY > 0) window.scrollTo(0, 0);
+    if (navbar) navbar.classList.toggle('nav-scrolled', window.scrollY > 60);
+  }
+
+  function onResize() { applyProgress(progress); }
+
+  window.addEventListener('wheel',      onWheel,      { passive: false });
+  window.addEventListener('scroll',     onScroll);
+  window.addEventListener('touchstart', onTouchStart, { passive: false });
+  window.addEventListener('touchmove',  onTouchMove,  { passive: false });
+  window.addEventListener('touchend',   onTouchEnd);
+  window.addEventListener('resize',     onResize);
+
+  /* Scroll-reveal IntersectionObserver */
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) entry.target.classList.add('in-view');
+    });
+  }, { threshold: 0.07 });
+
+  function attachReveal() {
+    document.querySelectorAll('.reveal-up, .deliv-item').forEach(el => {
+      revealObserver.observe(el);
+    });
+  }
+
+  caseContent.addEventListener('transitionend', () => {
+    if (caseContent.classList.contains('visible')) attachReveal();
+  });
+  attachReveal();
+
+  applyProgress(0);
+  window.scrollTo(0, 0);
+})();
+</script>
+
+<script>
+  /* ── Mobile menu ── */
+  (function () {
+    const menuToggle   = document.getElementById('menu-toggle');
+    const menuCloseBtn = document.getElementById('menu-close');
+    const mobileMenuEl = document.getElementById('mobile-menu');
+    if (!menuToggle || !mobileMenuEl) return;
+    window.closeMobileMenu = function () {
+      mobileMenuEl.classList.remove('flex');
+      mobileMenuEl.classList.add('hidden');
+    };
+    menuToggle.addEventListener('click', function () {
+      mobileMenuEl.classList.remove('hidden');
+      mobileMenuEl.classList.add('flex');
+    });
+    menuCloseBtn.addEventListener('click', window.closeMobileMenu);
+  })();
+  function toggleMobileServices() {
+    const list  = document.getElementById('mobile-services-list');
+    const arrow = document.getElementById('mobile-svc-arrow');
+    if (!list) return;
+    const open = list.classList.toggle('hidden') === false;
+    if (arrow) arrow.style.transform = open ? 'rotate(180deg)' : 'rotate(0deg)';
+  }
+</script>
+
+<!-- ===== VIDEO MODAL ===== -->
+<div id="vid-modal" role="dialog" aria-modal="true" aria-label="Video player">
+  <button id="vid-modal-close" aria-label="Close video">&#x2715;</button>
+  <video id="vid-modal-video" controls playsinline></video>
+</div>
+
+<script>
+(function () {
+  const modal    = document.getElementById('vid-modal');
+  const vidEl    = document.getElementById('vid-modal-video');
+  const closeBtn = document.getElementById('vid-modal-close');
+
+  window.openVidModal = function (src) {
+    vidEl.src = src;
+    modal.classList.add('open');
+    vidEl.play();
+    document.body.style.overflow = 'hidden';
+  };
+
+  function closeVidModal() {
+    modal.classList.remove('open');
+    vidEl.pause();
+    setTimeout(() => { vidEl.src = ''; }, 300);
+    document.body.style.overflow = '';
+  }
+
+  closeBtn.addEventListener('click', closeVidModal);
+  modal.addEventListener('click', function (e) {
+    if (e.target === modal) closeVidModal();
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && modal.classList.contains('open')) closeVidModal();
+  });
+})();
+</script>
+
+<!-- FOOTER START -->
+  <!-- ===== FOOTER ===== -->
+  <footer class="bg-pmm-surface border-t border-pmm-border pt-16 pb-10">
+    <div class="max-w-7xl mx-auto px-6 lg:px-10">
+      <div class="grid md:grid-cols-4 gap-12 mb-14">
+        <div class="md:col-span-2">
+          <img src="/brand_assets/PMM-Logo-white.png" alt="Perception Multimedia" class="h-14 w-auto mb-5">
+          <p class="font-body text-white/35 text-sm leading-relaxed max-w-xs">
+            Collaborative digital agency in Middleburg Heights, Ohio. Award-winning marketing with no long-term contracts — we earn your business every month.
+          </p>
+          <div class="flex flex-wrap gap-x-4 gap-y-2 mt-6">
+            <a href="tel:4403401115" class="font-heading font-semibold text-[10px] tracking-[0.2em] uppercase text-pmm-red hover:text-white transition-colors duration-200">(440) 340-1115</a>
+            <span class="text-pmm-border">·</span>
+            <a href="tel:4406552032" class="font-heading font-semibold text-[10px] tracking-[0.2em] uppercase text-white/30 hover:text-white transition-colors duration-200">(440) 655-2032</a>
+            <span class="text-pmm-border">·</span>
+            <a href="mailto:info@perceptionmm.com" class="font-heading font-semibold text-[10px] tracking-[0.2em] uppercase text-white/30 hover:text-white transition-colors duration-200">info@perceptionmm.com</a>
+          </div>
+          <div class="flex items-center gap-3 mt-5">
+            <a href="https://www.facebook.com/PerceptionMultimedia/" target="_blank" rel="noopener noreferrer" aria-label="Facebook" class="w-8 h-8 flex items-center justify-center rounded-full border border-pmm-border text-white/30 hover:text-white hover:border-white/40 transition-colors duration-200">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+            </a>
+            <a href="https://www.linkedin.com/company/perception-multimedia-inc-/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" class="w-8 h-8 flex items-center justify-center rounded-full border border-pmm-border text-white/30 hover:text-white hover:border-white/40 transition-colors duration-200">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
+            </a>
+            <a href="https://www.instagram.com/perception_multimedia/" target="_blank" rel="noopener noreferrer" aria-label="Instagram" class="w-8 h-8 flex items-center justify-center rounded-full border border-pmm-border text-white/30 hover:text-white hover:border-white/40 transition-colors duration-200">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+            </a>
+            <a href="https://www.youtube.com/c/Perceptionmm" target="_blank" rel="noopener noreferrer" aria-label="YouTube" class="w-8 h-8 flex items-center justify-center rounded-full border border-pmm-border text-white/30 hover:text-white hover:border-white/40 transition-colors duration-200">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.95 1.96C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.96A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="#161616"/></svg>
+            </a>
+          </div>
+        </div>
+        <div>
+          <h4 class="font-heading font-semibold text-[10px] tracking-[0.25em] uppercase text-white/30 mb-5">Services</h4>
+          <ul class="space-y-2.5">
+            <li><a href="/services/video-production.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Video Production</a></li>
+            <li><a href="/services/website-design.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Website Design</a></li>
+            <li><a href="/services/social-media.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Social Media</a></li>
+            <li><a href="/services/email-campaigns.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Email Campaigns</a></li>
+            <li><a href="/services/search-marketing.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Search Marketing</a></li>
+            <li><a href="/services/graphic-design.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Branding &amp; Logo Design</a></li>
+            <li><a href="/services/photography.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Photography</a></li>
+            <li><a href="/services/traditional-media.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Traditional Media</a></li>
+            <li><a href="/services/google-business-profile.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Google Business Profile</a></li>
+            <li><a href="/services/reputation-management.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Reputation Management</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="font-heading font-semibold text-[10px] tracking-[0.25em] uppercase text-white/30 mb-5">Company</h4>
+          <ul class="space-y-2.5">
+            <li><a href="/about.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">About Us</a></li>
+            <li><a href="/clients/index.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Portfolio</a></li>
+            <li><a href="/services/index.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Services</a></li>
+            <li><a href="/contact.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Contact</a></li>
+            <li><a href="/philanthropy.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Philanthropy</a></li>
+            <li><a href="/blog/index.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Blog</a></li>
+            <li><a href="mailto:careers@perceptionmm.com" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Careers</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="border-t border-pmm-border pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <p class="font-body text-xs text-white/20">© 2026 Perception Multimedia Inc. All rights reserved.</p>
+        <p class="font-heading font-semibold text-[10px] tracking-[0.25em] uppercase text-white/15">Middleburg Heights, OH · perceptionmm.com</p>
+      </div>
+    </div>
+  </footer>
+<!-- FOOTER END -->
+
+</body>
+</html>

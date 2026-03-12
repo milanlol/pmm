@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Services — Perception Multimedia Inc.</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Josefin+Sans:ital,wght@0,300;0,400;0,600;0,700;1,300&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../styles.css">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'pmm-red':     '#E81B1E',
+            'pmm-black':   '#0A0A0A',
+            'pmm-dark':    '#111111',
+            'pmm-surface': '#161616',
+            'pmm-border':  '#222222',
+            'pmm-muted':   '#3A3A3A',
+            'pmm-white':   '#F4F4F0',
+            'pmm-cream':   '#EDECEA',
+            'pmm-gray':    '#5C5C5C',
+          },
+          fontFamily: {
+            'display': ['"Bebas Neue"', 'cursive'],
+            'heading': ['"Josefin Sans"', 'sans-serif'],
+            'body':    ['"DM Sans"', 'sans-serif'],
+          },
+        }
+      }
+    }
+  </script>
+  <style>
+    /* Page hero entrance */
+    .page-hero-line {
+      opacity: 0;
+      transform: translateY(28px);
+      animation: fadeSlideUp 0.85s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    .page-hero-line:nth-child(1) { animation-delay: 0.05s; }
+    .page-hero-line:nth-child(2) { animation-delay: 0.20s; }
+    .page-hero-line:nth-child(3) { animation-delay: 0.33s; }
+
+    /* PMM symbol watermark in hero */
+    .page-hero-symbol {
+      position: absolute;
+      right: -2%;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 44vw;
+      max-width: 620px;
+      height: 80%;
+      object-fit: contain;
+      opacity: 0.035;
+      filter: invert(1);
+      pointer-events: none;
+      user-select: none;
+    }
+
+    /* Scroll reveal */
+    .reveal-up {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .reveal-up.in-view { opacity: 1; transform: translateY(0); }
+    .delay-1 { transition-delay: 0.07s; }
+    .delay-2 { transition-delay: 0.14s; }
+    .delay-3 { transition-delay: 0.21s; }
+
+    /* Section eyebrow rule */
+    .eyebrow-rule {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .eyebrow-rule::before {
+      content: '';
+      display: block;
+      width: 36px;
+      height: 2px;
+      background: var(--pmm-red);
+      flex-shrink: 0;
+    }
+
+    /* Make svc-card an anchor */
+    a.svc-card {
+      display: block;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    /* Dark partner badge override */
+    .partner-badge-dark {
+      padding: 18px 28px;
+      border: 1px solid #222;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: border-color 0.25s ease;
+    }
+    .partner-badge-dark:hover { border-color: #333; }
+  </style>
+</head>
+<body class="bg-pmm-black text-pmm-white font-body">
+<div class="overflow-x-hidden">
+
+  <!-- GRAIN OVERLAY -->
+  <div class="grain-overlay" aria-hidden="true"></div>
+
+  <!-- NAV START -->
+  <!-- NAV -->
+  <nav id="navbar" class="fixed top-0 left-0 right-0 z-50">
+    <div class="max-w-7xl mx-auto px-6 lg:px-10 h-20 flex items-center justify-between">
+      <a href="/index.html" class="flex-shrink-0">
+        <img src="/brand_assets/PMM-Logo-white.png" alt="Perception Multimedia" class="h-11 w-auto">
+      </a>
+      <div class="hidden md:flex items-center gap-8">
+        <a href="/index.html" class="nav-link font-heading font-semibold text-xs tracking-[0.2em] uppercase text-white/60 hover:text-white transition-colors duration-200">Home</a>
+        <a href="/about.html" class="nav-link font-heading font-semibold text-xs tracking-[0.2em] uppercase text-white/60 hover:text-white transition-colors duration-200">About</a>
+        <div class="nav-dropdown-wrapper">
+          <a href="/services/index.html" class="nav-link nav-active font-heading font-semibold text-xs tracking-[0.2em] uppercase transition-colors duration-200 flex items-center gap-1.5">Services <svg class="nav-chevron-icon" width="8" height="5" viewBox="0 0 8 5" fill="none"><path d="M1 1l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+          <div class="nav-dropdown">
+            <a href="/services/video-production.html" class="nav-dropdown-item">Video Production</a>
+            <a href="/services/website-design.html" class="nav-dropdown-item">Website Design</a>
+            <a href="/services/social-media.html" class="nav-dropdown-item">Social Media</a>
+            <a href="/services/email-campaigns.html" class="nav-dropdown-item">Email Campaigns</a>
+            <a href="/services/photography.html" class="nav-dropdown-item">Photography</a>
+            <a href="/services/search-marketing.html" class="nav-dropdown-item">Search Marketing</a>
+            <a href="/services/graphic-design.html" class="nav-dropdown-item">Branding &amp; Logo Design</a>
+            <a href="/services/traditional-media.html" class="nav-dropdown-item">Traditional Media</a>
+            <a href="/services/google-business-profile.html" class="nav-dropdown-item">Google Business Profile</a>
+            <a href="/services/reputation-management.html" class="nav-dropdown-item">Reputation Management</a>
+          </div>
+        </div>
+        <a href="/clients/index.html" class="nav-link font-heading font-semibold text-xs tracking-[0.2em] uppercase text-white/60 hover:text-white transition-colors duration-200">Work</a>
+        <a href="/philanthropy.html" class="nav-link font-heading font-semibold text-xs tracking-[0.2em] uppercase text-white/60 hover:text-white transition-colors duration-200">Philanthropy</a>
+        <a href="/contact.html" class="nav-cta-btn font-heading font-bold text-xs tracking-[0.2em] uppercase px-6 py-3 bg-pmm-red text-white hover:bg-red-700 transition-colors duration-200">Contact</a>
+      </div>
+      <button id="menu-toggle" class="md:hidden text-white p-2 focus:outline-none" aria-label="Open menu">
+        <svg width="22" height="16" viewBox="0 0 22 16" fill="none">
+          <line x1="0" y1="1"  x2="22" y2="1"  stroke="currentColor" stroke-width="2"/>
+          <line x1="0" y1="8"  x2="22" y2="8"  stroke="currentColor" stroke-width="2"/>
+          <line x1="0" y1="15" x2="22" y2="15" stroke="currentColor" stroke-width="2"/>
+        </svg>
+      </button>
+    </div>
+  </nav>
+
+  <!-- MOBILE MENU -->
+  <div id="mobile-menu" class="fixed inset-0 z-[60] bg-pmm-black hidden flex-col items-center justify-center">
+    <button id="menu-close" class="absolute top-6 right-6 text-white/40 hover:text-white" aria-label="Close menu">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+      </svg>
+    </button>
+    <nav class="flex flex-col items-center gap-5 text-center">
+      <a href="/index.html" onclick="closeMobileMenu()" class="font-display text-5xl text-white hover:text-pmm-red transition-colors duration-200">HOME</a>
+      <a href="/about.html" onclick="closeMobileMenu()" class="font-display text-5xl text-white hover:text-pmm-red transition-colors duration-200">ABOUT</a>
+      <div class="flex flex-col items-center gap-2">
+        <button onclick="toggleMobileServices()" class="font-display text-5xl text-white hover:text-pmm-red flex items-center gap-3 bg-transparent border-none cursor-pointer">SERVICES <span id="mobile-svc-arrow" style="font-size:1.4rem;line-height:1;display:inline-block;transition:transform 0.25s cubic-bezier(0.16,1,0.3,1);">↓</span></button>
+        <div id="mobile-services-list" class="hidden flex-col items-center gap-1 mt-3">
+          <a href="/services/video-production.html" onclick="closeMobileMenu()" class="font-heading font-semibold text-sm tracking-[0.18em] uppercase text-white/50 hover:text-pmm-red transition-colors duration-200 py-2.5 px-6">Video Production</a>
+          <a href="/services/website-design.html" onclick="closeMobileMenu()" class="font-heading font-semibold text-sm tracking-[0.18em] uppercase text-white/50 hover:text-pmm-red transition-colors duration-200 py-2.5 px-6">Website Design</a>
+          <a href="/services/social-media.html" onclick="closeMobileMenu()" class="font-heading font-semibold text-sm tracking-[0.18em] uppercase text-white/50 hover:text-pmm-red transition-colors duration-200 py-2.5 px-6">Social Media</a>
+          <a href="/services/email-campaigns.html" onclick="closeMobileMenu()" class="font-heading font-semibold text-sm tracking-[0.18em] uppercase text-white/50 hover:text-pmm-red transition-colors duration-200 py-2.5 px-6">Email Campaigns</a>
+          <a href="/services/photography.html" onclick="closeMobileMenu()" class="font-heading font-semibold text-sm tracking-[0.18em] uppercase text-white/50 hover:text-pmm-red transition-colors duration-200 py-2.5 px-6">Photography</a>
+          <a href="/services/search-marketing.html" onclick="closeMobileMenu()" class="font-heading font-semibold text-sm tracking-[0.18em] uppercase text-white/50 hover:text-pmm-red transition-colors duration-200 py-2.5 px-6">Search Marketing</a>
+          <a href="/services/graphic-design.html" onclick="closeMobileMenu()" class="font-heading font-semibold text-sm tracking-[0.18em] uppercase text-white/50 hover:text-pmm-red transition-colors duration-200 py-2.5 px-6">Branding &amp; Logo Design</a>
+          <a href="/services/traditional-media.html" onclick="closeMobileMenu()" class="font-heading font-semibold text-sm tracking-[0.18em] uppercase text-white/50 hover:text-pmm-red transition-colors duration-200 py-2.5 px-6">Traditional Media</a>
+          <a href="/services/google-business-profile.html" onclick="closeMobileMenu()" class="font-heading font-semibold text-sm tracking-[0.18em] uppercase text-white/50 hover:text-pmm-red transition-colors duration-200 py-2.5 px-6">Google Business Profile</a>
+          <a href="/services/reputation-management.html" onclick="closeMobileMenu()" class="font-heading font-semibold text-sm tracking-[0.18em] uppercase text-white/50 hover:text-pmm-red transition-colors duration-200 py-2.5 px-6">Reputation Management</a>
+        </div>
+      </div>
+      <a href="/clients/index.html" onclick="closeMobileMenu()" class="font-display text-5xl text-white hover:text-pmm-red transition-colors duration-200">WORK</a>
+      <a href="/philanthropy.html" onclick="closeMobileMenu()" class="font-display text-5xl text-white hover:text-pmm-red transition-colors duration-200">PHILANTHROPY</a>
+      <a href="/contact.html" onclick="closeMobileMenu()" class="font-display text-5xl text-pmm-red">CONTACT</a>
+    </nav>
+    <div class="absolute bottom-10 font-heading text-xs tracking-[0.25em] uppercase text-white/20">440.340.1115</div>
+  </div>
+<!-- NAV END -->
+
+  <!-- ===== PAGE HERO ===== -->
+  <section class="relative flex flex-col justify-end pb-16 pt-40 overflow-hidden" style="min-height: 52vh;">
+    <!-- Radial red atmosphere -->
+    <div class="absolute top-0 left-0 w-full h-full pointer-events-none" aria-hidden="true"
+         style="background: radial-gradient(ellipse 70% 60% at 30% 40%, rgba(232,27,30,0.07) 0%, transparent 70%);"></div>
+    <!-- Bottom grain fade -->
+    <div class="absolute bottom-0 left-0 right-0 h-32 pointer-events-none" aria-hidden="true"
+         style="background: linear-gradient(to bottom, transparent, rgba(10,10,10,0.6));"></div>
+    <!-- PMM symbol watermark -->
+    <img src="../brand_assets/PMM-Logo-Symbol.jpg" alt="" class="page-hero-symbol" aria-hidden="true">
+    <!-- Bottom rule -->
+    <div class="absolute bottom-0 left-0 right-0 h-px bg-pmm-border"></div>
+
+    <div class="relative z-10 max-w-7xl mx-auto px-6 lg:px-10 w-full">
+      <div class="page-hero-line eyebrow-rule">
+        <span class="font-heading font-semibold text-pmm-red text-xs tracking-[0.3em] uppercase">Full-Service Agency &middot; Cleveland, Ohio</span>
+      </div>
+      <h1 class="page-hero-line font-display text-pmm-white leading-[0.88] tracking-[0.02em] mb-6"
+          style="font-size: clamp(4.5rem, 10vw, 10rem);">
+        What We Do
+      </h1>
+      <p class="page-hero-line font-body text-pmm-white/50 leading-[1.75] max-w-xl"
+         style="font-size: clamp(1rem, 1.5vw, 1.15rem);">
+        From video production to digital strategy — integrated campaigns that connect brands with the audiences that matter most.
+      </p>
+    </div>
+  </section>
+
+  <!-- ===== RED MARQUEE STRIP ===== -->
+  <div class="bg-pmm-red py-3 overflow-hidden" aria-hidden="true">
+    <div class="marquee-track">
+      <div class="marquee-inner font-heading font-bold text-[11px] tracking-[0.25em] uppercase text-white">
+        <span>Video Production</span><span class="marquee-dot">&middot;</span>
+        <span>Website Design</span><span class="marquee-dot">&middot;</span>
+        <span>Social Media</span><span class="marquee-dot">&middot;</span>
+        <span>Email Campaigns</span><span class="marquee-dot">&middot;</span>
+        <span>Photography</span><span class="marquee-dot">&middot;</span>
+        <span>Search Marketing</span><span class="marquee-dot">&middot;</span>
+        <span>Graphic Design</span><span class="marquee-dot">&middot;</span>
+        <span>Traditional Media</span><span class="marquee-dot">&middot;</span>
+        <span>Google Business Profile</span><span class="marquee-dot">&middot;</span>
+        <span>Reputation Management</span><span class="marquee-dot">&middot;</span>
+        <span>Video Production</span><span class="marquee-dot">&middot;</span>
+        <span>Website Design</span><span class="marquee-dot">&middot;</span>
+        <span>Social Media</span><span class="marquee-dot">&middot;</span>
+        <span>Email Campaigns</span><span class="marquee-dot">&middot;</span>
+        <span>Photography</span><span class="marquee-dot">&middot;</span>
+        <span>Search Marketing</span><span class="marquee-dot">&middot;</span>
+        <span>Graphic Design</span><span class="marquee-dot">&middot;</span>
+        <span>Traditional Media</span><span class="marquee-dot">&middot;</span>
+        <span>Google Business Profile</span><span class="marquee-dot">&middot;</span>
+        <span>Reputation Management</span><span class="marquee-dot">&middot;</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SERVICES GRID ===== -->
+  <section class="py-20 lg:py-28" style="background: #EDECEA;">
+    <div class="max-w-7xl mx-auto px-6 lg:px-10">
+
+      <div class="mb-14 reveal-up">
+        <div class="eyebrow-rule">
+          <span class="font-heading font-semibold text-[10px] tracking-[0.3em] uppercase text-pmm-gray">Our Services</span>
+        </div>
+        <h2 class="font-display text-pmm-black leading-[0.9] tracking-[0.01em]"
+            style="font-size: clamp(2.5rem, 5vw, 4.5rem);">
+          Everything Your Brand Needs
+        </h2>
+      </div>
+
+      <div class="services-grid">
+
+        <!-- 01. Video Production -->
+        <a href="video-production.html" class="svc-card">
+          <span class="svc-num font-heading font-semibold text-[10px] tracking-[0.3em] uppercase" style="color: #aaa;">01</span>
+          <div class="svc-icon-wrap">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/>
+            </svg>
+          </div>
+          <h3 class="svc-name font-heading font-bold tracking-[0.02em] uppercase text-pmm-black" style="font-size: 1.2rem;">Video Production</h3>
+          <p class="font-body text-sm leading-[1.75]" style="color: #5C5C5C;">
+            Don't just tell customers why they should choose you — show them. We produce compelling brand films, commercials, corporate overviews, and animation that drive real results across every platform.
+          </p>
+          <div class="svc-tags">
+            <span class="svc-tag">Brand Films</span>
+            <span class="svc-tag">Commercials</span>
+            <span class="svc-tag">Animation</span>
+            <span class="svc-tag">Corporate Video</span>
+            <span class="svc-tag">Social Reels</span>
+          </div>
+        </a>
+
+        <!-- 02. Website Design -->
+        <a href="website-design.html" class="svc-card">
+          <span class="svc-num font-heading font-semibold text-[10px] tracking-[0.3em] uppercase" style="color: #aaa;">02</span>
+          <div class="svc-icon-wrap">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>
+            </svg>
+          </div>
+          <h3 class="svc-name font-heading font-bold tracking-[0.02em] uppercase text-pmm-black" style="font-size: 1.2rem;">Website Design</h3>
+          <p class="font-body text-sm leading-[1.75]" style="color: #5C5C5C;">
+            Your website is your most powerful sales tool. We build everything from high-converting landing pages to full eCommerce platforms — designed to perform, built to impress, and engineered to grow with your business.
+          </p>
+          <div class="svc-tags">
+            <span class="svc-tag">UI / UX Design</span>
+            <span class="svc-tag">eCommerce</span>
+            <span class="svc-tag">Landing Pages</span>
+            <span class="svc-tag">CMS</span>
+            <span class="svc-tag">Web Strategy</span>
+          </div>
+        </a>
+
+        <!-- 03. Social Media -->
+        <a href="social-media.html" class="svc-card">
+          <span class="svc-num font-heading font-semibold text-[10px] tracking-[0.3em] uppercase" style="color: #aaa;">03</span>
+          <div class="svc-icon-wrap">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
+              <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+            </svg>
+          </div>
+          <h3 class="svc-name font-heading font-bold tracking-[0.02em] uppercase text-pmm-black" style="font-size: 1.2rem;">Social Media</h3>
+          <p class="font-body text-sm leading-[1.75]" style="color: #5C5C5C;">
+            We manage your brand's voice across every platform where your audience lives — from organic content strategy to paid social campaigns that turn followers into customers and customers into advocates.
+          </p>
+          <div class="svc-tags">
+            <span class="svc-tag">Content Strategy</span>
+            <span class="svc-tag">Paid Social</span>
+            <span class="svc-tag">Community Mgmt</span>
+            <span class="svc-tag">Meta Ads</span>
+            <span class="svc-tag">Analytics</span>
+          </div>
+        </a>
+
+        <!-- 04. Email Campaigns -->
+        <a href="email-campaigns.html" class="svc-card">
+          <span class="svc-num font-heading font-semibold text-[10px] tracking-[0.3em] uppercase" style="color: #aaa;">04</span>
+          <div class="svc-icon-wrap">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+              <polyline points="22,6 12,13 2,6"/>
+            </svg>
+          </div>
+          <h3 class="svc-name font-heading font-bold tracking-[0.02em] uppercase text-pmm-black" style="font-size: 1.2rem;">Email Campaigns</h3>
+          <p class="font-body text-sm leading-[1.75]" style="color: #5C5C5C;">
+            Email remains the highest-ROI channel in digital marketing. We design, write, and launch campaigns that keep your customers engaged — from automated drip sequences to seasonal promotions and newsletters.
+          </p>
+          <div class="svc-tags">
+            <span class="svc-tag">Email Design</span>
+            <span class="svc-tag">Automation</span>
+            <span class="svc-tag">Mailchimp</span>
+            <span class="svc-tag">A/B Testing</span>
+            <span class="svc-tag">List Growth</span>
+          </div>
+        </a>
+
+        <!-- 05. Photography -->
+        <a href="photography.html" class="svc-card">
+          <span class="svc-num font-heading font-semibold text-[10px] tracking-[0.3em] uppercase" style="color: #aaa;">05</span>
+          <div class="svc-icon-wrap">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+              <circle cx="12" cy="13" r="4"/>
+            </svg>
+          </div>
+          <h3 class="svc-name font-heading font-bold tracking-[0.02em] uppercase text-pmm-black" style="font-size: 1.2rem;">Photography</h3>
+          <p class="font-body text-sm leading-[1.75]" style="color: #5C5C5C;">
+            Professional imaging that elevates your brand from every angle. From polished executive headshots and product photography to large-scale event coverage — we capture the moments that define your company.
+          </p>
+          <div class="svc-tags">
+            <span class="svc-tag">Headshots</span>
+            <span class="svc-tag">Product Photography</span>
+            <span class="svc-tag">Event Coverage</span>
+            <span class="svc-tag">Brand Imagery</span>
+          </div>
+        </a>
+
+        <!-- 06. Search Engine Marketing -->
+        <a href="search-marketing.html" class="svc-card">
+          <span class="svc-num font-heading font-semibold text-[10px] tracking-[0.3em] uppercase" style="color: #aaa;">06</span>
+          <div class="svc-icon-wrap">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"/>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+          </div>
+          <h3 class="svc-name font-heading font-bold tracking-[0.02em] uppercase text-pmm-black" style="font-size: 1.2rem;">Search Marketing</h3>
+          <p class="font-body text-sm leading-[1.75]" style="color: #5C5C5C;">
+            Get found by the customers already searching for what you offer. As a certified Google Partner, we manage paid search campaigns that maximize your budget and drive immediate, high-quality traffic to your website.
+          </p>
+          <div class="svc-tags">
+            <span class="svc-tag">Google Ads</span>
+            <span class="svc-tag">PPC Management</span>
+            <span class="svc-tag">SEO</span>
+            <span class="svc-tag">Display Ads</span>
+            <span class="svc-tag">Remarketing</span>
+          </div>
+        </a>
+
+        <!-- 07. Graphic Design -->
+        <a href="graphic-design.html" class="svc-card">
+          <span class="svc-num font-heading font-semibold text-[10px] tracking-[0.3em] uppercase" style="color: #aaa;">07</span>
+          <div class="svc-icon-wrap">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/>
+              <circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/>
+              <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/>
+            </svg>
+          </div>
+          <h3 class="svc-name font-heading font-bold tracking-[0.02em] uppercase text-pmm-black" style="font-size: 1.2rem;">Branding &amp; Logo Design</h3>
+          <p class="font-body text-sm leading-[1.75]" style="color: #5C5C5C;">
+            From logo and brand identity to print collateral and digital creative — we build visual systems that communicate with clarity and make every customer touchpoint reflect the quality of your brand.
+          </p>
+          <div class="svc-tags">
+            <span class="svc-tag">Logo Design</span>
+            <span class="svc-tag">Brand Identity</span>
+            <span class="svc-tag">Print Collateral</span>
+            <span class="svc-tag">Signage</span>
+            <span class="svc-tag">Ad Creative</span>
+          </div>
+        </a>
+
+        <!-- 08. Traditional Media -->
+        <a href="traditional-media.html" class="svc-card">
+          <span class="svc-num font-heading font-semibold text-[10px] tracking-[0.3em] uppercase" style="color: #aaa;">08</span>
+          <div class="svc-icon-wrap">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M16.24 7.76a6 6 0 0 1 0 8.49m-8.48-.01a6 6 0 0 1 0-8.49m11.31-2.82a10 10 0 0 1 0 14.14m-14.14 0a10 10 0 0 1 0-14.14"/>
+              <circle cx="12" cy="12" r="1" fill="currentColor"/>
+            </svg>
+          </div>
+          <h3 class="svc-name font-heading font-bold tracking-[0.02em] uppercase text-pmm-black" style="font-size: 1.2rem;">Traditional Media</h3>
+          <p class="font-body text-sm leading-[1.75]" style="color: #5C5C5C;">
+            Digital isn't the only way to reach your audience. We blend TV, radio, outdoor, and print channels with your digital strategy to create fully integrated campaigns with maximum market coverage.
+          </p>
+          <div class="svc-tags">
+            <span class="svc-tag">TV Advertising</span>
+            <span class="svc-tag">Radio</span>
+            <span class="svc-tag">Billboard / OOH</span>
+            <span class="svc-tag">Print</span>
+            <span class="svc-tag">Media Buying</span>
+          </div>
+        </a>
+
+        <!-- 09. Google Business Profile -->
+        <a href="google-business-profile.html" class="svc-card">
+          <span class="svc-num font-heading font-semibold text-[10px] tracking-[0.3em] uppercase" style="color: #aaa;">09</span>
+          <div class="svc-icon-wrap">
+            <svg width="18" height="18" viewBox="0 0 24 24" style="flex-shrink:0;"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+          </div>
+          <h3 class="svc-name font-heading font-bold tracking-[0.02em] uppercase text-pmm-black" style="font-size: 1.2rem;">Google Business Profile</h3>
+          <p class="font-body text-sm leading-[1.75]" style="color: #5C5C5C;">
+            Local search results begin with your Google Business Profile. We optimize, manage, and grow your listing to improve visibility in Google Maps and local search — driving more calls, visits, and customers.
+          </p>
+          <div class="svc-tags">
+            <span class="svc-tag">Listing Optimization</span>
+            <span class="svc-tag">Google Maps</span>
+            <span class="svc-tag">Review Management</span>
+            <span class="svc-tag">Local SEO</span>
+          </div>
+        </a>
+
+        <!-- 10. Reputation Management -->
+        <a href="reputation-management.html" class="svc-card">
+          <span class="svc-num font-heading font-semibold text-[10px] tracking-[0.3em] uppercase" style="color: #aaa;">10</span>
+          <div class="svc-icon-wrap">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+            </svg>
+          </div>
+          <h3 class="svc-name font-heading font-bold tracking-[0.02em] uppercase text-pmm-black" style="font-size: 1.2rem;">Reputation Management</h3>
+          <p class="font-body text-sm leading-[1.75]" style="color: #5C5C5C;">
+            Online reviews can make or break a business. We monitor, manage, and grow your reputation across Google, Yelp, Facebook, and beyond — turning customer feedback into a competitive advantage.
+          </p>
+          <div class="svc-tags">
+            <span class="svc-tag">Review Monitoring</span>
+            <span class="svc-tag">Response Management</span>
+            <span class="svc-tag">Review Generation</span>
+            <span class="svc-tag">Strategy</span>
+          </div>
+        </a>
+
+      </div><!-- /services-grid -->
+    </div>
+  </section>
+
+  <!-- ===== WHY PMM ===== -->
+  <section class="bg-pmm-black py-20 lg:py-28 border-t border-pmm-border">
+    <div class="max-w-7xl mx-auto px-6 lg:px-10">
+
+      <div class="mb-14 reveal-up">
+        <div class="eyebrow-rule">
+          <span class="font-heading font-semibold text-[10px] tracking-[0.3em] uppercase text-pmm-red">Why PMM</span>
+        </div>
+        <h2 class="font-display text-pmm-white leading-[0.9] tracking-[0.01em] max-w-2xl"
+            style="font-size: clamp(2.5rem, 5vw, 4.5rem);">
+          Results-Driven.<br>No Long-Term Contracts.
+        </h2>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-px bg-pmm-border border border-pmm-border">
+
+        <div class="diff-card">
+          <div class="diff-icon mb-5">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#E81B1E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+            </svg>
+          </div>
+          <h3 class="font-heading font-bold text-lg tracking-[0.02em] uppercase text-pmm-white mb-3">Results-Driven</h3>
+          <p class="font-body text-sm leading-[1.75] text-white/50">
+            Every campaign we run is measured against real business outcomes — not vanity metrics. We focus on what actually moves the needle for your bottom line.
+          </p>
+        </div>
+
+        <div class="diff-card">
+          <div class="diff-icon mb-5">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#E81B1E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+              <circle cx="9" cy="7" r="4"/>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+            </svg>
+          </div>
+          <h3 class="font-heading font-bold text-lg tracking-[0.02em] uppercase text-pmm-white mb-3">Full-Service Team</h3>
+          <p class="font-body text-sm leading-[1.75] text-white/50">
+            From strategy to execution, our in-house team handles everything under one roof. No outsourcing, no hand-off gaps — just cohesive work from people who care about your brand.
+          </p>
+        </div>
+
+        <div class="diff-card">
+          <div class="diff-icon mb-5">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#E81B1E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            </svg>
+          </div>
+          <h3 class="font-heading font-bold text-lg tracking-[0.02em] uppercase text-pmm-white mb-3">No Lock-In</h3>
+          <p class="font-body text-sm leading-[1.75] text-white/50">
+            We don't believe in trapping clients with long-term contracts. We earn your business every month by delivering work that performs and service that goes beyond expectations.
+          </p>
+        </div>
+
+      </div>
+
+      <!-- Partner badges -->
+      <div class="mt-14 pt-10 border-t border-pmm-border reveal-up delay-1">
+        <p class="font-heading font-semibold text-[10px] tracking-[0.3em] uppercase text-white/30 mb-6">Certified Partners</p>
+        <div class="flex flex-wrap items-center gap-4">
+          <div class="partner-badge-dark">
+            <img src="../brand_assets/google-partner-badge.png" alt="Google Partner" class="h-12 w-auto opacity-55 hover:opacity-90 transition-opacity duration-200">
+          </div>
+          <div class="partner-badge-dark">
+            <img src="../brand_assets/Mailchimp-partners-badge.png" alt="Mailchimp Partner" class="h-12 w-auto opacity-55 hover:opacity-90 transition-opacity duration-200">
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===== CTA BANNER ===== -->
+  <section class="relative bg-pmm-red py-20 lg:py-28 overflow-hidden">
+    <img src="../brand_assets/PMM-Logo-Symbol.jpg" alt="" class="cta-symbol" aria-hidden="true">
+    <div class="relative z-10 max-w-7xl mx-auto px-6 lg:px-10">
+      <div class="max-w-2xl reveal-up">
+        <p class="font-heading font-semibold text-[10px] tracking-[0.3em] uppercase text-white/70 mb-4">Let's Work Together</p>
+        <h2 class="font-display text-white leading-[0.88] tracking-[0.01em] mb-8"
+            style="font-size: clamp(2.8rem, 7vw, 6rem);">
+          Ready to Grow<br>Your Brand?
+        </h2>
+        <p class="font-body text-white/75 leading-[1.75] mb-10 max-w-lg" style="font-size: 1.05rem;">
+          No long-term contracts. No fluff. Just strategic marketing that delivers real results for your business. Let's start the conversation.
+        </p>
+        <a href="../index.html#contact"
+           class="inline-flex items-center gap-3 bg-pmm-black text-pmm-white font-heading font-bold text-xs tracking-[0.2em] uppercase px-8 py-4 hover:bg-pmm-white hover:text-pmm-black transition-colors duration-200 group">
+          Get a Free Consultation
+          <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER START -->
+  <!-- ===== FOOTER ===== -->
+  <footer class="bg-pmm-surface border-t border-pmm-border pt-16 pb-10">
+    <div class="max-w-7xl mx-auto px-6 lg:px-10">
+      <div class="grid md:grid-cols-4 gap-12 mb-14">
+        <div class="md:col-span-2">
+          <img src="/brand_assets/PMM-Logo-white.png" alt="Perception Multimedia" class="h-14 w-auto mb-5">
+          <p class="font-body text-white/35 text-sm leading-relaxed max-w-xs">
+            Collaborative digital agency in Middleburg Heights, Ohio. Award-winning marketing with no long-term contracts — we earn your business every month.
+          </p>
+          <div class="flex flex-wrap gap-x-4 gap-y-2 mt-6">
+            <a href="tel:4403401115" class="font-heading font-semibold text-[10px] tracking-[0.2em] uppercase text-pmm-red hover:text-white transition-colors duration-200">(440) 340-1115</a>
+            <span class="text-pmm-border">·</span>
+            <a href="tel:4406552032" class="font-heading font-semibold text-[10px] tracking-[0.2em] uppercase text-white/30 hover:text-white transition-colors duration-200">(440) 655-2032</a>
+            <span class="text-pmm-border">·</span>
+            <a href="mailto:info@perceptionmm.com" class="font-heading font-semibold text-[10px] tracking-[0.2em] uppercase text-white/30 hover:text-white transition-colors duration-200">info@perceptionmm.com</a>
+          </div>
+          <div class="flex items-center gap-3 mt-5">
+            <a href="https://www.facebook.com/PerceptionMultimedia/" target="_blank" rel="noopener noreferrer" aria-label="Facebook" class="w-8 h-8 flex items-center justify-center rounded-full border border-pmm-border text-white/30 hover:text-white hover:border-white/40 transition-colors duration-200">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+            </a>
+            <a href="https://www.linkedin.com/company/perception-multimedia-inc-/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" class="w-8 h-8 flex items-center justify-center rounded-full border border-pmm-border text-white/30 hover:text-white hover:border-white/40 transition-colors duration-200">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
+            </a>
+            <a href="https://www.instagram.com/perception_multimedia/" target="_blank" rel="noopener noreferrer" aria-label="Instagram" class="w-8 h-8 flex items-center justify-center rounded-full border border-pmm-border text-white/30 hover:text-white hover:border-white/40 transition-colors duration-200">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+            </a>
+            <a href="https://www.youtube.com/c/Perceptionmm" target="_blank" rel="noopener noreferrer" aria-label="YouTube" class="w-8 h-8 flex items-center justify-center rounded-full border border-pmm-border text-white/30 hover:text-white hover:border-white/40 transition-colors duration-200">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.95 1.96C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.96A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="#161616"/></svg>
+            </a>
+          </div>
+        </div>
+        <div>
+          <h4 class="font-heading font-semibold text-[10px] tracking-[0.25em] uppercase text-white/30 mb-5">Services</h4>
+          <ul class="space-y-2.5">
+            <li><a href="/services/video-production.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Video Production</a></li>
+            <li><a href="/services/website-design.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Website Design</a></li>
+            <li><a href="/services/social-media.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Social Media</a></li>
+            <li><a href="/services/email-campaigns.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Email Campaigns</a></li>
+            <li><a href="/services/search-marketing.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Search Marketing</a></li>
+            <li><a href="/services/graphic-design.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Branding &amp; Logo Design</a></li>
+            <li><a href="/services/photography.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Photography</a></li>
+            <li><a href="/services/traditional-media.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Traditional Media</a></li>
+            <li><a href="/services/google-business-profile.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Google Business Profile</a></li>
+            <li><a href="/services/reputation-management.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Reputation Management</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="font-heading font-semibold text-[10px] tracking-[0.25em] uppercase text-white/30 mb-5">Company</h4>
+          <ul class="space-y-2.5">
+            <li><a href="/about.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">About Us</a></li>
+            <li><a href="/clients/index.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Portfolio</a></li>
+            <li><a href="/services/index.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Services</a></li>
+            <li><a href="/contact.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Contact</a></li>
+            <li><a href="/philanthropy.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Philanthropy</a></li>
+            <li><a href="/blog/index.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Blog</a></li>
+            <li><a href="mailto:careers@perceptionmm.com" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Careers</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="border-t border-pmm-border pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <p class="font-body text-xs text-white/20">© 2026 Perception Multimedia Inc. All rights reserved.</p>
+        <p class="font-heading font-semibold text-[10px] tracking-[0.25em] uppercase text-white/15">Middleburg Heights, OH · perceptionmm.com</p>
+      </div>
+    </div>
+  </footer>
+<!-- FOOTER END -->
+
+  <script>
+    // Navbar scroll
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('nav-scrolled', window.scrollY > 40);
+    }, { passive: true });
+
+    // Mobile menu
+    const menuToggle = document.getElementById('menu-toggle');
+    const menuClose  = document.getElementById('menu-close');
+    const mobileMenu = document.getElementById('mobile-menu');
+
+    menuToggle.addEventListener('click', () => {
+      mobileMenu.classList.remove('hidden');
+      mobileMenu.classList.add('flex');
+    });
+    menuClose.addEventListener('click', closeMobileMenu);
+
+    function closeMobileMenu() {
+      mobileMenu.classList.add('hidden');
+      mobileMenu.classList.remove('flex');
+    }
+
+    function toggleMobileServices() {
+      const list = document.getElementById('mobile-services-list');
+      const arrow = document.getElementById('mobile-svc-arrow');
+      const isOpen = list.classList.contains('flex');
+      list.classList.toggle('hidden', isOpen);
+      list.classList.toggle('flex', !isOpen);
+      arrow.style.transform = isOpen ? '' : 'rotate(180deg)';
+    }
+
+    // Scroll reveal
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('in-view');
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('.svc-card, .diff-card, .reveal-up').forEach(el => observer.observe(el));
+  </script>
+
+</div><!-- /overflow-x-hidden -->
+</body>
+</html>

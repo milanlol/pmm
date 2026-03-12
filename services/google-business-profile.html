@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Google Business Profile Management — Perception Multimedia Inc.</title>
+  <meta name="description" content="Perception Multimedia optimizes and manages Google Business Profiles for businesses across Cleveland and Northeast Ohio. Improve your local search visibility, Google Maps ranking, and online reputation.">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Josefin+Sans:ital,wght@0,300;0,400;0,600;0,700;1,300&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../styles.css">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'pmm-red':     '#E81B1E',
+            'pmm-black':   '#0A0A0A',
+            'pmm-dark':    '#111111',
+            'pmm-surface': '#161616',
+            'pmm-border':  '#222222',
+            'pmm-muted':   '#3A3A3A',
+            'pmm-white':   '#F4F4F0',
+            'pmm-cream':   '#EDECEA',
+            'pmm-gray':    '#5C5C5C',
+            'g-blue':      '#4285F4',
+          },
+          fontFamily: {
+            'display': ['"Bebas Neue"', 'cursive'],
+            'heading': ['"Josefin Sans"', 'sans-serif'],
+            'body':    ['"DM Sans"', 'sans-serif'],
+          },
+        }
+      }
+    }
+  </script>
+  <style>
+    /* Hero entrance */
+    .hero-line {
+      opacity: 0;
+      transform: translateY(32px);
+      animation: heroUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    .hero-line:nth-child(1) { animation-delay: 0.05s; }
+    .hero-line:nth-child(2) { animation-delay: 0.18s; }
+    .hero-line:nth-child(3) { animation-delay: 0.30s; }
+    @keyframes heroUp { to { opacity: 1; transform: translateY(0); } }
+
+    /* Scroll reveal */
+    .reveal-up {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .reveal-up.in-view { opacity: 1; transform: translateY(0); }
+    .delay-1 { transition-delay: 0.07s; }
+    .delay-2 { transition-delay: 0.14s; }
+    .delay-3 { transition-delay: 0.21s; }
+    .delay-4 { transition-delay: 0.28s; }
+
+    /* Eyebrow rule */
+    .eyebrow-rule {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .eyebrow-rule::before {
+      content: '';
+      display: block;
+      width: 36px;
+      height: 2px;
+      background: #E81B1E;
+      flex-shrink: 0;
+    }
+
+    /* Capability cards */
+    .cap-grid {
+      display: grid;
+      grid-template-columns: repeat(1, 1fr);
+      gap: 1px;
+      background: #222;
+      border: 1px solid #222;
+    }
+    @media (min-width: 640px) { .cap-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (min-width: 1024px) { .cap-grid { grid-template-columns: repeat(3, 1fr); } }
+
+    .cap-card {
+      background: #111;
+      padding: 2rem 2rem 2.25rem;
+      transition: background 0.25s ease;
+    }
+    .cap-card:hover { background: #161616; }
+    .cap-icon {
+      width: 40px;
+      height: 40px;
+      border: 1px solid #222;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.25rem;
+    }
+
+    /* Stats row */
+    .stat-row {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1px;
+      background: #222;
+      border: 1px solid #222;
+    }
+    @media (min-width: 768px) { .stat-row { grid-template-columns: repeat(4, 1fr); } }
+    .stat-cell {
+      background: #0A0A0A;
+      padding: 2rem 1.5rem;
+      text-align: center;
+    }
+
+    /* GBP mockup panel */
+    .gbp-panel {
+      background: #fff;
+      border-radius: 8px;
+      padding: 1.5rem;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+      max-width: 340px;
+    }
+    .gbp-star { color: #F4B400; }
+
+    /* Process steps */
+    .process-step {
+      display: grid;
+      grid-template-columns: 48px 1fr;
+      gap: 1.5rem;
+      align-items: start;
+      padding: 1.75rem 0;
+      border-bottom: 1px solid #222;
+    }
+    .process-step:last-child { border-bottom: none; }
+    .step-num {
+      width: 48px;
+      height: 48px;
+      border: 1px solid #E81B1E;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      color: #E81B1E;
+      font-family: 'Josefin Sans', sans-serif;
+      font-weight: 600;
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+    }
+  </style>
+</head>
+<body class="bg-pmm-black text-pmm-white font-body">
+<div class="overflow-x-hidden">
+
+  <!-- GRAIN OVERLAY -->
+  <div class="grain-overlay" aria-hidden="true"></div>
+
+<!-- NAV START -->
+  <!-- NAV -->
+  <nav id="navbar" class="fixed top-0 left-0 right-0 z-50">
+    <div class="max-w-7xl mx-auto px-6 lg:px-10 h-20 flex items-center justify-between">
+      <a href="/index.html" class="flex-shrink-0">
+        <img src="/brand_assets/PMM-Logo-white.png" alt="Perception Multimedia" class="h-11 w-auto">
+      </a>
+      <div class="hidden md:flex items-center gap-8">
+        <a href="/index.html" class="nav-link font-heading font-semibold text-xs tracking-[0.2em] uppercase text-white/60 hover:text-white transition-colors duration-200">Home</a>
+        <a href="/about.html" class="nav-link font-heading font-semibold text-xs tracking-[0.2em] uppercase text-white/60 hover:text-white transition-colors duration-200">About</a>
+        <div class="nav-dropdown-wrapper">
+          <a href="/services/index.html" class="nav-link nav-active font-heading font-semibold text-xs tracking-[0.2em] uppercase transition-colors duration-200 flex items-center gap-1.5">Services <svg class="nav-chevron-icon" width="8" height="5" viewBox="0 0 8 5" fill="none"><path d="M1 1l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+          <div class="nav-dropdown">
+            <a href="/services/video-production.html" class="nav-dropdown-item">Video Production</a>
+            <a href="/services/website-design.html" class="nav-dropdown-item">Website Design</a>
+            <a href="/services/social-media.html" class="nav-dropdown-item">Social Media</a>
+            <a href="/services/email-campaigns.html" class="nav-dropdown-item">Email Campaigns</a>
+            <a href="/services/photography.html" class="nav-dropdown-item">Photography</a>
+            <a href="/services/search-marketing.html" class="nav-dropdown-item">Search Marketing</a>
+            <a href="/services/graphic-design.html" class="nav-dropdown-item">Branding &amp; Logo Design</a>
+            <a href="/services/traditional-media.html" class="nav-dropdown-item">Traditional Media</a>
+            <a href="/services/google-business-profile.html" class="nav-dropdown-item active">Google Business Profile</a>
+            <a href="/services/reputation-management.html" class="nav-dropdown-item">Reputation Management</a>
+          </div>
+        </div>
+        <a href="/clients/index.html" class="nav-link font-heading font-semibold text-xs tracking-[0.2em] uppercase text-white/60 hover:text-white transition-colors duration-200">Work</a>
+        <a href="/philanthropy.html" class="nav-link font-heading font-semibold text-xs tracking-[0.2em] uppercase text-white/60 hover:text-white transition-colors duration-200">Philanthropy</a>
+        <a href="/contact.html" class="nav-cta-btn font-heading font-bold text-xs tracking-[0.2em] uppercase px-6 py-3 bg-pmm-red text-white hover:bg-red-700 transition-colors duration-200">Contact</a>
+      </div>
+      <button id="menu-toggle" class="md:hidden text-white p-2 focus:outline-none" aria-label="Open menu">
+        <svg width="22" height="16" viewBox="0 0 22 16" fill="none">
+          <line x1="0" y1="1"  x2="22" y2="1"  stroke="currentColor" stroke-width="2"/>
+          <line x1="0" y1="8"  x2="22" y2="8"  stroke="currentColor" stroke-width="2"/>
+          <line x1="0" y1="15" x2="22" y2="15" stroke="currentColor" stroke-width="2"/>
+        </svg>
+      </button>
+    </div>
+  </nav>
+
+  <!-- MOBILE MENU -->
+  <div id="mobile-menu" class="fixed inset-0 z-[60] bg-pmm-black hidden flex-col items-center justify-center">
+    <button id="menu-close" class="absolute top-6 right-6 text-white/40 hover:text-white" aria-label="Close menu">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+      </svg>
+    </button>
+    <nav class="flex flex-col items-center gap-5 text-center">
+      <a href="/index.html" onclick="closeMobileMenu()" class="font-display text-5xl text-white hover:text-pmm-red transition-colors duration-200">HOME</a>
+      <a href="/about.html" onclick="closeMobileMenu()" class="font-display text-5xl text-white hover:text-pmm-red transition-colors duration-200">ABOUT</a>
+      <div class="flex flex-col items-center gap-2">
+        <button onclick="toggleMobileServices()" class="font-display text-5xl text-white hover:text-pmm-red flex items-center gap-3 bg-transparent border-none cursor-pointer">SERVICES <span id="mobile-svc-arrow" style="font-size:1.4rem;line-height:1;display:inline-block;transition:transform 0.25s cubic-bezier(0.16,1,0.3,1);">↓</span></button>
+        <div id="mobile-services-list" class="hidden flex-col items-center gap-1 mt-3">
+          <a href="/services/video-production.html" onclick="closeMobileMenu()" class="font-heading font-semibold text-sm tracking-[0.18em] uppercase text-white/50 hover:text-pmm-red transition-colors duration-200 py-2.5 px-6">Video Production</a>
+          <a href="/services/website-design.html" onclick="closeMobileMenu()" class="font-heading font-semibold text-sm tracking-[0.18em] uppercase text-white/50 hover:text-pmm-red transition-colors duration-200 py-2.5 px-6">Website Design</a>
+          <a href="/services/social-media.html" onclick="closeMobileMenu()" class="font-heading font-semibold text-sm tracking-[0.18em] uppercase text-white/50 hover:text-pmm-red transition-colors duration-200 py-2.5 px-6">Social Media</a>
+          <a href="/services/email-campaigns.html" onclick="closeMobileMenu()" class="font-heading font-semibold text-sm tracking-[0.18em] uppercase text-white/50 hover:text-pmm-red transition-colors duration-200 py-2.5 px-6">Email Campaigns</a>
+          <a href="/services/photography.html" onclick="closeMobileMenu()" class="font-heading font-semibold text-sm tracking-[0.18em] uppercase text-white/50 hover:text-pmm-red transition-colors duration-200 py-2.5 px-6">Photography</a>
+          <a href="/services/search-marketing.html" onclick="closeMobileMenu()" class="font-heading font-semibold text-sm tracking-[0.18em] uppercase text-white/50 hover:text-pmm-red transition-colors duration-200 py-2.5 px-6">Search Marketing</a>
+          <a href="/services/graphic-design.html" onclick="closeMobileMenu()" class="font-heading font-semibold text-sm tracking-[0.18em] uppercase text-white/50 hover:text-pmm-red transition-colors duration-200 py-2.5 px-6">Branding &amp; Logo Design</a>
+          <a href="/services/traditional-media.html" onclick="closeMobileMenu()" class="font-heading font-semibold text-sm tracking-[0.18em] uppercase text-white/50 hover:text-pmm-red transition-colors duration-200 py-2.5 px-6">Traditional Media</a>
+          <a href="/services/google-business-profile.html" onclick="closeMobileMenu()" class="font-heading font-semibold text-sm tracking-[0.18em] uppercase text-white/50 hover:text-pmm-red transition-colors duration-200 py-2.5 px-6">Google Business Profile</a>
+          <a href="/services/reputation-management.html" onclick="closeMobileMenu()" class="font-heading font-semibold text-sm tracking-[0.18em] uppercase text-white/50 hover:text-pmm-red transition-colors duration-200 py-2.5 px-6">Reputation Management</a>
+        </div>
+      </div>
+      <a href="/clients/index.html" onclick="closeMobileMenu()" class="font-display text-5xl text-white hover:text-pmm-red transition-colors duration-200">WORK</a>
+      <a href="/philanthropy.html" onclick="closeMobileMenu()" class="font-display text-5xl text-white hover:text-pmm-red transition-colors duration-200">PHILANTHROPY</a>
+      <a href="/contact.html" onclick="closeMobileMenu()" class="font-display text-5xl text-pmm-red">CONTACT</a>
+    </nav>
+    <div class="absolute bottom-10 font-heading text-xs tracking-[0.25em] uppercase text-white/20">440.340.1115</div>
+  </div>
+<!-- NAV END -->
+
+  <!-- ===== HERO ===== -->
+  <section class="relative flex flex-col justify-end pb-16 pt-44 overflow-hidden" style="min-height: 60vh;">
+    <!-- Radial atmosphere -->
+    <div class="absolute inset-0 pointer-events-none" aria-hidden="true"
+         style="background: radial-gradient(ellipse 80% 70% at 20% 50%, rgba(66,133,244,0.07) 0%, transparent 60%),
+                            radial-gradient(ellipse 60% 50% at 80% 20%, rgba(232,27,30,0.06) 0%, transparent 60%);"></div>
+    <!-- Bottom fade -->
+    <div class="absolute bottom-0 left-0 right-0 h-32 pointer-events-none" aria-hidden="true"
+         style="background: linear-gradient(to bottom, transparent, rgba(10,10,10,0.7));"></div>
+    <div class="absolute bottom-0 left-0 right-0 h-px bg-pmm-border"></div>
+
+    <div class="relative z-10 max-w-7xl mx-auto px-6 lg:px-10 w-full">
+      <div class="hero-line eyebrow-rule">
+        <span class="font-heading font-semibold text-pmm-red text-xs tracking-[0.3em] uppercase">Local SEO &middot; Cleveland, Ohio</span>
+      </div>
+      <h1 class="hero-line font-display text-pmm-white leading-[0.88] tracking-[0.02em] mb-6"
+          style="font-size: clamp(4rem, 9vw, 9rem);">
+        Google Business<br>Profile Management
+      </h1>
+      <p class="hero-line font-body text-pmm-white/50 leading-[1.75] max-w-2xl"
+         style="font-size: clamp(1rem, 1.5vw, 1.15rem);">
+        Your Google Business Profile is often the first thing customers see. We optimize, manage, and grow your listing so your business shows up where it matters — Google Search and Google Maps.
+      </p>
+    </div>
+  </section>
+
+  <!-- ===== RED MARQUEE STRIP ===== -->
+  <div class="bg-pmm-red py-3 overflow-hidden" aria-hidden="true">
+    <div class="marquee-track">
+      <div class="marquee-inner font-heading font-bold text-[11px] tracking-[0.25em] uppercase text-white">
+        <span>Listing Optimization</span><span class="marquee-dot">&middot;</span>
+        <span>Google Maps Ranking</span><span class="marquee-dot">&middot;</span>
+        <span>Review Management</span><span class="marquee-dot">&middot;</span>
+        <span>Photo Management</span><span class="marquee-dot">&middot;</span>
+        <span>Weekly Posts</span><span class="marquee-dot">&middot;</span>
+        <span>Performance Tracking</span><span class="marquee-dot">&middot;</span>
+        <span>Local SEO</span><span class="marquee-dot">&middot;</span>
+        <span>Listing Optimization</span><span class="marquee-dot">&middot;</span>
+        <span>Google Maps Ranking</span><span class="marquee-dot">&middot;</span>
+        <span>Review Management</span><span class="marquee-dot">&middot;</span>
+        <span>Photo Management</span><span class="marquee-dot">&middot;</span>
+        <span>Weekly Posts</span><span class="marquee-dot">&middot;</span>
+        <span>Performance Tracking</span><span class="marquee-dot">&middot;</span>
+        <span>Local SEO</span><span class="marquee-dot">&middot;</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== INTRO SPLIT ===== -->
+  <section class="bg-pmm-cream py-20 lg:py-28">
+    <div class="max-w-7xl mx-auto px-6 lg:px-10">
+      <div class="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
+
+        <div class="reveal-up">
+          <div class="eyebrow-rule" style="margin-bottom: 16px;">
+            <span class="font-heading font-semibold text-[10px] tracking-[0.3em] uppercase text-pmm-gray">Why It Matters</span>
+          </div>
+          <h2 class="font-display text-pmm-black leading-[0.9] tracking-[0.01em] mb-8"
+              style="font-size: clamp(2.5rem, 5vw, 4.5rem);">
+            Win the Local<br>Search Results.
+          </h2>
+          <p class="font-body text-pmm-black/65 leading-[1.75] mb-5" style="font-size: 1.05rem;">
+            When someone in Cleveland searches for a business like yours, Google displays a map and a list of local results before anything else. If your Google Business Profile is incomplete, outdated, or unoptimized — you're invisible.
+          </p>
+          <p class="font-body text-pmm-black/50 leading-[1.75] mb-5" style="font-size: 0.95rem;">
+            Perception Multimedia manages your GBP listing end-to-end: optimizing every field for maximum visibility, posting regular updates, responding to reviews, and reporting on performance so you always know how customers are finding you.
+          </p>
+          <p class="font-body text-pmm-black/40 leading-[1.75]" style="font-size: 0.95rem;">
+            Whether you operate one location or multiple across Northeast Ohio, we make sure your business shows up — and shows well.
+          </p>
+        </div>
+
+        <!-- GBP Visual Mockup -->
+        <div class="reveal-up delay-1 flex justify-center lg:justify-end">
+          <div style="position: relative;">
+            <!-- Shadow/glow behind card -->
+            <div style="position:absolute;inset:-20px;background:radial-gradient(ellipse at center,rgba(66,133,244,0.12) 0%,transparent 70%);pointer-events:none;"></div>
+            <div class="gbp-panel relative z-10">
+              <!-- Google header -->
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;">
+                <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+                <span style="font-family:'DM Sans',sans-serif;font-size:0.75rem;color:#5C5C5C;font-weight:600;letter-spacing:0.05em;">GOOGLE BUSINESS PROFILE</span>
+              </div>
+              <!-- Business name -->
+              <div style="font-family:'Bebas Neue',cursive;font-size:1.6rem;color:#0A0A0A;line-height:1;margin-bottom:4px;">Perception Multimedia</div>
+              <div style="font-family:'DM Sans',sans-serif;font-size:0.78rem;color:#5C5C5C;margin-bottom:10px;">Digital Marketing Agency · Middleburg Heights, OH</div>
+              <!-- Stars -->
+              <div style="display:flex;align-items:center;gap:4px;margin-bottom:12px;">
+                <span class="gbp-star" style="font-size:1rem;">★★★★★</span>
+                <span style="font-family:'DM Sans',sans-serif;font-size:0.78rem;font-weight:600;color:#0A0A0A;">5.0</span>
+                <span style="font-family:'DM Sans',sans-serif;font-size:0.78rem;color:#5C5C5C;">&nbsp;Google Reviews</span>
+              </div>
+              <!-- Info rows -->
+              <div style="display:flex;flex-direction:column;gap:8px;border-top:1px solid #f0f0f0;padding-top:12px;">
+                <div style="display:flex;align-items:center;gap:8px;">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4285F4" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                  <span style="font-family:'DM Sans',sans-serif;font-size:0.78rem;color:#333;">15165 Bagley Rd, Middleburg Heights, OH</span>
+                </div>
+                <div style="display:flex;align-items:center;gap:8px;">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#34A853" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 2.18h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 9.27a16 16 0 0 0 6.29 6.29l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7a2 2 0 0 1 1.72 2.02z"/></svg>
+                  <span style="font-family:'DM Sans',sans-serif;font-size:0.78rem;color:#333;">(440) 340-1115</span>
+                </div>
+                <div style="display:flex;align-items:center;gap:8px;">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FBBC05" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                  <span style="font-family:'DM Sans',sans-serif;font-size:0.78rem;color:#34A853;font-weight:600;">Open · Closes 5:00 PM</span>
+                </div>
+              </div>
+              <!-- Action buttons -->
+              <div style="display:flex;gap:8px;margin-top:14px;">
+                <div style="flex:1;background:#4285F4;color:#fff;text-align:center;padding:8px;border-radius:4px;font-family:'DM Sans',sans-serif;font-size:0.72rem;font-weight:600;">Directions</div>
+                <div style="flex:1;background:#f8f9fa;color:#4285F4;text-align:center;padding:8px;border-radius:4px;font-family:'DM Sans',sans-serif;font-size:0.72rem;font-weight:600;border:1px solid #e0e0e0;">Call</div>
+                <div style="flex:1;background:#f8f9fa;color:#4285F4;text-align:center;padding:8px;border-radius:4px;font-family:'DM Sans',sans-serif;font-size:0.72rem;font-weight:600;border:1px solid #e0e0e0;">Website</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== STATS ===== -->
+  <section class="bg-pmm-black border-t border-pmm-border">
+    <div class="max-w-7xl mx-auto px-6 lg:px-10 py-0">
+      <div class="stat-row">
+        <div class="stat-cell reveal-up">
+          <div class="font-display text-pmm-red" style="font-size: clamp(2.5rem,5vw,3.5rem);">46%</div>
+          <div class="font-heading font-semibold text-[10px] tracking-[0.22em] uppercase text-white/35 mt-1">of Google searches<br>are local</div>
+        </div>
+        <div class="stat-cell reveal-up delay-1">
+          <div class="font-display text-pmm-white" style="font-size: clamp(2.5rem,5vw,3.5rem);">76%</div>
+          <div class="font-heading font-semibold text-[10px] tracking-[0.22em] uppercase text-white/35 mt-1">visit a business<br>within 24 hours</div>
+        </div>
+        <div class="stat-cell reveal-up delay-2">
+          <div class="font-display text-pmm-white" style="font-size: clamp(2.5rem,5vw,3.5rem);">3×</div>
+          <div class="font-heading font-semibold text-[10px] tracking-[0.22em] uppercase text-white/35 mt-1">more calls from<br>optimized profiles</div>
+        </div>
+        <div class="stat-cell reveal-up delay-3">
+          <div class="font-display text-pmm-white" style="font-size: clamp(2.5rem,5vw,3.5rem);">#1</div>
+          <div class="font-heading font-semibold text-[10px] tracking-[0.22em] uppercase text-white/35 mt-1">local search factor<br>is GBP signals</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CAPABILITIES ===== -->
+  <section class="bg-pmm-dark py-20 lg:py-28 border-t border-pmm-border">
+    <div class="max-w-7xl mx-auto px-6 lg:px-10">
+
+      <div class="mb-14 reveal-up">
+        <div class="eyebrow-rule">
+          <span class="font-heading font-semibold text-[10px] tracking-[0.3em] uppercase text-pmm-red">What We Do</span>
+        </div>
+        <h2 class="font-display text-pmm-white leading-[0.9] tracking-[0.01em]"
+            style="font-size: clamp(2.5rem, 5vw, 4.5rem);">
+          Full-Service GBP<br>Management
+        </h2>
+      </div>
+
+      <div class="cap-grid">
+
+        <div class="cap-card reveal-up">
+          <div class="cap-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#E81B1E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+          </div>
+          <h3 class="font-heading font-bold text-sm tracking-[0.06em] uppercase text-pmm-white mb-3">Listing Optimization</h3>
+          <p class="font-body text-sm leading-[1.75] text-white/45">
+            We audit and complete every field in your profile — business name, category, description, attributes, service areas, and hours — using keyword-rich copy that boosts your local rankings.
+          </p>
+        </div>
+
+        <div class="cap-card reveal-up delay-1">
+          <div class="cap-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#E81B1E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>
+            </svg>
+          </div>
+          <h3 class="font-heading font-bold text-sm tracking-[0.06em] uppercase text-pmm-white mb-3">Google Maps Ranking</h3>
+          <p class="font-body text-sm leading-[1.75] text-white/45">
+            We apply proven local SEO techniques to improve your position in the Google Maps "Local Pack" — the three listings that appear at the top of local search results and capture the most clicks.
+          </p>
+        </div>
+
+        <div class="cap-card reveal-up delay-2">
+          <div class="cap-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#E81B1E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+            </svg>
+          </div>
+          <h3 class="font-heading font-bold text-sm tracking-[0.06em] uppercase text-pmm-white mb-3">Review Monitoring &amp; Response</h3>
+          <p class="font-body text-sm leading-[1.75] text-white/45">
+            We monitor new reviews as they come in and craft professional, brand-consistent responses — turning every piece of feedback into an opportunity to demonstrate your commitment to customers.
+          </p>
+        </div>
+
+        <div class="cap-card reveal-up">
+          <div class="cap-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#E81B1E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/>
+              <polyline points="21 15 16 10 5 21"/>
+            </svg>
+          </div>
+          <h3 class="font-heading font-bold text-sm tracking-[0.06em] uppercase text-pmm-white mb-3">Photo &amp; Media Management</h3>
+          <p class="font-body text-sm leading-[1.75] text-white/45">
+            Profiles with professional photos receive significantly more engagement. We manage your photo library — uploading, captioning, and organizing images that make your listing stand out.
+          </p>
+        </div>
+
+        <div class="cap-card reveal-up delay-1">
+          <div class="cap-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#E81B1E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+            </svg>
+          </div>
+          <h3 class="font-heading font-bold text-sm tracking-[0.06em] uppercase text-pmm-white mb-3">Weekly Posts &amp; Updates</h3>
+          <p class="font-body text-sm leading-[1.75] text-white/45">
+            Regular Google Posts signal an active, trustworthy business. We create and schedule posts promoting your services, offers, events, and news — keeping your profile fresh and engaging.
+          </p>
+        </div>
+
+        <div class="cap-card reveal-up delay-2">
+          <div class="cap-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#E81B1E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>
+            </svg>
+          </div>
+          <h3 class="font-heading font-bold text-sm tracking-[0.06em] uppercase text-pmm-white mb-3">Performance Reporting</h3>
+          <p class="font-body text-sm leading-[1.75] text-white/45">
+            Monthly reports detailing searches, views, clicks, direction requests, and phone calls — so you can clearly see how your GBP is driving real business, not just impressions.
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== PROCESS ===== -->
+  <section class="bg-pmm-black py-20 lg:py-28 border-t border-pmm-border">
+    <div class="max-w-7xl mx-auto px-6 lg:px-10">
+      <div class="grid lg:grid-cols-2 gap-16 lg:gap-24">
+
+        <div class="reveal-up">
+          <div class="eyebrow-rule">
+            <span class="font-heading font-semibold text-[10px] tracking-[0.3em] uppercase text-pmm-red">Our Approach</span>
+          </div>
+          <h2 class="font-display text-pmm-white leading-[0.9] tracking-[0.01em] mb-4"
+              style="font-size: clamp(2.5rem, 5vw, 4.5rem);">
+            How We Optimize<br>Your Profile
+          </h2>
+          <p class="font-body text-white/45 text-sm leading-[1.75]">
+            A systematic, ongoing process that builds lasting visibility in local search — not just a one-time setup.
+          </p>
+        </div>
+
+        <div class="reveal-up delay-1">
+          <div class="process-step">
+            <div class="step-num">01</div>
+            <div>
+              <h3 class="font-heading font-bold text-sm tracking-[0.06em] uppercase text-pmm-white mb-2">Audit &amp; Claim</h3>
+              <p class="font-body text-sm leading-[1.75] text-white/45">We conduct a full audit of your existing profile (or create one if needed), verify ownership, and identify all optimization opportunities.</p>
+            </div>
+          </div>
+          <div class="process-step">
+            <div class="step-num">02</div>
+            <div>
+              <h3 class="font-heading font-bold text-sm tracking-[0.06em] uppercase text-pmm-white mb-2">Optimize &amp; Build</h3>
+              <p class="font-body text-sm leading-[1.75] text-white/45">We optimize every field, load professional photos, configure service menus, and write keyword-targeted descriptions that align with how your customers search.</p>
+            </div>
+          </div>
+          <div class="process-step">
+            <div class="step-num">03</div>
+            <div>
+              <h3 class="font-heading font-bold text-sm tracking-[0.06em] uppercase text-pmm-white mb-2">Manage &amp; Post</h3>
+              <p class="font-body text-sm leading-[1.75] text-white/45">Ongoing weekly posts, review responses, Q&amp;A management, and profile updates keep your listing active and your ranking strong.</p>
+            </div>
+          </div>
+          <div class="process-step">
+            <div class="step-num">04</div>
+            <div>
+              <h3 class="font-heading font-bold text-sm tracking-[0.06em] uppercase text-pmm-white mb-2">Report &amp; Refine</h3>
+              <p class="font-body text-sm leading-[1.75] text-white/45">Monthly performance reports with actionable insights. We continuously refine our approach based on what the data tells us about your customers' behavior.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SERVICE AREAS ===== -->
+  <section class="bg-pmm-surface py-16 border-t border-pmm-border">
+    <div class="max-w-7xl mx-auto px-6 lg:px-10">
+      <div class="text-center mb-10 reveal-up">
+        <div class="eyebrow-rule justify-center">
+          <span class="font-heading font-semibold text-[10px] tracking-[0.3em] uppercase text-pmm-red">Service Areas</span>
+        </div>
+        <h2 class="font-display text-pmm-white" style="font-size: clamp(2rem,4vw,3.5rem); line-height:0.9;">We Serve Northeast Ohio</h2>
+      </div>
+      <div class="flex flex-wrap justify-center gap-3 reveal-up delay-1">
+        <span class="font-heading font-semibold text-[11px] tracking-[0.2em] uppercase text-white/40 px-4 py-2 border border-pmm-border">Cleveland</span>
+        <span class="font-heading font-semibold text-[11px] tracking-[0.2em] uppercase text-white/40 px-4 py-2 border border-pmm-border">Middleburg Heights</span>
+        <span class="font-heading font-semibold text-[11px] tracking-[0.2em] uppercase text-white/40 px-4 py-2 border border-pmm-border">Parma</span>
+        <span class="font-heading font-semibold text-[11px] tracking-[0.2em] uppercase text-white/40 px-4 py-2 border border-pmm-border">Strongsville</span>
+        <span class="font-heading font-semibold text-[11px] tracking-[0.2em] uppercase text-white/40 px-4 py-2 border border-pmm-border">Westlake</span>
+        <span class="font-heading font-semibold text-[11px] tracking-[0.2em] uppercase text-white/40 px-4 py-2 border border-pmm-border">Berea</span>
+        <span class="font-heading font-semibold text-[11px] tracking-[0.2em] uppercase text-white/40 px-4 py-2 border border-pmm-border">Avon</span>
+        <span class="font-heading font-semibold text-[11px] tracking-[0.2em] uppercase text-white/40 px-4 py-2 border border-pmm-border">Medina</span>
+        <span class="font-heading font-semibold text-[11px] tracking-[0.2em] uppercase text-white/40 px-4 py-2 border border-pmm-border">Elyria</span>
+        <span class="font-heading font-semibold text-[11px] tracking-[0.2em] uppercase text-white/40 px-4 py-2 border border-pmm-border">Lorain</span>
+        <span class="font-heading font-semibold text-[11px] tracking-[0.2em] uppercase text-white/40 px-4 py-2 border border-pmm-border">Northeast Ohio</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CTA BANNER ===== -->
+  <section class="relative bg-pmm-red py-20 lg:py-28 overflow-hidden">
+    <div class="relative z-10 max-w-7xl mx-auto px-6 lg:px-10">
+      <div class="max-w-2xl reveal-up">
+        <p class="font-heading font-semibold text-[10px] tracking-[0.3em] uppercase text-white/70 mb-4">Get Found Locally</p>
+        <h2 class="font-display text-white leading-[0.88] tracking-[0.01em] mb-8"
+            style="font-size: clamp(2.8rem, 7vw, 6rem);">
+          Ready to Dominate<br>Local Search?
+        </h2>
+        <p class="font-body text-white/75 leading-[1.75] mb-10 max-w-lg" style="font-size: 1.05rem;">
+          Let's optimize your Google Business Profile and put your business at the top of local search results. No long-term contracts — just real results.
+        </p>
+        <a href="../contact.html"
+           class="inline-flex items-center gap-3 bg-pmm-black text-pmm-white font-heading font-bold text-xs tracking-[0.2em] uppercase px-8 py-4 hover:bg-pmm-white hover:text-pmm-black transition-colors duration-200 group">
+          Get a Free Consultation
+          <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+<!-- FOOTER START -->
+  <!-- ===== FOOTER ===== -->
+  <footer class="bg-pmm-surface border-t border-pmm-border pt-16 pb-10">
+    <div class="max-w-7xl mx-auto px-6 lg:px-10">
+      <div class="grid md:grid-cols-4 gap-12 mb-14">
+        <div class="md:col-span-2">
+          <img src="/brand_assets/PMM-Logo-white.png" alt="Perception Multimedia" class="h-14 w-auto mb-5">
+          <p class="font-body text-white/35 text-sm leading-relaxed max-w-xs">
+            Collaborative digital agency in Middleburg Heights, Ohio. Award-winning marketing with no long-term contracts — we earn your business every month.
+          </p>
+          <div class="flex flex-wrap gap-x-4 gap-y-2 mt-6">
+            <a href="tel:4403401115" class="font-heading font-semibold text-[10px] tracking-[0.2em] uppercase text-pmm-red hover:text-white transition-colors duration-200">(440) 340-1115</a>
+            <span class="text-pmm-border">·</span>
+            <a href="tel:4406552032" class="font-heading font-semibold text-[10px] tracking-[0.2em] uppercase text-white/30 hover:text-white transition-colors duration-200">(440) 655-2032</a>
+            <span class="text-pmm-border">·</span>
+            <a href="mailto:info@perceptionmm.com" class="font-heading font-semibold text-[10px] tracking-[0.2em] uppercase text-white/30 hover:text-white transition-colors duration-200">info@perceptionmm.com</a>
+          </div>
+          <div class="flex items-center gap-3 mt-5">
+            <a href="https://www.facebook.com/PerceptionMultimedia/" target="_blank" rel="noopener noreferrer" aria-label="Facebook" class="w-8 h-8 flex items-center justify-center rounded-full border border-pmm-border text-white/30 hover:text-white hover:border-white/40 transition-colors duration-200">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+            </a>
+            <a href="https://www.linkedin.com/company/perception-multimedia-inc-/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" class="w-8 h-8 flex items-center justify-center rounded-full border border-pmm-border text-white/30 hover:text-white hover:border-white/40 transition-colors duration-200">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
+            </a>
+            <a href="https://www.instagram.com/perception_multimedia/" target="_blank" rel="noopener noreferrer" aria-label="Instagram" class="w-8 h-8 flex items-center justify-center rounded-full border border-pmm-border text-white/30 hover:text-white hover:border-white/40 transition-colors duration-200">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+            </a>
+            <a href="https://www.youtube.com/c/Perceptionmm" target="_blank" rel="noopener noreferrer" aria-label="YouTube" class="w-8 h-8 flex items-center justify-center rounded-full border border-pmm-border text-white/30 hover:text-white hover:border-white/40 transition-colors duration-200">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.95 1.96C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.96A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="#161616"/></svg>
+            </a>
+          </div>
+        </div>
+        <div>
+          <h4 class="font-heading font-semibold text-[10px] tracking-[0.25em] uppercase text-white/30 mb-5">Services</h4>
+          <ul class="space-y-2.5">
+            <li><a href="/services/video-production.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Video Production</a></li>
+            <li><a href="/services/website-design.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Website Design</a></li>
+            <li><a href="/services/social-media.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Social Media</a></li>
+            <li><a href="/services/email-campaigns.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Email Campaigns</a></li>
+            <li><a href="/services/search-marketing.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Search Marketing</a></li>
+            <li><a href="/services/graphic-design.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Branding &amp; Logo Design</a></li>
+            <li><a href="/services/photography.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Photography</a></li>
+            <li><a href="/services/traditional-media.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Traditional Media</a></li>
+            <li><a href="/services/google-business-profile.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Google Business Profile</a></li>
+            <li><a href="/services/reputation-management.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Reputation Management</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="font-heading font-semibold text-[10px] tracking-[0.25em] uppercase text-white/30 mb-5">Company</h4>
+          <ul class="space-y-2.5">
+            <li><a href="/about.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">About Us</a></li>
+            <li><a href="/clients/index.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Portfolio</a></li>
+            <li><a href="/services/index.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Services</a></li>
+            <li><a href="/contact.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Contact</a></li>
+            <li><a href="/philanthropy.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Philanthropy</a></li>
+            <li><a href="/blog/index.html" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Blog</a></li>
+            <li><a href="mailto:careers@perceptionmm.com" class="font-body text-sm text-white/50 hover:text-white transition-colors duration-200">Careers</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="border-t border-pmm-border pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <p class="font-body text-xs text-white/20">© 2026 Perception Multimedia Inc. All rights reserved.</p>
+        <p class="font-heading font-semibold text-[10px] tracking-[0.25em] uppercase text-white/15">Middleburg Heights, OH · perceptionmm.com</p>
+      </div>
+    </div>
+  </footer>
+<!-- FOOTER END -->
+
+  <script>
+    // Navbar scroll
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('nav-scrolled', window.scrollY > 40);
+    }, { passive: true });
+
+    // Mobile menu
+    const menuToggle = document.getElementById('menu-toggle');
+    const menuClose  = document.getElementById('menu-close');
+    const mobileMenu = document.getElementById('mobile-menu');
+
+    menuToggle.addEventListener('click', () => {
+      mobileMenu.classList.remove('hidden');
+      mobileMenu.classList.add('flex');
+    });
+    menuClose.addEventListener('click', closeMobileMenu);
+
+    function closeMobileMenu() {
+      mobileMenu.classList.add('hidden');
+      mobileMenu.classList.remove('flex');
+    }
+
+    function toggleMobileServices() {
+      const list = document.getElementById('mobile-services-list');
+      const arrow = document.getElementById('mobile-svc-arrow');
+      const isOpen = list.classList.contains('flex');
+      list.classList.toggle('hidden', isOpen);
+      list.classList.toggle('flex', !isOpen);
+      arrow.style.transform = isOpen ? '' : 'rotate(180deg)';
+    }
+
+    // Scroll reveal
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('in-view');
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.07, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('.reveal-up').forEach(el => observer.observe(el));
+  </script>
+
+</div><!-- /overflow-x-hidden -->
+</body>
+</html>
