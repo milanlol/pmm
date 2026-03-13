@@ -205,44 +205,73 @@
       gap: 32px;
     }
     @media (min-width: 768px) {
-      .video-grid { grid-template-columns: repeat(3, 1fr); }
+      .video-grid { grid-template-columns: repeat(3, 1fr); gap: 2px; }
     }
-
     .video-card {
-      opacity: 0; transform: translateY(16px);
-      transition: opacity 0.55s cubic-bezier(0.16,1,0.3,1),
-                  transform 0.55s cubic-bezier(0.16,1,0.3,1);
+      position: relative; overflow: hidden;
+      height: 280px;
+      cursor: pointer;
+      background: #111;
     }
-    .video-card.in-view { opacity: 1; transform: translateY(0); }
-    .video-card:nth-child(1) { transition-delay: 0s; }
-    .video-card:nth-child(2) { transition-delay: 0.08s; }
-    .video-card:nth-child(3) { transition-delay: 0.16s; }
-
-    .video-embed-wrap {
-      position: relative;
-      width: 100%;
-      padding-bottom: 56.25%;
-      background: #000;
-      border-radius: 6px;
-      overflow: hidden;
-      box-shadow:
-        0 0 0 1px rgba(127,187,66,0.2),
-        0 0 40px rgba(127,187,66,0.08),
-        0 16px 48px rgba(0,0,0,0.6);
-    }
-    .video-embed-wrap iframe {
-      position: absolute; inset: 0;
+    .video-card video {
       width: 100%; height: 100%;
+      object-fit: cover; display: block;
+      filter: brightness(0.65);
+      transition: filter 0.5s ease, transform 0.7s cubic-bezier(0.16,1,0.3,1);
     }
-
-    /* Glow halo on video */
-    .video-glow {
-      position: absolute; inset: -8px; z-index: 0;
-      border-radius: 12px;
-      background: radial-gradient(ellipse 90% 80% at 50% 50%, rgba(127,187,66,0.32) 0%, rgba(127,187,66,0.10) 55%, transparent 100%);
-      filter: blur(22px);
+    .video-card:hover video {
+      filter: brightness(0.45);
+      transform: scale(1.04);
+    }
+    .video-card-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(127,187,66,0.35) 0%, transparent 60%);
       pointer-events: none;
     }
+    .video-card-label {
+      position: absolute; bottom: 20px; left: 20px; right: 20px;
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 10px; font-weight: 600;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      color: rgba(245,232,200,0.9);
+    }
+    .video-card-play {
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 52px; height: 52px;
+      border: 1.5px solid rgba(255,255,255,0.45);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      color: white;
+      transition: border-color 0.25s ease, background 0.25s ease, transform 0.25s ease;
+    }
+    .video-card:hover .video-card-play {
+      border-color: rgba(127,187,66,0.9);
+      background: rgba(127,187,66,0.2);
+      transform: translate(-50%, -50%) scale(1.1);
+    }
+
+    /* ── Video modal ── */
+    #vid-modal {
+      position: fixed; inset: 0; z-index: 500;
+      background: rgba(0,0,0,0.9);
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    #vid-modal.open { opacity: 1; pointer-events: auto; }
+    #vid-modal video {
+      max-width: 90vw; max-height: 82vh;
+      border-radius: 4px;
+      box-shadow: 0 0 0 1px rgba(127,187,66,0.3), 0 32px 80px rgba(0,0,0,0.8);
+    }
+    #vid-modal-close {
+      position: absolute; top: 24px; right: 28px;
+      color: rgba(255,255,255,0.5); cursor: pointer; background: none; border: none;
+      font-size: 28px; line-height: 1;
+      transition: color 0.2s ease;
+    }
+    #vid-modal-close:hover { color: #fff; }
 
     /* Section glow wash behind all 3 videos */
     .video-section-glow {
@@ -372,31 +401,129 @@
       background: rgba(127,187,66,0.06);
     }
 
-    /* ── Social mockup video ── */
-    .social-mockup-wrap {
-      display: flex;
-      flex-direction: column;
+    /* ── Phone Mockup (Our Approach) ── */
+    .fh-social-spotlight {
+      background: #0a0a0a;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+      overflow: visible;
+    }
+    .fh-spotlight-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 64px;
       align-items: center;
-      gap: 16px;
     }
-    .social-mockup-label {
-      font-family: 'Josefin Sans', sans-serif;
-      font-size: 9px; font-weight: 600;
-      letter-spacing: 0.28em; text-transform: uppercase;
-      color: rgba(127,187,66,0.6);
-      display: flex; align-items: center; gap: 10px;
+    @media (min-width: 1024px) {
+      .fh-spotlight-grid { grid-template-columns: 1fr 380px; gap: 80px; }
     }
-    .social-mockup-frame {
+    .fh-phone-wrap {
       position: relative;
-      border-radius: 20px;
-      overflow: hidden;
-      box-shadow: none;
+      display: flex;
+      justify-content: center;
+      padding: 24px 0 40px;
     }
-    .social-mockup-frame video {
-      display: block;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
+    .fh-phone-glow {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 280px; height: 560px;
+      background: radial-gradient(ellipse at center, rgba(127,187,66,0.18) 0%, transparent 70%);
+      pointer-events: none;
+      border-radius: 50%;
+      filter: blur(30px);
+    }
+    .fh-phone {
+      position: relative;
+      width: 240px;
+      background: #0d0d0d;
+      border-radius: 38px;
+      border: 1.5px solid rgba(127,187,66,0.3);
+      box-shadow:
+        0 0 0 5px #0a0a0a,
+        0 0 0 6px rgba(127,187,66,0.12),
+        0 32px 80px rgba(0,0,0,0.8),
+        inset 0 1px 0 rgba(255,255,255,0.06);
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    .fh-phone-notch {
+      position: relative;
+      height: 28px;
+      background: #0d0d0d;
+      display: flex; align-items: center; justify-content: center;
+      z-index: 2;
+    }
+    .fh-phone-notch::after {
+      content: '';
+      width: 70px; height: 14px;
+      background: #111;
+      border-radius: 0 0 14px 14px;
+      border: 1px solid rgba(127,187,66,0.15);
+      border-top: none;
+    }
+    .fh-phone-screen { background: #0d0d0d; overflow: hidden; }
+    .fh-phone-chin {
+      height: 24px; background: #0d0d0d;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .fh-phone-chin::after {
+      content: '';
+      width: 80px; height: 4px;
+      background: rgba(255,255,255,0.12);
+      border-radius: 2px;
+    }
+    .fh-ig-header {
+      display: flex; align-items: center; gap: 8px;
+      padding: 8px 10px;
+      background: #0d0d0d;
+    }
+    .fh-ig-avatar {
+      width: 30px; height: 30px;
+      border-radius: 50%;
+      background: #181818;
+      border: 1.5px solid rgba(127,187,66,0.5);
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden; flex-shrink: 0;
+    }
+    .fh-ig-avatar img { width: 80%; height: auto; object-fit: contain; }
+    .fh-ig-meta { display: flex; flex-direction: column; flex: 1; min-width: 0; }
+    .fh-ig-handle {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 10px; font-weight: 600;
+      color: #F4F4F0;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .fh-ig-sub { font-family: 'DM Sans', sans-serif; font-size: 8px; color: rgba(244,244,240,0.35); }
+    .fh-ig-dots { color: rgba(244,244,240,0.4); flex-shrink: 0; }
+    .fh-phone-video-wrap {
+      width: 100%; margin: 30px 0;
+      overflow: hidden; background: #0d0d0d;
+    }
+    .fh-phone-video-wrap video { width: 100%; height: 100%; object-fit: contain; display: block; }
+    .fh-ig-actions {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 8px 10px 4px;
+      color: rgba(244,244,240,0.8);
+    }
+    .fh-ig-left { display: flex; gap: 12px; align-items: center; }
+    .fh-ig-likes {
+      padding: 0 10px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 9.5px; font-weight: 600; color: #F4F4F0;
+    }
+    .fh-ig-caption {
+      padding: 2px 10px 10px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 8.5px; line-height: 1.5;
+      color: rgba(244,244,240,0.65);
+    }
+    .fh-ig-caption strong { color: #F4F4F0; }
+    .fh-spotlight-text { padding-top: 0; }
+    @media (min-width: 1024px) { .fh-spotlight-text { padding-top: 8px; } }
+    .fh-rule {
+      width: 48px; height: 2px;
+      background: linear-gradient(90deg, #7fbb42, #96d455);
     }
 
     /* ── CTA form ── */
@@ -564,7 +691,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
   <!-- Expanding video box -->
   <div id="media-box">
-    <video src="../brand_assets/clients/fat-heads/fat-heads-promo-video.mp4" autoplay muted loop playsinline preload="auto"></video>
+    <video src="../brand_assets/clients/fat-heads/PimpMySleigh.mp4" autoplay muted loop playsinline preload="auto"></video>
     <div id="media-overlay"></div>
   </div>
 
@@ -652,89 +779,71 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <div class="video-section-glow"></div>
       <div class="video-grid" style="position:relative; z-index:1;">
 
-      <!-- Video 1: Stuff the Bus -->
-      <div class="video-card">
-        <div style="position:relative;">
-          <div class="video-glow"></div>
-          <div style="position:relative; z-index:1;">
-            <div class="video-embed-wrap">
-              <iframe
-                src="https://www.youtube.com/embed/NuLFa3KbeW4"
-                title="Fat Head's — Stuff The Bus"
-                frameborder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                allowfullscreen
-              ></iframe>
+        <!-- Card 1: Stuff the Bus -->
+        <div>
+          <div class="video-card" onclick="openVidModal('../brand_assets/clients/fat-heads/StuffTheBus.mp4')" role="button" tabindex="0">
+            <video src="../brand_assets/clients/fat-heads/StuffTheBus.mp4" autoplay muted loop playsinline preload="auto"></video>
+            <div class="video-card-overlay"></div>
+            <div class="video-card-play">
+              <svg width="14" height="16" viewBox="0 0 14 16" fill="currentColor"><path d="M1 1l12 7L1 15V1z"/></svg>
             </div>
+            <div class="video-card-label">Stuff the Bus</div>
+          </div>
+          <div style="padding:16px 4px 0;">
+            <div class="flex items-center gap-3 mb-2">
+              <div style="width:24px; height:1px; background:#7fbb42;"></div>
+              <span class="font-heading text-[9px] font-semibold tracking-[0.22em] uppercase" style="color:#7fbb42;">Community</span>
+            </div>
+            <h4 class="font-display text-xl tracking-wide text-white mb-2">STUFF THE BUS</h4>
+            <p class="font-body text-xs leading-[1.8]" style="color:rgba(244,244,240,0.5);">
+              A community-driven charity campaign spotlighting Fat Head's commitment to giving back — collecting school supplies to help local students start the year off right.
+            </p>
           </div>
         </div>
-        <div class="mt-5">
-          <div class="flex items-center gap-3 mb-2">
-            <div style="width:24px; height:1px; background:#7fbb42;"></div>
-            <span class="font-heading text-[9px] font-semibold tracking-[0.22em] uppercase" style="color:#7fbb42;">Community</span>
-          </div>
-          <h4 class="font-display text-xl tracking-wide text-white mb-2">STUFF THE BUS</h4>
-          <p class="font-body text-xs leading-[1.8]" style="color:rgba(244,244,240,0.5);">
-            Join us in supporting the Stuff the Bus initiative! We highlight the incredible efforts to provide school supplies to children in need — a community-driven campaign collecting backpacks, notebooks, and essential items to help students start the school year off right.
-          </p>
-        </div>
-      </div>
 
-      <!-- Video 2: Promotional -->
-      <div class="video-card">
-        <div style="position:relative;">
-          <div class="video-glow"></div>
-          <div style="position:relative; z-index:1;">
-            <div class="video-embed-wrap">
-              <iframe
-                src="https://www.youtube.com/embed/VpWGL3X0bKY"
-                title="Fat Head's Promotional Video"
-                frameborder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                allowfullscreen
-              ></iframe>
+        <!-- Card 2: Fat Head's Promo -->
+        <div>
+          <div class="video-card" onclick="openVidModal('../brand_assets/clients/fat-heads/fat-heads-promo-video.mp4')" role="button" tabindex="0">
+            <video src="../brand_assets/clients/fat-heads/fat-heads-promo-video.mp4" autoplay muted loop playsinline preload="auto"></video>
+            <div class="video-card-overlay"></div>
+            <div class="video-card-play">
+              <svg width="14" height="16" viewBox="0 0 14 16" fill="currentColor"><path d="M1 1l12 7L1 15V1z"/></svg>
             </div>
+            <div class="video-card-label">Brand Promo</div>
+          </div>
+          <div style="padding:16px 4px 0;">
+            <div class="flex items-center gap-3 mb-2">
+              <div style="width:24px; height:1px; background:#7fbb42;"></div>
+              <span class="font-heading text-[9px] font-semibold tracking-[0.22em] uppercase" style="color:#7fbb42;">Brand</span>
+            </div>
+            <h4 class="font-display text-xl tracking-wide text-white mb-2">FAT HEAD'S PROMO</h4>
+            <p class="font-body text-xs leading-[1.8]" style="color:rgba(244,244,240,0.5);">
+              The full story behind an iconic Cleveland brewery — bold ales, vibrant atmosphere, and the brand personality that sets Fat Head's apart from the crowd.
+            </p>
           </div>
         </div>
-        <div class="mt-5">
-          <div class="flex items-center gap-3 mb-2">
-            <div style="width:24px; height:1px; background:#7fbb42;"></div>
-            <span class="font-heading text-[9px] font-semibold tracking-[0.22em] uppercase" style="color:#7fbb42;">Brand</span>
-          </div>
-          <h4 class="font-display text-xl tracking-wide text-white mb-2">FAT HEAD'S PROMOTIONAL VIDEO</h4>
-          <p class="font-body text-xs leading-[1.8]" style="color:rgba(244,244,240,0.5);">
-            Discover the bold flavors of Fat Head's Beer. From rich ales to crisp lagers, we dive into the story behind this iconic brewery and explore their standout brews — content built for seasoned craft beer lovers and newcomers alike.
-          </p>
-        </div>
-      </div>
 
-      <!-- Video 3: Pimp My Sleigh -->
-      <div class="video-card">
-        <div style="position:relative;">
-          <div class="video-glow"></div>
-          <div style="position:relative; z-index:1;">
-            <div class="video-embed-wrap">
-              <iframe
-                src="https://www.youtube.com/embed/A39MwyU3FsY"
-                title="Fat Head's — Pimp My Sleigh"
-                frameborder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                allowfullscreen
-              ></iframe>
+        <!-- Card 3: Holly Jolly -->
+        <div>
+          <div class="video-card" onclick="openVidModal('../brand_assets/clients/fat-heads/Holly-Jolly.mp4')" role="button" tabindex="0">
+            <video src="../brand_assets/clients/fat-heads/Holly-Jolly.mp4" autoplay muted loop playsinline preload="auto"></video>
+            <div class="video-card-overlay"></div>
+            <div class="video-card-play">
+              <svg width="14" height="16" viewBox="0 0 14 16" fill="currentColor"><path d="M1 1l12 7L1 15V1z"/></svg>
             </div>
+            <div class="video-card-label">Holly Jolly</div>
+          </div>
+          <div style="padding:16px 4px 0;">
+            <div class="flex items-center gap-3 mb-2">
+              <div style="width:24px; height:1px; background:#7fbb42;"></div>
+              <span class="font-heading text-[9px] font-semibold tracking-[0.22em] uppercase" style="color:#7fbb42;">Seasonal</span>
+            </div>
+            <h4 class="font-display text-xl tracking-wide text-white mb-2">HOLLY JOLLY</h4>
+            <p class="font-body text-xs leading-[1.8]" style="color:rgba(244,244,240,0.5);">
+              A festive holiday spot brewed with the same no-compromise energy as Fat Head's beer — crafted to drive seasonal engagement and keep the brand front-of-mind all winter long.
+            </p>
           </div>
         </div>
-        <div class="mt-5">
-          <div class="flex items-center gap-3 mb-2">
-            <div style="width:24px; height:1px; background:#7fbb42;"></div>
-            <span class="font-heading text-[9px] font-semibold tracking-[0.22em] uppercase" style="color:#7fbb42;">Seasonal</span>
-          </div>
-          <h4 class="font-display text-xl tracking-wide text-white mb-2">PIMP MY SLEIGH</h4>
-          <p class="font-body text-xs leading-[1.8]" style="color:rgba(244,244,240,0.5);">
-            Try Fat Head's great tasting beer for the holidays. A festive, fun social video crafted to drive engagement and spread seasonal cheer — exactly the kind of content that keeps a brand top of mind when it matters most.
-          </p>
-        </div>
-      </div>
 
       </div><!-- /video-grid -->
     </div><!-- /video-section-glow wrapper -->
@@ -768,54 +877,91 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </div>
   </section>
 
-  <!-- ── Approach / Quote ── -->
-  <section style="background:#EFEFED; border-top:1px solid rgba(0,0,0,0.08); border-bottom:1px solid rgba(0,0,0,0.08);">
-    <div class="max-w-7xl mx-auto px-6 lg:px-16 py-24 grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-stretch">
-      <div>
-        <div class="flex items-center gap-4 mb-8">
-          <div style="width:48px; height:2px; background:linear-gradient(90deg,#5a8a2a,#6ea832);"></div>
-          <span class="font-heading text-[10px] font-semibold tracking-[0.28em] uppercase" style="color:#4e7a25;">Our Approach</span>
-        </div>
-        <h3 class="font-display text-[clamp(2.5rem,5vw,4.5rem)] leading-[0.95] tracking-wide mb-8" style="color:#0A0A0A;">
-          CONTENT<br>WITH<br>CHARACTER
-        </h3>
-        <p class="font-body text-sm leading-[1.9]" style="color:rgba(10,10,10,0.65);">
-          Fat Head's isn't a brand that blends in, and neither is the content we made for them. Every video was built to match the brand's personality — direct, fun, and full of flavor. From a charity drive to a holiday social spot, we shaped each piece to connect with Fat Head's audience on the platforms where they live.
-        </p>
-        <p class="font-body text-sm leading-[1.9] mt-5" style="color:rgba(10,10,10,0.65);">
-          Our social media marketing work paired tight creative strategy with production quality that elevated their digital presence. The result: content that doesn't just get viewed — it gets shared.
-        </p>
-        <div class="mt-10" style="border-left:3px solid #5a8a2a; padding-left:28px;">
-          <p class="font-display text-[clamp(1.4rem,2.8vw,2.2rem)] leading-[1.2] tracking-wide mb-5" style="color:#0A0A0A;">
-            "PMM brought the same kind of bold, no-compromise energy to our content that we bring to our beer."
+  <!-- ── Approach / Phone Mockup ── -->
+  <section class="fh-social-spotlight">
+    <div class="max-w-7xl mx-auto px-6 lg:px-16 py-24 lg:py-32">
+      <div class="fh-spotlight-grid">
+
+        <!-- Text column -->
+        <div class="fh-spotlight-text">
+          <div class="flex items-center gap-4 mb-8 reveal-up">
+            <div class="fh-rule"></div>
+            <span class="font-heading text-[10px] font-semibold tracking-[0.28em] uppercase" style="color:#7fbb42;">Our Approach</span>
+          </div>
+          <h3 class="font-display leading-[0.92] tracking-wide reveal-up delay-1"
+              style="font-size:clamp(2.8rem,5.5vw,4.5rem); color:#F4F4F0;">
+            CONTENT<br>WITH<br><span style="color:#7fbb42;">CHARACTER</span>
+          </h3>
+
+          <p class="font-body text-sm leading-[1.9] mt-8 reveal-up delay-2" style="color:rgba(244,244,240,0.58);">
+            Fat Head's isn't a brand that blends in, and neither is the content we made for them. Every video was built to match the brand's personality — direct, fun, and full of flavor. From a charity drive to a holiday social spot, we shaped each piece to connect with Fat Head's audience on the platforms where they live.
           </p>
-          <div class="flex items-center gap-4">
-            <div style="width:40px; height:1px; background:#5a8a2a;"></div>
-            <div>
-              <div class="font-heading text-[11px] font-semibold tracking-[0.18em] uppercase" style="color:#0A0A0A;">Marketing Team</div>
-              <div class="font-heading text-[10px] tracking-[0.14em] uppercase mt-0.5" style="color:#5a8a2a;">Fat Head's Brewery</div>
+          <p class="font-body text-sm leading-[1.9] mt-4 reveal-up delay-2" style="color:rgba(244,244,240,0.58);">
+            Our social media marketing work paired tight creative strategy with production quality that elevated their digital presence. The result: content that doesn't just get viewed — it gets shared.
+          </p>
+
+          <div class="mt-10 reveal-up delay-3" style="border-left:3px solid #7fbb42; padding-left:28px;">
+            <p class="font-display text-[clamp(1.4rem,2.8vw,2rem)] leading-[1.2] tracking-wide mb-5" style="color:#F4F4F0;">
+              "PMM brought the same bold, no-compromise energy to our content that we bring to our beer."
+            </p>
+            <div class="flex items-center gap-4">
+              <div style="width:40px; height:1px; background:#7fbb42;"></div>
+              <div>
+                <div class="font-heading text-[11px] font-semibold tracking-[0.18em] uppercase" style="color:#F4F4F0;">Marketing Team</div>
+                <div class="font-heading text-[10px] tracking-[0.14em] uppercase mt-0.5" style="color:#7fbb42;">Fat Head's Brewery</div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <!-- Social media mockup video -->
-      <div style="display:flex; flex-direction:column; align-items:center; height:100%;">
-        <div class="social-mockup-wrap" style="flex:1; width:100%; display:flex; flex-direction:column;">
-          <div class="social-mockup-label" style="margin-bottom:16px; color:rgba(10,10,10,0.35);">
-            <span style="width:18px; height:1px; background:rgba(10,10,10,0.25); display:inline-block;"></span>
-            Social Content
-            <span style="width:18px; height:1px; background:rgba(10,10,10,0.25); display:inline-block;"></span>
-          </div>
-          <div class="social-mockup-frame" style="flex:1; box-shadow: none; border: none;">
-            <video
-              src="../brand_assets/clients/fat-heads/fat-heads-social-media-mockup.mp4"
-              autoplay muted loop playsinline preload="auto"
-            ></video>
+        <!-- Phone mockup -->
+        <div class="fh-phone-wrap reveal-up">
+          <div class="fh-phone-glow"></div>
+          <div class="fh-phone">
+            <div class="fh-phone-notch"></div>
+            <div class="fh-phone-screen">
+
+              <!-- Fake IG header -->
+              <div class="fh-ig-header">
+                <div class="fh-ig-avatar">
+                  <img src="../brand_assets/clients/fat-heads/fat-heads-logo.png" alt="Fat Head's Brewery">
+                </div>
+                <div class="fh-ig-meta">
+                  <span class="fh-ig-handle">fatheadsbrewery</span>
+                  <span class="fh-ig-sub">Sponsored</span>
+                </div>
+                <svg class="fh-ig-dots" width="16" height="4" viewBox="0 0 16 4" fill="currentColor">
+                  <circle cx="2" cy="2" r="1.5"/>
+                  <circle cx="8" cy="2" r="1.5"/>
+                  <circle cx="14" cy="2" r="1.5"/>
+                </svg>
+              </div>
+
+              <!-- Video -->
+              <div class="fh-phone-video-wrap">
+                <video src="../brand_assets/clients/fat-heads/Bumble-Berry-short-video.mp4" autoplay muted loop playsinline preload="auto"></video>
+              </div>
+
+              <!-- Fake IG actions -->
+              <div class="fh-ig-actions">
+                <div class="fh-ig-left">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                </div>
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+              </div>
+              <div class="fh-ig-likes">8.4k likes</div>
+              <div class="fh-ig-caption">
+                <strong>fatheadsbrewery</strong> Bumble Berry is back and it's better than ever 🍺🍇 Limited seasonal drop — find it at your nearest Fat Head's tap. #FatHeads #CraftBeer #BumbleBerry
+              </div>
+
+            </div>
+            <div class="fh-phone-chin"></div>
           </div>
         </div>
-      </div>
 
+      </div>
     </div>
   </section>
 
@@ -857,6 +1003,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 </div><!-- /#case-content -->
 
+<!-- ===== VIDEO MODAL ===== -->
+<div id="vid-modal" role="dialog" aria-modal="true" aria-label="Video player">
+  <button id="vid-modal-close" aria-label="Close video">&#x2715;</button>
+  <video id="vid-modal-video" controls playsinline></video>
+</div>
 
 <!-- ===== SCROLL-EXPANSION LOGIC ===== -->
 <script>
@@ -1032,6 +1183,37 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   applyProgress(0);
   window.scrollTo(0, 0);
 
+})();
+</script>
+
+<script>
+/* ── Video modal ── */
+(function () {
+  const modal    = document.getElementById('vid-modal');
+  const vidEl    = document.getElementById('vid-modal-video');
+  const closeBtn = document.getElementById('vid-modal-close');
+
+  window.openVidModal = function (src) {
+    vidEl.src = src;
+    modal.classList.add('open');
+    vidEl.play();
+    document.body.style.overflow = 'hidden';
+  };
+
+  function closeVidModal() {
+    modal.classList.remove('open');
+    vidEl.pause();
+    setTimeout(function() { vidEl.src = ''; }, 300);
+    document.body.style.overflow = '';
+  }
+
+  closeBtn.addEventListener('click', closeVidModal);
+  modal.addEventListener('click', function (e) {
+    if (e.target === modal) closeVidModal();
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && modal.classList.contains('open')) closeVidModal();
+  });
 })();
 </script>
 
