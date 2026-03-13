@@ -212,96 +212,91 @@
       background-clip: text;
     }
 
-    /* ── Video section ── */
+    /* ── Video cards (canonical pattern) ── */
     .video-grid {
       display: grid;
       grid-template-columns: 1fr;
       gap: 32px;
     }
     @media (min-width: 768px) {
-      .video-grid { grid-template-columns: repeat(2, 1fr); }
+      .video-grid {
+        grid-template-columns: repeat(6, 1fr);
+        column-gap: 2px;
+        row-gap: 40px;
+      }
+      /* Row 1: fill 3 columns evenly */
+      .video-grid > div:nth-child(1) { grid-column: 1 / 3; }
+      .video-grid > div:nth-child(2) { grid-column: 3 / 5; }
+      .video-grid > div:nth-child(3) { grid-column: 5 / 7; }
+      /* Row 2: center the 2 remaining cards */
+      .video-grid > div:nth-child(4) { grid-column: 2 / 4; }
+      .video-grid > div:nth-child(5) { grid-column: 4 / 6; }
     }
-
     .video-card {
-      opacity: 0; transform: translateY(16px);
-      transition: opacity 0.55s cubic-bezier(0.16,1,0.3,1),
-                  transform 0.55s cubic-bezier(0.16,1,0.3,1);
+      position: relative; overflow: hidden;
+      height: 280px;
+      cursor: pointer;
+      background: #111;
     }
-    .video-card.in-view { opacity: 1; transform: translateY(0); }
-    .video-card:nth-child(1) { transition-delay: 0s; }
-    .video-card:nth-child(2) { transition-delay: 0.10s; }
-
-    .video-embed-wrap {
-      position: relative;
-      width: 100%; padding-bottom: 56.25%;
-      background: #000; border-radius: 6px;
-      overflow: hidden;
-      box-shadow:
-        0 0 0 1px rgba(0,136,51,0.22),
-        0 0 40px rgba(0,136,51,0.08),
-        0 16px 48px rgba(0,0,0,0.6);
-    }
-    .video-embed-wrap video {
-      position: absolute; inset: 0;
+    .video-card video {
       width: 100%; height: 100%;
-      object-fit: cover;
+      object-fit: cover; display: block;
+      filter: brightness(0.65);
+      transition: filter 0.5s ease, transform 0.7s cubic-bezier(0.16,1,0.3,1);
     }
-
-    .video-glow {
-      position: absolute; inset: -8px; z-index: 0;
-      border-radius: 12px;
-      background: radial-gradient(ellipse 90% 80% at 50% 50%, rgba(0,136,51,0.28) 0%, rgba(0,136,51,0.08) 55%, transparent 100%);
-      filter: blur(22px);
+    .video-card:hover video {
+      filter: brightness(0.45);
+      transform: scale(1.04);
+    }
+    .video-card-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(0,68,26,0.55) 0%, transparent 60%);
       pointer-events: none;
     }
-    .video-section-glow {
-      position: absolute; inset: 0; z-index: 0; pointer-events: none;
-      background:
-        radial-gradient(ellipse 60% 70% at 20% 50%, rgba(0,136,51,0.07) 0%, transparent 70%),
-        radial-gradient(ellipse 60% 70% at 80% 50%, rgba(0,136,51,0.07) 0%, transparent 70%);
-      filter: blur(40px);
+    .video-card-label {
+      position: absolute; bottom: 20px; left: 20px; right: 20px;
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 10px; font-weight: 600;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      color: rgba(244,244,240,0.9);
     }
-
-    /* ── Inline video player (no iframe) ── */
-    .video-player-wrap {
-      position: relative;
-      width: 100%; padding-bottom: 56.25%;
-      background: #000; border-radius: 6px;
-      overflow: hidden;
-      box-shadow:
-        0 0 0 1px rgba(0,136,51,0.22),
-        0 0 40px rgba(0,136,51,0.08),
-        0 16px 48px rgba(0,0,0,0.6);
-    }
-    .video-player-wrap video {
-      position: absolute; inset: 0;
-      width: 100%; height: 100%;
-      object-fit: cover;
-    }
-
-    /* Play button overlay */
-    .play-btn-overlay {
-      position: absolute; inset: 0; z-index: 5;
-      display: flex; align-items: center; justify-content: center;
-      cursor: pointer;
-      background: rgba(0,0,0,0.25);
-      transition: background 0.25s ease;
-    }
-    .play-btn-overlay:hover { background: rgba(0,0,0,0.10); }
-    .play-btn-overlay.hidden { display: none; }
-    .play-icon {
-      width: 64px; height: 64px;
-      background: rgba(0,136,51,0.9);
+    .video-card-play {
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 52px; height: 52px;
+      border: 1.5px solid rgba(255,255,255,0.45);
       border-radius: 50%;
       display: flex; align-items: center; justify-content: center;
-      box-shadow: 0 0 0 8px rgba(0,136,51,0.2), 0 4px 24px rgba(0,0,0,0.5);
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      color: white;
+      transition: border-color 0.25s ease, background 0.25s ease, transform 0.25s ease;
     }
-    .play-btn-overlay:hover .play-icon {
-      transform: scale(1.08);
-      box-shadow: 0 0 0 12px rgba(0,136,51,0.18), 0 4px 32px rgba(0,0,0,0.5);
+    .video-card:hover .video-card-play {
+      border-color: rgba(0,136,51,0.9);
+      background: rgba(0,136,51,0.2);
+      transform: translate(-50%, -50%) scale(1.1);
     }
-    .play-icon svg { margin-left: 4px; }
+
+    /* ── Video modal ── */
+    #vid-modal {
+      position: fixed; inset: 0; z-index: 500;
+      background: rgba(0,0,0,0.92);
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    #vid-modal.open { opacity: 1; pointer-events: auto; }
+    #vid-modal video {
+      max-width: 90vw; max-height: 82vh;
+      border-radius: 4px;
+      box-shadow: 0 0 0 1px rgba(0,136,51,0.3), 0 32px 80px rgba(0,0,0,0.8);
+    }
+    #vid-modal-close {
+      position: absolute; top: 24px; right: 28px;
+      color: rgba(255,255,255,0.5); cursor: pointer; background: none; border: none;
+      font-size: 28px; line-height: 1;
+      transition: color 0.2s ease;
+    }
+    #vid-modal-close:hover { color: #fff; }
 
     /* ── Photo gallery ── */
 
@@ -533,6 +528,148 @@
     .reveal-up:nth-child(3) { transition-delay: 0.19s; }
 
 
+    /* ── Social Spotlight ── */
+    .swg-social-spotlight {
+      background: #0a0a0a;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+      overflow: visible;
+    }
+    .swg-spotlight-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 64px;
+      align-items: center;
+    }
+    @media (min-width: 1024px) {
+      .swg-spotlight-grid { grid-template-columns: 380px 1fr; gap: 80px; }
+      .swg-spotlight-grid--reverse { grid-template-columns: 1fr 380px; }
+    }
+    .swg-phone-wrap {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      padding: 24px 0 40px;
+    }
+    .swg-phone-glow {
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 280px; height: 560px;
+      background: radial-gradient(ellipse at center, rgba(0,136,51,0.18) 0%, transparent 70%);
+      pointer-events: none; border-radius: 50%; filter: blur(30px);
+    }
+    .swg-phone {
+      position: relative; width: 240px;
+      background: #0d0d0d; border-radius: 38px;
+      border: 1.5px solid rgba(0,136,51,0.3);
+      box-shadow:
+        0 0 0 5px #0a0a0a,
+        0 0 0 6px rgba(0,136,51,0.12),
+        0 32px 80px rgba(0,0,0,0.8),
+        inset 0 1px 0 rgba(255,255,255,0.06);
+      overflow: hidden; flex-shrink: 0;
+    }
+    .swg-phone-notch {
+      position: relative; height: 28px;
+      background: #0d0d0d;
+      display: flex; align-items: center; justify-content: center; z-index: 2;
+    }
+    .swg-phone-notch::after {
+      content: ''; width: 70px; height: 14px;
+      background: #111; border-radius: 0 0 14px 14px;
+      border: 1px solid rgba(0,136,51,0.15); border-top: none;
+    }
+    .swg-phone-screen { background: #0d0d0d; overflow: hidden; }
+    .swg-phone-chin {
+      height: 24px; background: #0d0d0d;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .swg-phone-chin::after {
+      content: ''; width: 80px; height: 4px;
+      background: rgba(255,255,255,0.12); border-radius: 2px;
+    }
+    /* IG UI */
+    .swg-ig-header {
+      display: flex; align-items: center; gap: 8px;
+      padding: 8px 10px; background: #0d0d0d;
+    }
+    .swg-ig-avatar {
+      width: 30px; height: 30px; border-radius: 50%;
+      background: #181818; border: 1.5px solid rgba(0,136,51,0.5);
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden; flex-shrink: 0;
+    }
+    .swg-ig-avatar img { width: 80%; height: auto; object-fit: contain; }
+    .swg-ig-meta { display: flex; flex-direction: column; flex: 1; min-width: 0; }
+    .swg-ig-handle {
+      font-family: 'DM Sans', sans-serif; font-size: 10px; font-weight: 600;
+      color: #F4F4F0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .swg-ig-dots { color: rgba(244,244,240,0.4); flex-shrink: 0; }
+    .swg-phone-video-wrap { width: 100%; aspect-ratio: 9/14; overflow: hidden; background: #0d0d0d; }
+    .swg-phone-video-wrap video { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .swg-ig-actions {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 8px 10px 4px; color: rgba(244,244,240,0.8);
+    }
+    .swg-ig-left { display: flex; gap: 12px; align-items: center; }
+    .swg-ig-likes {
+      padding: 0 10px; font-family: 'DM Sans', sans-serif;
+      font-size: 9.5px; font-weight: 600; color: #F4F4F0;
+    }
+    .swg-ig-caption {
+      padding: 2px 10px 10px; font-family: 'DM Sans', sans-serif;
+      font-size: 8.5px; line-height: 1.5; color: rgba(244,244,240,0.65);
+    }
+    .swg-ig-caption strong { color: #F4F4F0; }
+    /* TikTok UI */
+    .swg-phone--tiktok {
+      border-color: rgba(0,136,51,0.25);
+      box-shadow: 0 0 0 5px #0a0a0a, 0 0 0 6px rgba(0,136,51,0.10), 0 32px 80px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.06);
+    }
+    .swg-phone--tiktok .swg-phone-screen { height: 440px; position: relative; background: #000; overflow: hidden; }
+    .swg-tt-video-wrap { position: absolute; inset: 0; z-index: 0; }
+    .swg-tt-video-wrap video { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .swg-tt-vignette {
+      position: absolute; inset: 0;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.45) 0%, transparent 22%), linear-gradient(to top, rgba(0,0,0,0.72) 0%, transparent 45%);
+      pointer-events: none;
+    }
+    .swg-tt-topbar {
+      position: absolute; top: 10px; left: 0; right: 0; z-index: 10;
+      display: flex; justify-content: center; gap: 14px; align-items: center;
+    }
+    .swg-tt-tab { font-family: 'DM Sans', sans-serif; font-size: 9.5px; font-weight: 500; color: rgba(255,255,255,0.5); letter-spacing: 0.03em; }
+    .swg-tt-tab--active { color: #fff; font-weight: 700; position: relative; }
+    .swg-tt-tab--active::after { content: ''; position: absolute; bottom: -3px; left: 50%; transform: translateX(-50%); width: 16px; height: 2px; background: #fff; border-radius: 1px; }
+    .swg-tt-actions { position: absolute; right: 8px; bottom: 60px; z-index: 10; display: flex; flex-direction: column; align-items: center; gap: 14px; }
+    .swg-tt-avatar-wrap { position: relative; margin-bottom: 4px; }
+    .swg-tt-avatar { width: 34px; height: 34px; border-radius: 50%; background: #222; border: 1.5px solid #fff; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+    .swg-tt-avatar img { width: 75%; height: auto; object-fit: contain; }
+    .swg-tt-follow { position: absolute; bottom: -7px; left: 50%; transform: translateX(-50%); width: 14px; height: 14px; background: #008833; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; color: #fff; line-height: 1; }
+    .swg-tt-action-btn { display: flex; flex-direction: column; align-items: center; gap: 2px; color: #fff; }
+    .swg-tt-action-btn span { font-family: 'DM Sans', sans-serif; font-size: 7.5px; font-weight: 600; color: rgba(255,255,255,0.9); }
+    .swg-tt-disc { width: 30px; height: 30px; border-radius: 50%; background: #1a1a1a; border: 3px solid #333; overflow: hidden; display: flex; align-items: center; justify-content: center; animation: discSpin 4s linear infinite; }
+    .swg-tt-disc img { width: 60%; height: auto; object-fit: contain; }
+    @keyframes discSpin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+    .swg-tt-caption { position: absolute; left: 10px; right: 48px; bottom: 18px; z-index: 10; display: flex; flex-direction: column; gap: 4px; }
+    .swg-tt-username { font-family: 'DM Sans', sans-serif; font-size: 10.5px; font-weight: 700; color: #fff; }
+    .swg-tt-desc { font-family: 'DM Sans', sans-serif; font-size: 8px; line-height: 1.45; color: rgba(255,255,255,0.88); display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .swg-tt-sound { display: flex; align-items: center; gap: 5px; margin-top: 2px; }
+    .swg-tt-sound-text { font-family: 'DM Sans', sans-serif; font-size: 7.5px; color: rgba(255,255,255,0.7); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .swg-tt-progress { position: absolute; bottom: 0; left: 0; right: 0; height: 2px; background: rgba(255,255,255,0.2); z-index: 10; }
+    .swg-tt-progress-fill { height: 100%; width: 38%; background: #fff; border-radius: 1px; }
+    /* platform list */
+    .swg-platform-list { display: flex; flex-direction: column; gap: 0; margin-top: 32px; }
+    .swg-platform-item {
+      display: flex; align-items: center; gap: 14px;
+      padding: 13px 0; border-bottom: 1px solid #1a1a1a;
+      font-family: 'Josefin Sans', sans-serif; font-size: 11px; font-weight: 600;
+      letter-spacing: 0.1em; text-transform: uppercase; color: rgba(244,244,240,0.5);
+    }
+    .swg-platform-item:first-child { border-top: 1px solid #1a1a1a; }
+    .swg-platform-item svg { color: #008833; flex-shrink: 0; }
+
     /* Scrollbar */
     ::-webkit-scrollbar          { width: 3px; }
     ::-webkit-scrollbar-track    { background: #0A0A0A; }
@@ -635,7 +772,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
   <!-- Expanding video: nurses footage -->
   <div id="media-box">
-    <video src="../brand_assets/clients/SWG/nurses.mp4" autoplay muted loop playsinline preload="auto"></video>
+    <video src="../brand_assets/clients/SWG/Southwest-General-Maternity-Event.mp4" autoplay muted loop playsinline preload="auto"></video>
     <div id="media-overlay"></div>
   </div>
 
@@ -709,84 +846,142 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
   </section>
 
-  <!-- ── Video Work ── -->
-  <section class="max-w-7xl mx-auto px-6 lg:px-16 py-20 lg:py-28">
-    <div class="flex items-center gap-4 mb-14">
-      <div class="green-rule"></div>
-      <span class="font-heading text-[10px] font-semibold tracking-[0.28em] uppercase" style="color:#008833;">Video Production</span>
-    </div>
+  <!-- ── Video Production ── -->
+  <section style="background:#090909; border-top:1px solid #1a1a1a; border-bottom:1px solid #1a1a1a;">
+    <div class="max-w-7xl mx-auto px-6 lg:px-16 py-24">
 
-    <div style="position:relative;">
-      <div class="video-section-glow"></div>
-      <div class="video-grid" style="position:relative; z-index:1;">
-
-        <!-- Video 1: Dr. Korkor Overview -->
-        <div class="video-card">
-          <div style="position:relative;">
-            <div class="video-glow"></div>
-            <div style="position:relative; z-index:1;">
-              <div class="video-player-wrap" id="wrap-korkor-overview">
-                <video id="vid-korkor-overview"
-                       src="../brand_assets/clients/SWG/DrKorkorOverview.mp4"
-                       poster="../brand_assets/clients/SWG/Meet-Dr-Korkor-Vid-Thumbnail.jpg"
-                       preload="metadata"
-                       playsinline></video>
-                <div class="play-btn-overlay" id="play-korkor-overview">
-                  <div class="play-icon">
-                    <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
-                      <polygon points="7,4 19,11 7,18" fill="white"/>
-                    </svg>
-                  </div>
-                </div>
-              </div>
-            </div>
+      <!-- Section header -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-start mb-16">
+        <div>
+          <div class="flex items-center gap-4 mb-8 reveal-up">
+            <div class="green-rule"></div>
+            <span class="font-heading text-[10px] font-semibold tracking-[0.28em] uppercase" style="color:#008833;">Video Production</span>
           </div>
-          <div class="mt-5">
+          <h3 class="font-display text-[clamp(2.5rem,5vw,4.5rem)] leading-[0.95] tracking-wide reveal-up" style="color:#F4F4F0;">
+            STORIES<br>WORTH<br>TELLING
+          </h3>
+        </div>
+        <div class="lg:pt-16">
+          <p class="font-body text-sm leading-[1.9] reveal-up" style="color:rgba(244,244,240,0.6);">
+            From physician spotlights and facility tours to community events and nursing team highlights, our video work for Southwest General puts real faces on exceptional care — building trust with patients before they ever step through the door.
+          </p>
+        </div>
+      </div>
+
+      <!-- Video grid — 5 videos, 3-col desktop (last 2 centered) -->
+      <div class="video-grid">
+
+        <!-- Card 1: Community -->
+        <div>
+          <div class="video-card" onclick="openVidModal('../brand_assets/clients/SWG/Community.mp4')" role="button" tabindex="0">
+            <video src="../brand_assets/clients/SWG/Community.mp4" autoplay muted loop playsinline preload="auto"></video>
+            <div class="video-card-overlay"></div>
+            <div class="video-card-play">
+              <svg width="14" height="16" viewBox="0 0 14 16" fill="currentColor"><path d="M1 1l12 7L1 15V1z"/></svg>
+            </div>
+            <div class="video-card-label">Community Outreach</div>
+          </div>
+          <div style="padding:16px 4px 0;">
             <div class="flex items-center gap-3 mb-2">
               <div style="width:24px; height:1px; background:#008833;"></div>
-              <span class="font-heading text-[9px] font-semibold tracking-[0.22em] uppercase" style="color:#008833;">Physician Spotlight</span>
+              <span class="font-heading text-[9px] font-semibold tracking-[0.22em] uppercase" style="color:#008833;">Community</span>
             </div>
-            <h4 class="font-display text-xl tracking-wide text-white mb-2">DR. KORKOR — OVERVIEW</h4>
-            <p class="font-body text-xs leading-[1.8]" style="color:rgba(244,244,240,0.50);">
-              A physician spotlight video introducing Dr. Korkor to the Southwest General community — his background, his approach to patient care, and what drives his commitment to medicine. Professional, warm, and built to build trust with prospective patients.
+            <h4 class="font-display text-xl tracking-wide text-white mb-2">COMMUNITY OUTREACH</h4>
+            <p class="font-body text-xs leading-[1.8]" style="color:rgba(244,244,240,0.5);">
+              A heartfelt look at Southwest General's commitment beyond the hospital walls — showcasing the outreach programs and community health initiatives that connect the hospital to the neighborhoods it serves.
             </p>
           </div>
         </div>
 
-        <!-- Video 2: Dr. Korkor Tour -->
-        <div class="video-card">
-          <div style="position:relative;">
-            <div class="video-glow"></div>
-            <div style="position:relative; z-index:1;">
-              <div class="video-player-wrap" id="wrap-korkor-tour">
-                <video id="vid-korkor-tour"
-                       src="../brand_assets/clients/SWG/DrKorkorTour.mp4"
-                       poster="../brand_assets/clients/SWG/Office-Tour-Dr-Korkor-Vid-Thumbnail.jpg"
-                       preload="metadata"
-                       playsinline></video>
-                <div class="play-btn-overlay" id="play-korkor-tour">
-                  <div class="play-icon">
-                    <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
-                      <polygon points="7,4 19,11 7,18" fill="white"/>
-                    </svg>
-                  </div>
-                </div>
-              </div>
+        <!-- Card 2: Facility Tour -->
+        <div>
+          <div class="video-card" onclick="openVidModal('../brand_assets/clients/SWG/DrKorkorTour.mp4')" role="button" tabindex="0">
+            <video src="../brand_assets/clients/SWG/DrKorkorTour.mp4" autoplay muted loop playsinline preload="auto"></video>
+            <div class="video-card-overlay"></div>
+            <div class="video-card-play">
+              <svg width="14" height="16" viewBox="0 0 14 16" fill="currentColor"><path d="M1 1l12 7L1 15V1z"/></svg>
             </div>
+            <div class="video-card-label">Facility Tour</div>
           </div>
-          <div class="mt-5">
+          <div style="padding:16px 4px 0;">
             <div class="flex items-center gap-3 mb-2">
               <div style="width:24px; height:1px; background:#008833;"></div>
               <span class="font-heading text-[9px] font-semibold tracking-[0.22em] uppercase" style="color:#008833;">Facility Tour</span>
             </div>
             <h4 class="font-display text-xl tracking-wide text-white mb-2">DR. KORKOR — FACILITY TOUR</h4>
-            <p class="font-body text-xs leading-[1.8]" style="color:rgba(244,244,240,0.50);">
-              A guided walkthrough of Southwest General's facilities with Dr. Korkor as the host — designed to give patients a behind-the-scenes look at the environment and technology that supports their care. Approachable, transparent, and reassuring.
+            <p class="font-body text-xs leading-[1.8]" style="color:rgba(244,244,240,0.5);">
+              A guided walkthrough of Southwest General's facilities hosted by Dr. Korkor — designed to give patients a transparent, reassuring look at the environment and technology that supports their care.
             </p>
           </div>
         </div>
 
-      </div><!-- /video-grid -->
+        <!-- Card 3: Dr. Korkor Overview -->
+        <div>
+          <div class="video-card" onclick="openVidModal('../brand_assets/clients/SWG/DrKorkorOverview.mp4')" role="button" tabindex="0">
+            <video src="../brand_assets/clients/SWG/DrKorkorOverview.mp4" autoplay muted loop playsinline preload="auto"></video>
+            <div class="video-card-overlay"></div>
+            <div class="video-card-play">
+              <svg width="14" height="16" viewBox="0 0 14 16" fill="currentColor"><path d="M1 1l12 7L1 15V1z"/></svg>
+            </div>
+            <div class="video-card-label">Meet Dr. Korkor</div>
+          </div>
+          <div style="padding:16px 4px 0;">
+            <div class="flex items-center gap-3 mb-2">
+              <div style="width:24px; height:1px; background:#008833;"></div>
+              <span class="font-heading text-[9px] font-semibold tracking-[0.22em] uppercase" style="color:#008833;">Physician Spotlight</span>
+            </div>
+            <h4 class="font-display text-xl tracking-wide text-white mb-2">MEET DR. KORKOR</h4>
+            <p class="font-body text-xs leading-[1.8]" style="color:rgba(244,244,240,0.5);">
+              A physician spotlight introducing Dr. Korkor to the Southwest General community — his background, his approach to patient care, and what drives his commitment to medicine. Professional, warm, and built to earn trust.
+            </p>
+          </div>
+        </div>
+
+        <!-- Card 4: Nurses (centered in row 2) -->
+        <div>
+          <div class="video-card" onclick="openVidModal('../brand_assets/clients/SWG/nurses.mp4')" role="button" tabindex="0">
+            <video src="../brand_assets/clients/SWG/nurses.mp4" autoplay muted loop playsinline preload="auto"></video>
+            <div class="video-card-overlay"></div>
+            <div class="video-card-play">
+              <svg width="14" height="16" viewBox="0 0 14 16" fill="currentColor"><path d="M1 1l12 7L1 15V1z"/></svg>
+            </div>
+            <div class="video-card-label">Nursing Excellence</div>
+          </div>
+          <div style="padding:16px 4px 0;">
+            <div class="flex items-center gap-3 mb-2">
+              <div style="width:24px; height:1px; background:#008833;"></div>
+              <span class="font-heading text-[9px] font-semibold tracking-[0.22em] uppercase" style="color:#008833;">Team</span>
+            </div>
+            <h4 class="font-display text-xl tracking-wide text-white mb-2">NURSING EXCELLENCE</h4>
+            <p class="font-body text-xs leading-[1.8]" style="color:rgba(244,244,240,0.5);">
+              A tribute to the nurses who are the backbone of patient care at Southwest General — capturing their daily dedication, compassion, and the vital role they play in every patient's journey to recovery.
+            </p>
+          </div>
+        </div>
+
+        <!-- Card 5: Maternity Event (centered in row 2) -->
+        <div>
+          <div class="video-card" onclick="openVidModal('../brand_assets/clients/SWG/Southwest-General-Maternity-Event.mp4')" role="button" tabindex="0">
+            <video src="../brand_assets/clients/SWG/Southwest-General-Maternity-Event.mp4" autoplay muted loop playsinline preload="auto"></video>
+            <div class="video-card-overlay"></div>
+            <div class="video-card-play">
+              <svg width="14" height="16" viewBox="0 0 14 16" fill="currentColor"><path d="M1 1l12 7L1 15V1z"/></svg>
+            </div>
+            <div class="video-card-label">Maternity Event</div>
+          </div>
+          <div style="padding:16px 4px 0;">
+            <div class="flex items-center gap-3 mb-2">
+              <div style="width:24px; height:1px; background:#008833;"></div>
+              <span class="font-heading text-[9px] font-semibold tracking-[0.22em] uppercase" style="color:#008833;">Event Coverage</span>
+            </div>
+            <h4 class="font-display text-xl tracking-wide text-white mb-2">MATERNITY EVENT</h4>
+            <p class="font-body text-xs leading-[1.8]" style="color:rgba(244,244,240,0.5);">
+              Full event coverage of Southwest General's maternity program celebration — highlighting the hospital's birth center and connecting expectant families with the compassionate care team guiding them through their journey.
+            </p>
+          </div>
+        </div>
+
+      </div>
     </div>
   </section>
 
@@ -797,13 +992,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <div class="green-rule"></div>
         <span class="font-heading text-[10px] font-semibold tracking-[0.28em] uppercase" style="color:#008833;">Physician Photography</span>
       </div>
-    </div>
-
-    <!-- Environment / office shot — full bleed banner -->
-    <div class="gallery-banner">
-      <img src="../brand_assets/clients/SWG/Jacqui_Stachowiak_Office_3436-.jpg" alt="Southwest General — Clinical Environment">
-      <div class="gallery-banner-overlay"></div>
-      <div class="gallery-banner-label">Clinical Environment</div>
     </div>
 
     <!-- 4 physician portrait cards -->
@@ -839,6 +1027,180 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           <div class="portrait-card-name">Jacqui Stachowiak</div>
           <div class="portrait-card-title">CNP</div>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Social Media Spotlight ── -->
+  <!-- Variant 1: Instagram — Cardiovascular (phone left, text right) -->
+  <section class="swg-social-spotlight">
+    <div class="max-w-7xl mx-auto px-6 lg:px-16 py-24 lg:py-32">
+      <div class="swg-spotlight-grid">
+
+        <!-- Phone mockup — Instagram style -->
+        <div class="swg-phone-wrap reveal-up">
+          <div class="swg-phone-glow"></div>
+          <div class="swg-phone">
+            <div class="swg-phone-notch"></div>
+            <div class="swg-phone-screen">
+              <div class="swg-ig-header">
+                <div class="swg-ig-avatar">
+                  <img src="../brand_assets/clients/SWG/swLogo-Horizontal_color-logo-white.png" alt="Southwest General">
+                </div>
+                <div class="swg-ig-meta">
+                  <span class="swg-ig-handle">swgeneralhosp</span>
+                </div>
+                <svg class="swg-ig-dots" width="16" height="4" viewBox="0 0 16 4" fill="currentColor">
+                  <circle cx="2" cy="2" r="1.5"/><circle cx="8" cy="2" r="1.5"/><circle cx="14" cy="2" r="1.5"/>
+                </svg>
+              </div>
+              <div class="swg-phone-video-wrap">
+                <video src="../brand_assets/clients/SWG/Caridovascular-vertical.mp4" autoplay muted loop playsinline preload="auto"></video>
+              </div>
+              <div class="swg-ig-actions">
+                <div class="swg-ig-left">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                </div>
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+              </div>
+              <div class="swg-ig-likes">12.4k likes</div>
+              <div class="swg-ig-caption">
+                <strong>swgeneralhosp</strong> Your heart deserves expert care close to home. Meet our cardiovascular team. ❤️ #HeartHealth #SouthwestGeneral
+              </div>
+            </div>
+            <div class="swg-phone-chin"></div>
+          </div>
+        </div>
+
+        <!-- Text column -->
+        <div>
+          <div class="flex items-center gap-4 mb-8 reveal-up">
+            <div class="green-rule"></div>
+            <span class="font-heading text-[10px] font-semibold tracking-[0.28em] uppercase" style="color:#008833;">Social Media</span>
+          </div>
+          <h3 class="font-display leading-[0.92] tracking-wide reveal-up delay-1"
+              style="font-size:clamp(2.8rem,5.5vw,5rem); color:#F4F4F0;">
+            REACH<br>PATIENTS<br><span style="color:#008833;">WHERE THEY ARE</span>
+          </h3>
+          <p class="font-body text-sm leading-[1.9] mt-8 reveal-up delay-2" style="color:rgba(244,244,240,0.58);">
+            We create short-form social content that translates complex medical expertise into compelling, human stories — driving awareness and building trust with patients across Instagram, Facebook, and beyond.
+          </p>
+          <div class="swg-platform-list reveal-up delay-3">
+            <div class="swg-platform-item">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+              </svg>
+              <span>Instagram Reels &amp; Feed Posts</span>
+            </div>
+            <div class="swg-platform-item">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+              <span>Facebook Video &amp; Campaigns</span>
+            </div>
+            <div class="swg-platform-item">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
+              <span>YouTube Physician Spotlights</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Variant 2: TikTok — Histology (text left, phone right) -->
+  <section class="swg-social-spotlight" style="background:#090909;">
+    <div class="max-w-7xl mx-auto px-6 lg:px-16 py-24 lg:py-32">
+      <div class="swg-spotlight-grid swg-spotlight-grid--reverse">
+
+        <!-- Text column -->
+        <div>
+          <div class="flex items-center gap-4 mb-8 reveal-up">
+            <div class="green-rule"></div>
+            <span class="font-heading text-[10px] font-semibold tracking-[0.28em] uppercase" style="color:#008833;">Behind the Science</span>
+          </div>
+          <h3 class="font-display leading-[0.92] tracking-wide reveal-up delay-1"
+              style="font-size:clamp(2.8rem,5.5vw,5rem); color:#F4F4F0;">
+            EXPERTISE<br>MADE<br><span style="color:#008833;">VISIBLE</span>
+          </h3>
+          <p class="font-body text-sm leading-[1.9] mt-8 reveal-up delay-2" style="color:rgba(244,244,240,0.58);">
+            From the lab to the patient room, we showcase the depth of Southwest General's clinical capabilities — turning specialized science into content that educates, inspires, and earns community trust.
+          </p>
+          <div class="swg-platform-list reveal-up delay-3">
+            <div class="swg-platform-item">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34l-.01-8.66a8.17 8.17 0 0 0 4.78 1.52V4.71a4.84 4.84 0 0 1-1-.02z"/>
+              </svg>
+              <span>TikTok Short-Form Video</span>
+            </div>
+            <div class="swg-platform-item">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+              </svg>
+              <span>Instagram Stories &amp; Reels</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Phone mockup — TikTok style -->
+        <div class="swg-phone-wrap reveal-up">
+          <div class="swg-phone-glow"></div>
+          <div class="swg-phone swg-phone--tiktok">
+            <div class="swg-phone-notch"></div>
+            <div class="swg-phone-screen">
+              <div class="swg-tt-video-wrap">
+                <video src="../brand_assets/clients/SWG/Histology-vertical.mp4" autoplay muted loop playsinline preload="auto"></video>
+                <div class="swg-tt-vignette"></div>
+              </div>
+              <div class="swg-tt-topbar">
+                <span class="swg-tt-tab">Following</span>
+                <span class="swg-tt-tab swg-tt-tab--active">For You</span>
+                <span class="swg-tt-tab">LIVE</span>
+              </div>
+              <div class="swg-tt-actions">
+                <div class="swg-tt-avatar-wrap">
+                  <div class="swg-tt-avatar">
+                    <img src="../brand_assets/clients/SWG/swLogo-Horizontal_color-logo-white.png" alt="Southwest General">
+                  </div>
+                  <div class="swg-tt-follow">+</div>
+                </div>
+                <div class="swg-tt-action-btn">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                  <span>9.1K</span>
+                </div>
+                <div class="swg-tt-action-btn">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                  <span>412</span>
+                </div>
+                <div class="swg-tt-action-btn">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                  <span>Share</span>
+                </div>
+                <div class="swg-tt-disc">
+                  <img src="../brand_assets/clients/SWG/swLogo-Horizontal_color-logo-white.png" alt="">
+                </div>
+              </div>
+              <div class="swg-tt-caption">
+                <div class="swg-tt-username">@swgeneralhosp</div>
+                <div class="swg-tt-desc">Inside the lab 🔬 Our histology team is the backbone of accurate diagnosis. #SouthwestGeneral #MedTok #Healthcare</div>
+                <div class="swg-tt-sound">
+                  <svg width="10" height="10" viewBox="0 0 24 24" fill="white"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+                  <span class="swg-tt-sound-text">Original sound — swgeneralhosp</span>
+                </div>
+              </div>
+              <div class="swg-tt-progress">
+                <div class="swg-tt-progress-fill"></div>
+              </div>
+            </div>
+            <div class="swg-phone-chin"></div>
+          </div>
+        </div>
+
       </div>
     </div>
   </section>
@@ -932,6 +1294,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </div>
   </section>
 
+
+  <!-- ===== VIDEO MODAL ===== -->
+  <div id="vid-modal" role="dialog" aria-modal="true" aria-label="Video player">
+    <button id="vid-modal-close" aria-label="Close video">&#x2715;</button>
+    <video id="vid-modal-video" controls playsinline></video>
+  </div>
 
 </div><!-- /#case-content -->
 
@@ -1056,28 +1424,35 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   window.scrollTo(0, 0);
 
 
-  /* ── Custom video play buttons ── */
-  function setupPlayBtn(btnId, vidId) {
-    const btn = document.getElementById(btnId);
-    const vid = document.getElementById(vidId);
-    if (!btn || !vid) return;
+})();
 
-    btn.addEventListener('click', function () {
-      btn.classList.add('hidden');
-      vid.controls = true;
-      vid.play().catch(() => {});
-    });
+/* ── Video modal ── */
+(function () {
+  const modal    = document.getElementById('vid-modal');
+  const vidEl    = document.getElementById('vid-modal-video');
+  const closeBtn = document.getElementById('vid-modal-close');
 
-    vid.addEventListener('ended', function () {
-      vid.controls = false;
-      vid.currentTime = 0;
-      btn.classList.remove('hidden');
-    });
+  window.openVidModal = function (src) {
+    vidEl.src = src;
+    modal.classList.add('open');
+    vidEl.play().catch(() => {});
+    document.body.style.overflow = 'hidden';
+  };
+
+  function closeVidModal() {
+    modal.classList.remove('open');
+    vidEl.pause();
+    setTimeout(() => { vidEl.src = ''; }, 300);
+    document.body.style.overflow = '';
   }
 
-  setupPlayBtn('play-korkor-overview', 'vid-korkor-overview');
-  setupPlayBtn('play-korkor-tour',     'vid-korkor-tour');
-
+  closeBtn.addEventListener('click', closeVidModal);
+  modal.addEventListener('click', function (e) {
+    if (e.target === modal) closeVidModal();
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && modal.classList.contains('open')) closeVidModal();
+  });
 })();
 </script>
 
