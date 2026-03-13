@@ -239,6 +239,12 @@ for (const [relPath, { topLink, dropdownItem, mobileActive, canonical, title, de
     }
   }
 
+  // Inject script.js before </body> if not already present
+  if (!html.includes('script.js')) {
+    const depth = relPath.includes('/') ? '../' : './';
+    html = html.replace('</body>', `<script src="${depth}script.js"></script>\n</body>`);
+  }
+
   writeFileSync(filePath, html, 'utf8');
   console.log(`  ✓  ${relPath}`);
   updated++;

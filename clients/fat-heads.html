@@ -209,7 +209,7 @@
     }
     .video-card {
       position: relative; overflow: hidden;
-      height: 280px;
+      aspect-ratio: 16 / 9;
       cursor: pointer;
       background: #111;
     }
@@ -782,7 +782,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <!-- Card 1: Stuff the Bus -->
         <div>
           <div class="video-card" onclick="openVidModal('../brand_assets/clients/fat-heads/StuffTheBus.mp4')" role="button" tabindex="0">
-            <video src="../brand_assets/clients/fat-heads/StuffTheBus.mp4" autoplay muted loop playsinline preload="auto"></video>
+            <video src="../brand_assets/clients/fat-heads/StuffTheBus.mp4" poster="../brand_assets/clients/fat-heads/StuffTheBus-thumb.jpg" autoplay muted loop playsinline preload="auto"></video>
             <div class="video-card-overlay"></div>
             <div class="video-card-play">
               <svg width="14" height="16" viewBox="0 0 14 16" fill="currentColor"><path d="M1 1l12 7L1 15V1z"/></svg>
@@ -804,7 +804,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <!-- Card 2: Fat Head's Promo -->
         <div>
           <div class="video-card" onclick="openVidModal('../brand_assets/clients/fat-heads/fat-heads-promo-video.mp4')" role="button" tabindex="0">
-            <video src="../brand_assets/clients/fat-heads/fat-heads-promo-video.mp4" autoplay muted loop playsinline preload="auto"></video>
+            <video src="../brand_assets/clients/fat-heads/fat-heads-promo-video.mp4" poster="../brand_assets/clients/fat-heads/fat-heads-promo-video-thumb.jpg" autoplay muted loop playsinline preload="auto"></video>
             <div class="video-card-overlay"></div>
             <div class="video-card-play">
               <svg width="14" height="16" viewBox="0 0 14 16" fill="currentColor"><path d="M1 1l12 7L1 15V1z"/></svg>
@@ -826,7 +826,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <!-- Card 3: Holly Jolly -->
         <div>
           <div class="video-card" onclick="openVidModal('../brand_assets/clients/fat-heads/Holly-Jolly.mp4')" role="button" tabindex="0">
-            <video src="../brand_assets/clients/fat-heads/Holly-Jolly.mp4" autoplay muted loop playsinline preload="auto"></video>
+            <video src="../brand_assets/clients/fat-heads/Holly-Jolly.mp4" poster="../brand_assets/clients/fat-heads/Holly-Jolly-thumb.jpg" autoplay muted loop playsinline preload="auto"></video>
             <div class="video-card-overlay"></div>
             <div class="video-card-play">
               <svg width="14" height="16" viewBox="0 0 14 16" fill="currentColor"><path d="M1 1l12 7L1 15V1z"/></svg>
@@ -1343,5 +1343,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 <!-- FOOTER END -->
 
+<script src="../script.js"></script>
 </body>
 </html>
