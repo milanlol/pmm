@@ -219,22 +219,11 @@
       gap: 32px;
     }
     @media (min-width: 768px) {
-      .video-grid {
-        grid-template-columns: repeat(6, 1fr);
-        column-gap: 2px;
-        row-gap: 40px;
-      }
-      /* Row 1: fill 3 columns evenly */
-      .video-grid > div:nth-child(1) { grid-column: 1 / 3; }
-      .video-grid > div:nth-child(2) { grid-column: 3 / 5; }
-      .video-grid > div:nth-child(3) { grid-column: 5 / 7; }
-      /* Row 2: center the 2 remaining cards */
-      .video-grid > div:nth-child(4) { grid-column: 2 / 4; }
-      .video-grid > div:nth-child(5) { grid-column: 4 / 6; }
+      .video-grid { grid-template-columns: repeat(3, 1fr); gap: 2px; }
     }
     .video-card {
       position: relative; overflow: hidden;
-      height: 280px;
+      aspect-ratio: 16 / 9;
       cursor: pointer;
       background: #111;
     }
@@ -772,7 +761,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
   <!-- Expanding video: nurses footage -->
   <div id="media-box">
-    <video src="../brand_assets/clients/SWG/Southwest-General-Maternity-Event.mp4" autoplay muted loop playsinline preload="auto"></video>
+    <video src="../brand_assets/clients/SWG/Southwest-General-Maternity-Event.mp4" autoplay muted loop playsinline preload="metadata"></video>
     <div id="media-overlay"></div>
   </div>
 
@@ -874,7 +863,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <!-- Card 1: Community -->
         <div>
           <div class="video-card" onclick="openVidModal('../brand_assets/clients/SWG/Community.mp4')" role="button" tabindex="0">
-            <video src="../brand_assets/clients/SWG/Community.mp4" autoplay muted loop playsinline preload="auto"></video>
+            <video src="../brand_assets/clients/SWG/Community.mp4" poster="../brand_assets/clients/SWG/Community-thumb.jpg" autoplay muted loop playsinline preload="metadata"></video>
             <div class="video-card-overlay"></div>
             <div class="video-card-play">
               <svg width="14" height="16" viewBox="0 0 14 16" fill="currentColor"><path d="M1 1l12 7L1 15V1z"/></svg>
@@ -896,7 +885,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <!-- Card 2: Facility Tour -->
         <div>
           <div class="video-card" onclick="openVidModal('../brand_assets/clients/SWG/DrKorkorTour.mp4')" role="button" tabindex="0">
-            <video src="../brand_assets/clients/SWG/DrKorkorTour.mp4" autoplay muted loop playsinline preload="auto"></video>
+            <video src="../brand_assets/clients/SWG/DrKorkorTour.mp4" poster="../brand_assets/clients/SWG/DrKorkorTour-thumb.jpg" autoplay muted loop playsinline preload="metadata"></video>
             <div class="video-card-overlay"></div>
             <div class="video-card-play">
               <svg width="14" height="16" viewBox="0 0 14 16" fill="currentColor"><path d="M1 1l12 7L1 15V1z"/></svg>
@@ -918,7 +907,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <!-- Card 3: Dr. Korkor Overview -->
         <div>
           <div class="video-card" onclick="openVidModal('../brand_assets/clients/SWG/DrKorkorOverview.mp4')" role="button" tabindex="0">
-            <video src="../brand_assets/clients/SWG/DrKorkorOverview.mp4" autoplay muted loop playsinline preload="auto"></video>
+            <video src="../brand_assets/clients/SWG/DrKorkorOverview.mp4" poster="../brand_assets/clients/SWG/DrKorkorOverview-thumb.jpg" autoplay muted loop playsinline preload="metadata"></video>
             <div class="video-card-overlay"></div>
             <div class="video-card-play">
               <svg width="14" height="16" viewBox="0 0 14 16" fill="currentColor"><path d="M1 1l12 7L1 15V1z"/></svg>
@@ -940,7 +929,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <!-- Card 4: Nurses (centered in row 2) -->
         <div>
           <div class="video-card" onclick="openVidModal('../brand_assets/clients/SWG/nurses.mp4')" role="button" tabindex="0">
-            <video src="../brand_assets/clients/SWG/nurses.mp4" autoplay muted loop playsinline preload="auto"></video>
+            <video src="../brand_assets/clients/SWG/nurses.mp4" poster="../brand_assets/clients/SWG/nurses-thumb.jpg" autoplay muted loop playsinline preload="metadata"></video>
             <div class="video-card-overlay"></div>
             <div class="video-card-play">
               <svg width="14" height="16" viewBox="0 0 14 16" fill="currentColor"><path d="M1 1l12 7L1 15V1z"/></svg>
@@ -962,7 +951,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <!-- Card 5: Maternity Event (centered in row 2) -->
         <div>
           <div class="video-card" onclick="openVidModal('../brand_assets/clients/SWG/Southwest-General-Maternity-Event.mp4')" role="button" tabindex="0">
-            <video src="../brand_assets/clients/SWG/Southwest-General-Maternity-Event.mp4" autoplay muted loop playsinline preload="auto"></video>
+            <video src="../brand_assets/clients/SWG/Southwest-General-Maternity-Event.mp4" poster="../brand_assets/clients/SWG/Southwest-General-Maternity-Event-thumb.jpg" autoplay muted loop playsinline preload="metadata"></video>
             <div class="video-card-overlay"></div>
             <div class="video-card-play">
               <svg width="14" height="16" viewBox="0 0 14 16" fill="currentColor"><path d="M1 1l12 7L1 15V1z"/></svg>
@@ -1055,7 +1044,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 </svg>
               </div>
               <div class="swg-phone-video-wrap">
-                <video src="../brand_assets/clients/SWG/Caridovascular-vertical.mp4" autoplay muted loop playsinline preload="auto"></video>
+                <video src="../brand_assets/clients/SWG/Caridovascular-vertical-web.mp4" autoplay muted loop playsinline preload="metadata"></video>
               </div>
               <div class="swg-ig-actions">
                 <div class="swg-ig-left">
@@ -1154,7 +1143,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             <div class="swg-phone-notch"></div>
             <div class="swg-phone-screen">
               <div class="swg-tt-video-wrap">
-                <video src="../brand_assets/clients/SWG/Histology-vertical.mp4" autoplay muted loop playsinline preload="auto"></video>
+                <video src="../brand_assets/clients/SWG/Histology-vertical-web.mp4" autoplay muted loop playsinline preload="metadata"></video>
                 <div class="swg-tt-vignette"></div>
               </div>
               <div class="swg-tt-topbar">
