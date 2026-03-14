@@ -11,6 +11,9 @@ screenshot-scroll.mjs
 screenshot-section.mjs
 screenshot-sections.mjs
 serve.mjs
+compress-images.mjs
+package.json
+package-lock.json
 nul
 
 # Files over GitHub's 100MB limit
